@@ -1,12 +1,12 @@
-# Parijs site v0.04
+# Parijs site v0.06
 
-## Lokaal starten
+## Start lokaal
 
 ```powershell
 npm install
 $env:ADMIN_USERNAME="admin"
-$env:ADMIN_PASSWORD="KiesHierEenSterkWachtwoord!2026"
-$env:SESSION_SECRET="DitIsEenLangeUniekeSessieSleutelVanMinstens32Tekens"
+$env:ADMIN_PASSWORD="kies-hier-een-sterk-wachtwoord"
+$env:SESSION_SECRET="lange-unieke-sessie-sleutel"
 npm start
 ```
 
@@ -14,14 +14,11 @@ Open daarna `http://localhost:3000`.
 
 ## Render
 
-- Build Command: `npm install`
-- Start Command: `npm start`
-- Environment variables:
-  - `ADMIN_USERNAME`
-  - `ADMIN_PASSWORD`
-  - `SESSION_SECRET`
+Build command: `npm install`
+Start command: `npm start`
 
-## Opmerking
-
-- Sessies worden opgeslagen in SQLite in `data/app.db`
-- Sitegegevens worden ook opgeslagen in dezelfde database
+## Nieuw in v0.06
+- Instagram previews voor reel- en postlinks
+- Praktische info in admin bewerkbaar
+- Kleine foto's bij programma-items
+- Standaardfoto's toegevoegd voor Louvre, Eiffeltoren, Arc de Triomphe, Sacré-Cœur, Montmartre en Disneyland
