@@ -1,0 +1,373 @@
+{
+  "shared": {
+    "departure": "2026-04-13T07:00",
+    "announcements": [
+      {
+        "id": "pt01nzku",
+        "title": "Controleer je ID of paspoort",
+        "text": "Neem op de dag van vertrek een geldig identiteitsbewijs mee. Zonder ID kun je niet mee op reis.",
+        "type": "urgent",
+        "link": ""
+      }
+    ],
+    "instagram": [
+      {
+        "id": "2cwsh3gz",
+        "title": "School Instagram",
+        "url": "https://www.instagram.com/"
+      }
+    ]
+  },
+  "groups": {
+    "A": {
+      "label": "Groep A",
+      "hotel": "Generator Paris",
+      "leiding": "Mevr. Jansen, Dhr. Bakker",
+      "program": [
+        {
+          "id": "9hblwd3d",
+          "dayShort": "Ma",
+          "dayLabel": "Dag 1",
+          "title": "Vertrek, aankomst Parijs, Arc de Triomphe en bootreis",
+          "items": [
+            {
+              "title": "Ochtend — vertrek & aankomst",
+              "text": "Verzamelen, vertrek met school en aankomst in Parijs. Daarna naar het hotel."
+            },
+            {
+              "title": "Middag — Arc de Triomphe",
+              "text": "Bezoek aan de Arc de Triomphe en omgeving."
+            },
+            {
+              "title": "Avond — vaartocht over de Seine",
+              "text": "Boottocht langs de bekendste plekken van Parijs."
+            }
+          ]
+        },
+        {
+          "id": "i5xzgb3i",
+          "dayShort": "Di",
+          "dayLabel": "Dag 2",
+          "title": "Disneyland Paris",
+          "items": [
+            {
+              "title": "Hele dag — Disney",
+              "text": "Een volledige dag in Disneyland Paris."
+            }
+          ]
+        },
+        {
+          "id": "wjhsmvom",
+          "dayShort": "Wo",
+          "dayLabel": "Dag 3",
+          "title": "Louvre, Eiffeltoren en vrije tijd",
+          "items": [
+            {
+              "title": "Ochtend — Louvre",
+              "text": "Bezoek aan het museum."
+            },
+            {
+              "title": "Middag — Eiffeltoren",
+              "text": "Bezoek aan de Eiffeltoren."
+            },
+            {
+              "title": "Later — vrije tijd",
+              "text": "Vrije tijd volgens de groepsafspraken."
+            }
+          ]
+        },
+        {
+          "id": "6n6b2eaz",
+          "dayShort": "Do",
+          "dayLabel": "Dag 4",
+          "title": "Montmartre, Sacré-Cœur en terugreis",
+          "items": [
+            {
+              "title": "Ochtend — Montmartre",
+              "text": "Wandeling door Montmartre."
+            },
+            {
+              "title": "Middag — Sacré-Cœur",
+              "text": "Bezoek aan de basiliek."
+            },
+            {
+              "title": "Later — terugreis",
+              "text": "Vertrek uit Parijs en terugreis naar huis."
+            }
+          ]
+        }
+      ],
+      "rooms": [
+        {
+          "id": "hyi0r2hf",
+          "name": "Kamer 201",
+          "students": "Emma, Noor, Mila",
+          "note": "Dicht bij de trap"
+        },
+        {
+          "id": "dhfez589",
+          "name": "Kamer 202",
+          "students": "Daan, Sem, Lucas",
+          "note": ""
+        }
+      ],
+      "spots": [
+        {
+          "name": "Generator Paris (hotel)",
+          "coords": [
+            48.8786,
+            2.3707
+          ],
+          "note": "Hotel / uitvalsbasis",
+          "x": 58,
+          "y": 36
+        },
+        {
+          "name": "Arc de Triomphe",
+          "coords": [
+            48.8738,
+            2.295
+          ],
+          "note": "Maandag middag",
+          "x": 28,
+          "y": 28
+        },
+        {
+          "name": "Seine boottocht",
+          "coords": [
+            48.8623,
+            2.2877
+          ],
+          "note": "Maandag avond",
+          "x": 36,
+          "y": 47
+        },
+        {
+          "name": "Disneyland Paris",
+          "coords": [
+            48.8706,
+            2.7797
+          ],
+          "note": "Dinsdag hele dag",
+          "x": 90,
+          "y": 40
+        },
+        {
+          "name": "Louvre",
+          "coords": [
+            48.8606,
+            2.3376
+          ],
+          "note": "Woensdag ochtend",
+          "x": 47,
+          "y": 42
+        },
+        {
+          "name": "Eiffeltoren",
+          "coords": [
+            48.8584,
+            2.2945
+          ],
+          "note": "Woensdag middag",
+          "x": 31,
+          "y": 52
+        },
+        {
+          "name": "Montmartre",
+          "coords": [
+            48.8867,
+            2.3431
+          ],
+          "note": "Donderdag ochtend",
+          "x": 48,
+          "y": 18
+        },
+        {
+          "name": "Sacré-Cœur",
+          "coords": [
+            48.8867,
+            2.3431
+          ],
+          "note": "Donderdag middag",
+          "x": 50,
+          "y": 15
+        }
+      ]
+    },
+    "B": {
+      "label": "Groep B",
+      "hotel": "The People Paris Marais",
+      "leiding": "Mevr. De Vries, Dhr. Smit",
+      "program": [
+        {
+          "id": "ddxpk5a8",
+          "dayShort": "Ma",
+          "dayLabel": "Dag 1",
+          "title": "Vertrek, aankomst Parijs, Arc de Triomphe en bootreis",
+          "items": [
+            {
+              "title": "Ochtend — vertrek & aankomst",
+              "text": "Verzamelen, vertrek en aankomst in Parijs. Daarna richting hotel."
+            },
+            {
+              "title": "Middag — Arc de Triomphe",
+              "text": "Gezamenlijk bezoek met leiding."
+            },
+            {
+              "title": "Avond — vaartocht over de Seine",
+              "text": "Boottocht met de groep."
+            }
+          ]
+        },
+        {
+          "id": "iv0583bt",
+          "dayShort": "Di",
+          "dayLabel": "Dag 2",
+          "title": "Disneyland Paris",
+          "items": [
+            {
+              "title": "Hele dag — Disney",
+              "text": "Volledige dag Disneyland Paris."
+            }
+          ]
+        },
+        {
+          "id": "2pzvloyr",
+          "dayShort": "Wo",
+          "dayLabel": "Dag 3",
+          "title": "Louvre, Eiffeltoren en vrije tijd",
+          "items": [
+            {
+              "title": "Ochtend — Louvre",
+              "text": "Cultureel bezoek aan het Louvre."
+            },
+            {
+              "title": "Middag — Eiffeltoren",
+              "text": "Bezoek en fotomoment."
+            },
+            {
+              "title": "Later — vrije tijd",
+              "text": "Vrije tijd volgens de afspraken van groep B."
+            }
+          ]
+        },
+        {
+          "id": "evjsfbhc",
+          "dayShort": "Do",
+          "dayLabel": "Dag 4",
+          "title": "Montmartre, Sacré-Cœur en terugreis",
+          "items": [
+            {
+              "title": "Ochtend — Montmartre",
+              "text": "Wandeling door de wijk."
+            },
+            {
+              "title": "Middag — Sacré-Cœur",
+              "text": "Bezoek aan de basiliek en uitzichtpunt."
+            },
+            {
+              "title": "Later — terugreis",
+              "text": "Vertrek naar huis."
+            }
+          ]
+        }
+      ],
+      "rooms": [
+        {
+          "id": "aqcxe7q9",
+          "name": "Kamer 301",
+          "students": "Sara, Lotte, Yara",
+          "note": ""
+        },
+        {
+          "id": "bax3aplr",
+          "name": "Kamer 302",
+          "students": "Finn, Milan, Ties",
+          "note": "Naast begeleiderskamer"
+        }
+      ],
+      "spots": [
+        {
+          "name": "The People Paris Marais (hotel)",
+          "coords": [
+            48.8517,
+            2.3652
+          ],
+          "note": "Hotel / uitvalsbasis",
+          "x": 58,
+          "y": 36
+        },
+        {
+          "name": "Arc de Triomphe",
+          "coords": [
+            48.8738,
+            2.295
+          ],
+          "note": "Maandag middag",
+          "x": 28,
+          "y": 28
+        },
+        {
+          "name": "Seine boottocht",
+          "coords": [
+            48.8623,
+            2.2877
+          ],
+          "note": "Maandag avond",
+          "x": 36,
+          "y": 47
+        },
+        {
+          "name": "Disneyland Paris",
+          "coords": [
+            48.8706,
+            2.7797
+          ],
+          "note": "Dinsdag hele dag",
+          "x": 90,
+          "y": 40
+        },
+        {
+          "name": "Louvre",
+          "coords": [
+            48.8606,
+            2.3376
+          ],
+          "note": "Woensdag ochtend",
+          "x": 47,
+          "y": 42
+        },
+        {
+          "name": "Eiffeltoren",
+          "coords": [
+            48.8584,
+            2.2945
+          ],
+          "note": "Woensdag middag",
+          "x": 31,
+          "y": 52
+        },
+        {
+          "name": "Montmartre",
+          "coords": [
+            48.8867,
+            2.3431
+          ],
+          "note": "Donderdag ochtend",
+          "x": 48,
+          "y": 18
+        },
+        {
+          "name": "Sacré-Cœur",
+          "coords": [
+            48.8867,
+            2.3431
+          ],
+          "note": "Donderdag middag",
+          "x": 50,
+          "y": 15
+        }
+      ]
+    }
+  }
+}
