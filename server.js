@@ -22,16 +22,29 @@ function uid() {
   return Math.random().toString(36).slice(2, 10);
 }
 
-function defaultSpots(hotelName, hotelX, hotelY) {
+const DEFAULT_COORDS = {
+  'generator paris (hotel)': [48.8786, 2.3707],
+  'the people paris marais (hotel)': [48.8517, 2.3652],
+  'arc de triomphe': [48.8738, 2.2950],
+  'seine boottocht': [48.8623, 2.2877],
+  'disneyland paris': [48.8706, 2.7797],
+  'louvre': [48.8606, 2.3376],
+  'eiffeltoren': [48.8584, 2.2945],
+  'montmartre': [48.8867, 2.3431],
+  'sacré-cœur': [48.8867, 2.3431],
+  'sacre-coeur': [48.8867, 2.3431]
+};
+
+function defaultSpots(hotelName) {
   return [
-    { id: uid(), name: `${hotelName} (hotel)`, note: 'Hotel / uitvalsbasis', x: hotelX, y: hotelY },
-    { id: uid(), name: 'Arc de Triomphe', note: 'Maandag middag', x: 22, y: 34 },
-    { id: uid(), name: 'Seine boottocht', note: 'Maandag avond', x: 30, y: 54 },
-    { id: uid(), name: 'Disneyland Paris', note: 'Dinsdag hele dag', x: 88, y: 42 },
-    { id: uid(), name: 'Louvre', note: 'Woensdag ochtend', x: 45, y: 48 },
-    { id: uid(), name: 'Eiffeltoren', note: 'Woensdag middag', x: 28, y: 58 },
-    { id: uid(), name: 'Montmartre', note: 'Donderdag ochtend', x: 45, y: 16 },
-    { id: uid(), name: 'Sacré-Cœur', note: 'Donderdag middag', x: 48, y: 12 }
+    { id: uid(), name: `${hotelName} (hotel)`, note: 'Hotel / uitvalsbasis', coords: DEFAULT_COORDS[`${hotelName.toLowerCase()} (hotel)`] || [48.8786, 2.3707] },
+    { id: uid(), name: 'Arc de Triomphe', note: 'Maandag middag', coords: DEFAULT_COORDS['arc de triomphe'] },
+    { id: uid(), name: 'Seine boottocht', note: 'Maandag avond', coords: DEFAULT_COORDS['seine boottocht'] },
+    { id: uid(), name: 'Disneyland Paris', note: 'Dinsdag hele dag', coords: DEFAULT_COORDS['disneyland paris'] },
+    { id: uid(), name: 'Louvre', note: 'Woensdag ochtend', coords: DEFAULT_COORDS['louvre'] },
+    { id: uid(), name: 'Eiffeltoren', note: 'Woensdag middag', coords: DEFAULT_COORDS['eiffeltoren'] },
+    { id: uid(), name: 'Montmartre', note: 'Donderdag ochtend', coords: DEFAULT_COORDS['montmartre'] },
+    { id: uid(), name: 'Sacré-Cœur', note: 'Donderdag middag', coords: DEFAULT_COORDS['sacré-cœur'] }
   ];
 }
 
@@ -97,7 +110,7 @@ function defaultData() {
           { id: uid(), name: 'Kamer 201', students: 'Emma, Noor, Mila', note: 'Dicht bij de trap' },
           { id: uid(), name: 'Kamer 202', students: 'Daan, Sem, Lucas', note: '' }
         ],
-        spots: defaultSpots('Generator Paris', 56, 31)
+        spots: defaultSpots('Generator Paris')
       },
       B: {
         label: 'Groep B',
@@ -138,9 +151,52 @@ function defaultData() {
           { id: uid(), name: 'Kamer 301', students: 'Sara, Lotte, Yara', note: '' },
           { id: uid(), name: 'Kamer 302', students: 'Finn, Milan, Ties', note: 'Naast begeleiderskamer' }
         ],
-        spots: defaultSpots('The People Paris Marais', 60, 51)
+        spots: defaultSpots('The People Paris Marais')
       }
     }
+  };
+}
+
+function normalizeSpot(spot, hotelName) {
+  if (!spot) return null;
+  const name = spot.name || 'Locatie';
+  const key = name.toLowerCase();
+  let coords = Array.isArray(spot.coords) && spot.coords.length === 2 ? spot.coords : null;
+  if (!coords) {
+    if (key.includes('(hotel)')) coords = DEFAULT_COORDS[`${hotelName.toLowerCase()} (hotel)`] || [48.8786, 2.3707];
+    else coords = DEFAULT_COORDS[key] || [48.8606, 2.3376];
+  }
+  return {
+    id: spot.id || uid(),
+    name,
+    note: spot.note || '',
+    coords: [Number(coords[0]), Number(coords[1])]
+  };
+}
+
+function normalizeData(data) {
+  const defaults = defaultData();
+  const next = data && typeof data === 'object' ? data : defaults;
+  const shared = next.shared || defaults.shared;
+  const groups = next.groups || defaults.groups;
+  ['A', 'B'].forEach(groupKey => {
+    const group = groups[groupKey] || defaults.groups[groupKey];
+    group.label = group.label || `Groep ${groupKey}`;
+    group.hotel = group.hotel || defaults.groups[groupKey].hotel;
+    group.leiding = group.leiding || defaults.groups[groupKey].leiding;
+    group.program = Array.isArray(group.program) && group.program.length ? group.program : defaults.groups[groupKey].program;
+    group.rooms = Array.isArray(group.rooms) ? group.rooms : defaults.groups[groupKey].rooms;
+    group.spots = (Array.isArray(group.spots) && group.spots.length ? group.spots : defaults.groups[groupKey].spots)
+      .map(spot => normalizeSpot(spot, group.hotel));
+  });
+  return {
+    shared: {
+      departure: shared.departure || defaults.shared.departure,
+      instagramProfile: shared.instagramProfile || defaults.shared.instagramProfile,
+      announcements: Array.isArray(shared.announcements) ? shared.announcements : defaults.shared.announcements,
+      instagramLinks: Array.isArray(shared.instagramLinks) && shared.instagramLinks.length ? shared.instagramLinks : defaults.shared.instagramLinks
+    },
+    groups
   };
 }
 
@@ -170,16 +226,19 @@ async function initDb() {
   const row = await get('SELECT value FROM settings WHERE key = ?', ['siteData']);
   if (!row) {
     await run('INSERT INTO settings(key, value) VALUES(?, ?)', ['siteData', JSON.stringify(defaultData())]);
+  } else {
+    const normalized = normalizeData(JSON.parse(row.value));
+    await run('UPDATE settings SET value = ? WHERE key = ?', [JSON.stringify(normalized), 'siteData']);
   }
 }
 
 async function readData() {
   const row = await get('SELECT value FROM settings WHERE key = ?', ['siteData']);
-  return JSON.parse(row.value);
+  return normalizeData(JSON.parse(row.value));
 }
 
 async function writeData(data) {
-  await run('UPDATE settings SET value = ? WHERE key = ?', [JSON.stringify(data), 'siteData']);
+  await run('UPDATE settings SET value = ? WHERE key = ?', [JSON.stringify(normalizeData(data)), 'siteData']);
 }
 
 function requireAuth(req, res, next) {
