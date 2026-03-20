@@ -1,13 +1,18 @@
 {
-  "name": "parijs-site-v0.03",
-  "version": "0.0.3",
-  "private": true,
-  "type": "commonjs",
+  "name": "parijs-schoolreis-app",
+  "version": "1.0.0",
+  "description": "Buitenlandse reis Parijs - school app",
+  "main": "server.js",
   "scripts": {
     "start": "node server.js"
   },
+  "engines": {
+    "node": "20.x"
+  },
   "dependencies": {
-    "express": "^4.21.2",
-    "express-session": "^1.18.1"
+    "express": "^4.19.2",
+    "express-session": "^1.17.3",
+    "body-parser": "^1.20.2",
+    "cors": "^2.8.5"
   }
 }
