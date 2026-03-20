@@ -310,7 +310,7 @@
       else if (t.finished) { statusLabel.textContent = 'Status'; heroStatus.textContent = 'Reis afgerond'; }
       else { statusLabel.textContent = 'Vertrek'; heroStatus.textContent = formatDate(state.site.shared.departure); }
       document.getElementById('departLabel').textContent = formatDate(state.site.shared.departure);
-      document.getElementById('hotelNameText').textContent = group.hotel;
+      const hotelNameText = document.getElementById('hotelNameText'); if (hotelNameText) hotelNameText.textContent = group.hotel;
       document.getElementById('instagramProfileBtn').href = state.site.shared.instagramProfile || '#';
       document.getElementById('mapCaption').textContent = `${group.hotel} en de excursielocaties`;
       const countdownSection = document.getElementById('aftellen');
