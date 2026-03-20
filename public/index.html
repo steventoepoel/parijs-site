@@ -5,434 +5,643 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>Buitenlandse reis Parijs • DevelsteinCollege</title>
   <meta name="theme-color" content="#0f172a" />
-  <meta name="description" content="Mobiele reiswebsite voor de buitenlandse reis naar Parijs." />
   <style>
-    :root{--bg:#f8fafc;--card:#fff;--text:#0f172a;--muted:#64748b;--line:#e2e8f0;--primary:#1d4ed8;--primary2:#0f172a;--danger:#dc2626;--radius:24px;--shadow:0 18px 40px rgba(15,23,42,.08);--max:1024px}
-    *{box-sizing:border-box} html{scroll-behavior:smooth} body{margin:0;font-family:Inter,system-ui,Arial,sans-serif;background:radial-gradient(circle at top right, rgba(29,78,216,.08), transparent 30%),radial-gradient(circle at top left, rgba(14,165,233,.08), transparent 25%),var(--bg);color:var(--text)}
-    a{color:var(--primary)} button,input,textarea,select{font:inherit}
-    .app{max-width:var(--max);margin:0 auto;padding:16px 14px 120px}
-    .hero{position:relative;overflow:hidden;border-radius:30px;padding:18px;color:#fff;background:linear-gradient(135deg,rgba(15,23,42,.96),rgba(29,78,216,.90) 55%,rgba(2,132,199,.84));box-shadow:var(--shadow)}
-    .school-brand{display:flex;align-items:center;gap:14px;margin-bottom:14px}.school-logo{width:76px;height:76px;border-radius:18px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.16);padding:8px;display:grid;place-items:center;overflow:hidden}.school-logo img{width:100%;height:100%;object-fit:contain}.school-name small{display:block;text-transform:uppercase;letter-spacing:.08em;opacity:.8;font-size:11px}.school-name strong{display:block;font-size:18px;margin-top:4px}
-    h1{margin:14px 0 10px;font-size:clamp(30px,7.5vw,44px);line-height:1.02}.hero p{margin:0;max-width:40ch;color:rgba(255,255,255,.92);line-height:1.55;font-size:15px}
-    .quick-grid,.count-grid,.card-grid,.room-grid,.insta-grid,.announce-grid,.two-col,.lead-grid{display:grid;gap:12px}.quick-grid{grid-template-columns:repeat(2,1fr);margin-top:16px}.count-grid{grid-template-columns:repeat(4,1fr)}.card-grid,.room-grid,.insta-grid,.announce-grid,.two-col,.lead-grid{grid-template-columns:1fr}
-    .card,.count,.modal-card,.login-card,.picker-card{background:rgba(255,255,255,.94);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}.card{padding:16px}.quick{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.16);border-radius:20px;padding:14px}.quick small{color:rgba(255,255,255,.76);display:block}.quick strong{display:block;margin-top:6px;font-size:15px}
-    section{margin-top:18px}.section-head{display:flex;justify-content:space-between;align-items:end;gap:12px;margin-bottom:12px}.section-head h2{margin:0;font-size:22px}.section-head p{margin:4px 0 0;color:var(--muted);font-size:14px}
-    .nav{position:sticky;top:10px;z-index:100;margin-top:14px;display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none}.nav::-webkit-scrollbar{display:none}.nav a,.nav button{white-space:nowrap;text-decoration:none;color:var(--text);background:rgba(255,255,255,.82);border:1px solid var(--line);border-radius:999px;padding:10px 14px;font-size:13px;font-weight:700;cursor:pointer}
-    .nav .group-pill{background:#0f172a;color:#fff}
-    .count{text-align:center;padding:16px 10px}.count strong{display:block;font-size:clamp(26px,7vw,36px);line-height:1;margin-bottom:6px}.count small,.meta,.note{color:var(--muted);font-size:14px}
-    .schedule-card{display:grid;grid-template-columns:88px 1fr;gap:14px;align-items:start}.day-pill{background:linear-gradient(135deg,var(--primary),var(--primary2));color:#fff;border-radius:22px;padding:12px 8px;text-align:center;position:sticky;top:66px}.day-pill strong{display:block;font-size:16px}.day-pill span{display:block;margin-top:4px;font-size:11px;opacity:.8}
-    .timeline{display:flex;flex-direction:column;gap:10px}.timeline-item,.room-card,.insta-card,.announce-card,.check-card,.lead-card{background:#fff;border:1px solid var(--line);border-radius:22px;padding:16px}.timeline-item strong{display:block;margin-bottom:6px}.timeline-item p,.room-card p,.insta-card p,.announce-card p,.check-card p,.lead-card p{margin:0;color:var(--muted);line-height:1.5;font-size:14px}
-    .announce-top{display:flex;justify-content:space-between;gap:10px;align-items:start;margin-bottom:8px}.tag{display:inline-flex;align-items:center;border-radius:999px;padding:6px 10px;font-size:11px;font-weight:700;background:#fee2e2;color:#991b1b}.tag.info{background:#e0f2fe;color:#075985}.tag.form{background:#dcfce7;color:#166534}
-    .chip-row,.btn-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}.btn{border:0;border-radius:14px;padding:12px 14px;font-weight:700;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:8px}.btn-primary{background:linear-gradient(135deg,#60a5fa,#a78bfa);color:#0f172a}.btn-secondary{background:#e2e8f0;color:#0f172a}.btn-danger{background:#fee2e2;color:#991b1b}.btn-dark{background:#0f172a;color:#fff}
-    ul.clean{padding-left:18px;margin:10px 0 0} ul.clean li{margin:8px 0;color:#334155;line-height:1.5}
-    .insta-frame{width:100%;aspect-ratio:9/16;border:0;border-radius:18px;background:#0f172a}.empty-state{border:2px dashed rgba(100,116,139,.28);border-radius:20px;padding:18px;text-align:center;color:var(--muted);background:rgba(255,255,255,.55)}
-    .map-shell{padding:0;overflow:hidden}.map-figure{position:relative;background:linear-gradient(180deg,#e0f2fe,#f8fafc);border-radius:22px;min-height:390px}.map-svg{width:100%;height:390px;display:block}.map-marker{cursor:pointer}.map-marker circle{fill:#1d4ed8;stroke:#fff;stroke-width:2}.map-marker text{font-size:10px;fill:#0f172a;font-weight:700}.map-info{padding:14px 16px;border-top:1px solid var(--line)}
-    .fab-admin{position:fixed;right:14px;bottom:88px;z-index:999;width:58px;height:58px;border-radius:999px;background:#0f172a;color:#fff;box-shadow:0 20px 40px rgba(15,23,42,.28);border:3px solid #fff;font-size:24px}
-    .modal{position:fixed;inset:0;background:rgba(15,23,42,.58);display:none;align-items:end;justify-content:center;z-index:1100;padding:14px}.modal.show{display:flex}.modal-card,.login-card,.picker-card{width:min(100%,920px);max-height:92vh;overflow:auto;padding:18px;border-radius:28px;background:#fff}.login-card,.picker-card{width:min(100%,460px)}.modal-head{display:flex;justify-content:space-between;gap:12px;align-items:start;margin-bottom:14px}.modal-head h3{margin:0;font-size:22px}.modal-head p{margin:4px 0 0;color:var(--muted);font-size:14px}
-    .form-grid{display:grid;grid-template-columns:1fr;gap:12px}.field{display:flex;flex-direction:column;gap:6px}.field label{font-weight:700;font-size:14px}.field input,.field textarea,.field select{width:100%;padding:12px 14px;border:1px solid #cbd5e1;border-radius:14px;background:#fff;color:var(--text)}.field textarea{min-height:96px;resize:vertical}
-    .admin-block{border:1px solid var(--line);border-radius:20px;padding:14px;background:#f8fafc}.admin-block+.admin-block{margin-top:12px}.admin-title{margin:0 0 10px;font-size:16px}.list-admin{display:flex;flex-direction:column;gap:10px;margin-top:10px}.mini-card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:12px}.footer-note{text-align:center;color:var(--muted);font-size:12px;margin-top:18px}.hidden{display:none!important}
-    @media (min-width:720px){.app{padding:24px 18px 120px}.quick-grid{grid-template-columns:repeat(4,1fr)}.card-grid,.room-grid,.insta-grid,.announce-grid,.two-col,.lead-grid{grid-template-columns:repeat(2,1fr)}.form-grid.two{grid-template-columns:repeat(2,1fr)}}
-    @media (max-width:560px){.count-grid{grid-template-columns:repeat(2,1fr)}.schedule-card{grid-template-columns:1fr}.day-pill{position:static}.school-logo{width:64px;height:64px}.map-figure,.map-svg{min-height:320px;height:320px}}
+    :root {
+      --bg: #f6f8fb;
+      --card: #ffffff;
+      --text: #0f172a;
+      --muted: #64748b;
+      --line: rgba(15, 23, 42, .08);
+      --primary: #1d4ed8;
+      --primary-dark: #0f172a;
+      --danger: #b91c1c;
+      --soft: #eff6ff;
+      --radius: 24px;
+      --shadow: 0 16px 34px rgba(15,23,42,.08);
+      --max: 980px;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      color: var(--text);
+      font-family: Inter, system-ui, Arial, sans-serif;
+      background: radial-gradient(circle at top right, rgba(29,78,216,.08), transparent 30%), var(--bg);
+    }
+    img { display:block; max-width:100%; }
+    button, input, textarea, select { font: inherit; }
+    .app { max-width: var(--max); margin: 0 auto; padding: 16px 14px 110px; }
+    .hero {
+      background: linear-gradient(135deg, rgba(15,23,42,.96), rgba(29,78,216,.88));
+      color: white; border-radius: 30px; padding: 18px; box-shadow: var(--shadow);
+    }
+    .hero-top { display: flex; gap: 14px; align-items: center; justify-content: space-between; }
+    .brand { display: flex; gap: 14px; align-items: center; min-width: 0; }
+    .logo-wrap { width: 74px; height: 74px; border-radius: 20px; background: rgba(255,255,255,.12); display:grid; place-items:center; padding: 8px; overflow:hidden; flex: 0 0 auto; }
+    .logo-wrap img { width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 6px 10px rgba(0,0,0,.16)); }
+    .title-wrap h1 { margin: 0; font-size: clamp(28px, 6vw, 42px); line-height: 1.05; }
+    .title-wrap small { display:block; opacity:.85; margin-bottom:4px; }
+    .group-hero-btn {
+      width: 72px; height: 72px; border: 0; border-radius: 22px; background: rgba(255,255,255,.16);
+      color: white; font-size: 38px; font-weight: 800; cursor: pointer; flex: 0 0 auto;
+      backdrop-filter: blur(10px); box-shadow: inset 0 0 0 1px rgba(255,255,255,.16);
+    }
+    .quick-grid, .count-grid, .two-col, .grid { display: grid; gap: 12px; }
+    .quick-grid { grid-template-columns: repeat(3, 1fr); margin-top: 16px; }
+    .count-grid { grid-template-columns: repeat(4, 1fr); }
+    .grid, .two-col { grid-template-columns: 1fr; }
+    .quick, .card, .count, .modal-card { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); }
+    .quick { padding: 14px; background: rgba(255,255,255,.14); color: white; border-color: rgba(255,255,255,.14); }
+    .quick small { display:block; opacity:.76; }
+    .quick strong { display:block; margin-top: 8px; font-size: 15px; }
+    .card { padding: 16px; }
+    .count { text-align: center; padding: 16px 10px; }
+    .count strong { display:block; font-size: clamp(26px, 7vw, 38px); line-height: 1; }
+    .count small { color: var(--muted); }
+    section { margin-top: 18px; }
+    .section-head { margin-bottom: 12px; }
+    .section-head h2 { margin: 0; font-size: 22px; }
+    .nav { position: sticky; top: 10px; z-index: 10; display:flex; gap:8px; overflow:auto; margin-top:14px; padding-bottom:4px; }
+    .nav a, .nav button {
+      white-space: nowrap; border: 1px solid var(--line); background: rgba(255,255,255,.84); color: var(--text); border-radius: 999px; padding: 10px 14px; text-decoration:none; font-weight:700; cursor:pointer;
+    }
+    .notice, .room, .insta, .place, .timeline-item { background: white; border: 1px solid var(--line); border-radius: 20px; padding: 15px; }
+    .notice h3, .room h3, .insta h3, .place h3 { margin: 0 0 8px; font-size: 17px; }
+    .muted, .notice p, .room p, .insta p, .place p, .timeline-item p { margin:0; color: var(--muted); line-height:1.5; }
+    .timeline-card { display:grid; grid-template-columns: 86px 1fr; gap: 14px; align-items:start; }
+    .day-pill { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color:white; border-radius: 20px; text-align:center; padding: 12px 8px; }
+    .day-pill strong { display:block; font-size:16px; }
+    .day-pill span { opacity:.8; font-size:11px; }
+    .timeline { display:flex; flex-direction:column; gap:10px; }
+    .tag { display:inline-flex; padding:6px 10px; border-radius:999px; font-size:11px; font-weight:800; }
+    .tag.urgent { background: #fee2e2; color: #991b1b; }
+    .tag.info { background: #e0f2fe; color: #075985; }
+    .tag.form { background: #dcfce7; color: #166534; }
+    .map-wrap { background: linear-gradient(180deg, #edf3fb, #f8fafc); border-radius: 22px; border: 1px solid var(--line); overflow: hidden; }
+    .map-header { padding: 12px 14px 0; color: var(--muted); font-size: 13px; }
+    .map-svg { width: 100%; height: auto; display:block; }
+    .map-pin { fill: #1d4ed8; stroke: white; stroke-width: 3; cursor: pointer; }
+    .map-pin.hotel { fill: #0f172a; }
+    .map-label { font-size: 13px; fill: #0f172a; font-weight: 700; }
+    .map-badge { fill: rgba(255,255,255,.96); stroke: rgba(15,23,42,.12); }
+    .map-note { padding: 12px 14px 14px; font-size: 14px; color: var(--muted); }
+    .insta a, .notice a { color: var(--primary); font-weight: 700; }
+    .modal { position: fixed; inset:0; background: rgba(15,23,42,.56); display:none; align-items:center; justify-content:center; padding:14px; z-index:50; }
+    .modal.show { display:flex; }
+    .modal-card { width:min(100%, 860px); max-height:92vh; overflow:auto; padding:18px; }
+    .picker-grid { display:grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 12px; }
+    .group-card { border:1px solid var(--line); border-radius: 22px; background:#fff; padding: 18px; cursor:pointer; text-align:center; }
+    .group-card strong { display:block; font-size: 42px; }
+    .field { display:flex; flex-direction:column; gap: 6px; margin-top:12px; }
+    .field input, .field textarea, .field select { padding: 12px 14px; border-radius: 14px; border:1px solid #cbd5e1; background:white; }
+    .field textarea { min-height: 90px; resize: vertical; }
+    .btn-row { display:flex; gap:10px; flex-wrap:wrap; margin-top: 12px; }
+    .btn { border:0; border-radius: 14px; padding: 12px 14px; cursor:pointer; font-weight:700; }
+    .btn-primary { background: linear-gradient(135deg, #60a5fa, #a78bfa); color: #0f172a; }
+    .btn-secondary { background: #e2e8f0; color: #0f172a; }
+    .btn-danger { background: #fee2e2; color: #991b1b; }
+    .admin-block { border:1px solid var(--line); border-radius: 20px; padding:14px; margin-top:12px; background:#f8fafc; }
+    .admin-block h4 { margin:0 0 10px; }
+    .mini-list { display:flex; flex-direction:column; gap:10px; margin-top:10px; }
+    .mini { background:white; border:1px solid var(--line); border-radius:16px; padding:12px; }
+    .empty { border: 2px dashed rgba(100,116,139,.24); border-radius: 20px; padding: 18px; text-align:center; color: var(--muted); }
+    .hidden { display: none !important; }
+    .footer { text-align:center; color: var(--muted); font-size:12px; margin-top:18px; }
+    @media (min-width: 760px) {
+      .app { padding: 24px 18px 110px; }
+      .grid, .two-col { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 620px) {
+      .quick-grid { grid-template-columns: 1fr 1fr; }
+      .count-grid { grid-template-columns: 1fr 1fr; }
+      .timeline-card { grid-template-columns: 1fr; }
+      .group-hero-btn { width: 62px; height: 62px; font-size: 34px; }
+      .logo-wrap { width: 62px; height: 62px; }
+    }
   </style>
 </head>
 <body>
   <div class="app">
     <header class="hero">
-      <div class="school-brand">
-        <div class="school-logo"><img src="/assets/logo.png" alt="Logo DevelsteinCollege" /></div>
-        <div class="school-name"><small>Buitenlandse reis</small><strong>DevelsteinCollege</strong></div>
+      <div class="hero-top">
+        <div class="brand">
+          <div class="logo-wrap"><img src="/assets/logo.png" alt="DevelsteinCollege logo" /></div>
+          <div class="title-wrap">
+            <small>DevelsteinCollege</small>
+            <h1>Buitenlandse reis Parijs</h1>
+          </div>
+        </div>
+        <button class="group-hero-btn" id="groupHeroBtn" aria-label="Wissel groep">A</button>
       </div>
-      <h1>Buitenlandse reis Parijs</h1>
       <div class="quick-grid">
-        <div class="quick"><small>Groep</small><strong id="heroGroup">Groep A</strong></div>
-        <div class="quick"><small>Hotel</small><strong id="heroHotel">—</strong></div>
-        <div class="quick"><small>Vertrek</small><strong id="heroDeparture">—</strong></div>
-        <div class="quick"><small>Leiding</small><strong id="heroLeiding">—</strong></div>
+        <div class="quick"><small>Hotel</small><strong id="heroHotel">-</strong></div>
+        <div class="quick"><small id="statusLabel">Vertrek</small><strong id="heroStatus">-</strong></div>
+        <div class="quick"><small>Instagram</small><strong>DevelsteinCollege</strong></div>
       </div>
     </header>
 
-    <nav class="nav">
-      <a href="#aftellen">Aftellen</a>
+    <nav class="nav" id="mainNav">
+      <a href="#aftellen" id="countdownNavLink">Aftellen</a>
       <a href="#mededelingen">Mededelingen</a>
       <a href="#schema">Schema</a>
       <a href="#instagram">Instagram</a>
       <a href="#kamers">Kamers</a>
       <a href="#kaart">Kaart</a>
       <a href="#praktisch">Praktisch</a>
-      <button id="groupSwitchBtn" class="group-pill" type="button">Groep A</button>
       <button id="openAdminNav" type="button">Admin</button>
     </nav>
 
     <section id="aftellen">
-      <div class="section-head"><div><h2>Aftelklok tot vertrek</h2></div></div>
+      <div class="section-head"><h2>Aftelklok tot vertrek</h2></div>
       <div class="card">
-        <div class="count-grid" id="countdown">
+        <div class="count-grid" id="countdownGrid">
           <div class="count"><strong>0</strong><small>Dagen</small></div>
           <div class="count"><strong>0</strong><small>Uren</small></div>
           <div class="count"><strong>0</strong><small>Minuten</small></div>
           <div class="count"><strong>0</strong><small>Seconden</small></div>
         </div>
-        <p class="note" style="margin-top:12px;">We vertrekken op <strong id="departLabel">—</strong></p>
+        <p class="muted" style="margin-top:12px;">We vertrekken op <strong id="departLabel">-</strong></p>
       </div>
     </section>
 
     <section id="mededelingen">
-      <div class="section-head"><div><h2>Mededelingen</h2><p>Geldig voor groep A en B.</p></div></div>
-      <div id="announcementsList" class="announce-grid"></div>
+      <div class="section-head"><h2>Mededelingen</h2></div>
+      <div id="announcementsList" class="grid"></div>
     </section>
 
     <section id="schema">
-      <div class="section-head"><div><h2>Programma per dag</h2><p id="programGroupLabel">Programma van Groep A.</p></div></div>
-      <div id="scheduleList" class="card-grid"></div>
+      <div class="section-head"><h2>Programma per dag</h2></div>
+      <div id="scheduleList" class="grid"></div>
     </section>
 
     <section id="instagram">
-      <div class="section-head"><div><h2>Instagram filmpjes van school</h2><p>Geldig voor groep A en B.</p></div></div>
-      <div id="instagramList" class="insta-grid"></div>
-    </section>
-
-    <section id="leiding">
-      <div class="section-head"><div><h2>Leiding</h2><p id="leidingGroupLabel">Begeleiders van Groep A.</p></div></div>
-      <div class="lead-grid" id="leidingList"></div>
+      <div class="section-head"><h2>Instagram</h2></div>
+      <div id="instagramList" class="grid"></div>
     </section>
 
     <section id="kamers">
-      <div class="section-head"><div><h2>Kamerverdeling</h2><p id="roomsGroupLabel">Kamerverdeling van Groep A.</p></div></div>
-      <div id="roomsList" class="room-grid"></div>
+      <div class="section-head"><h2>Kamerverdeling</h2></div>
+      <div id="roomsList" class="grid"></div>
     </section>
 
     <section id="kaart">
-      <div class="section-head"><div><h2>Kaart van Parijs + hotel</h2><p id="mapGroupLabel">Locaties van Groep A.</p></div></div>
-      <div class="card map-shell">
-        <div class="map-figure">
-          <svg class="map-svg" viewBox="0 0 100 70" preserveAspectRatio="none">
-            <defs>
-              <linearGradient id="river" x1="0" y1="0" x2="1" y2="0">
-                <stop offset="0%" stop-color="#93c5fd" />
-                <stop offset="100%" stop-color="#60a5fa" />
-              </linearGradient>
-            </defs>
-            <rect x="0" y="0" width="100" height="70" fill="#f8fafc"></rect>
-            <path d="M10 53 C22 40, 38 55, 50 45 S76 33, 92 42" stroke="url(#river)" stroke-width="6" fill="none" stroke-linecap="round"></path>
-            <g opacity=".12" stroke="#0f172a">
-              <path d="M8 10 H92"/><path d="M8 20 H92"/><path d="M8 30 H92"/><path d="M8 40 H92"/><path d="M8 50 H92"/><path d="M8 60 H92"/>
-              <path d="M15 5 V65"/><path d="M30 5 V65"/><path d="M45 5 V65"/><path d="M60 5 V65"/><path d="M75 5 V65"/>
-            </g>
-            <g id="mapMarkers"></g>
-          </svg>
+      <div class="section-head"><h2>Kaart van Parijs + hotel</h2></div>
+      <div class="card">
+        <div class="map-wrap">
+          <div class="map-header" id="mapHotelHeader">Hotel</div>
+          <svg class="map-svg" viewBox="0 0 1000 700" id="mapSvg" role="img" aria-label="Kaart van Parijs"></svg>
+          <div class="map-note" id="mapSelectedNote">Tik op een locatie om de naam te zien.</div>
         </div>
-        <div class="map-info"><strong id="mapInfoTitle">Klik op een locatie</strong><p id="mapInfoText" class="meta">Bekijk per groep het hotel en de excursielocaties.</p></div>
       </div>
     </section>
 
     <section id="praktisch">
-      <div class="section-head"><div><h2>Praktische informatie</h2></div></div>
+      <div class="section-head"><h2>Praktische informatie</h2></div>
       <div class="two-col">
-        <div class="check-card">
-          <h3>Hotel & vervoer</h3>
-          <ul class="clean">
-            <li><strong>Hotel:</strong> <span id="hotelNameText">—</span></li>
-            <li><strong>Bestemming:</strong> Parijs, Frankrijk</li>
-            <li><strong>Reisduur:</strong> maandag t/m donderdag</li>
-            <li><strong>Vervoer:</strong> bus of trein</li>
-            <li><strong>Groep:</strong> <span id="praktischGroup">Groep A</span></li>
-          </ul>
+        <div class="card">
+          <h3 style="margin:0 0 8px;">Hotel & leiding</h3>
+          <p class="muted"><strong>Hotel:</strong> <span id="hotelNameText">-</span></p>
+          <p class="muted" style="margin-top:8px;"><strong>Leiding:</strong> <span id="leadersText">-</span></p>
         </div>
-        <div class="check-card">
-          <h3>Paklijst & afspraken</h3>
-          <ul class="clean">
-            <li>Geldig paspoort of ID-kaart</li>
-            <li>Kleding voor meerdere dagen</li>
-            <li>Comfortabele schoenen</li>
-            <li>Toilettas en medicijnen</li>
-            <li>Oplader en powerbank</li>
-            <li>Blijf altijd bereikbaar en kom op tijd bij verzamelpunten</li>
-          </ul>
+        <div class="card">
+          <h3 style="margin:0 0 8px;">Paklijst</h3>
+          <p class="muted">Geldig paspoort of ID-kaart, kleding voor meerdere dagen, comfortabele schoenen, toilettas, oplader, powerbank en een kleine rugzak.</p>
         </div>
       </div>
     </section>
-    <p class="footer-note">v0.03 • Mededelingen en Instagram zijn gedeeld. Programma, hotel, leiding, kamers en kaart zijn per groep.</p>
+
+    <p class="footer">v0.04 • Installeerbaar als app zodra de site online staat.</p>
   </div>
 
-  <button class="fab-admin" id="fabAdmin" aria-label="Open admin login">⚙️</button>
-
   <div class="modal" id="groupModal">
-    <div class="picker-card">
-      <div class="modal-head"><div><h3>Kies je groep</h3><p>Deze keuze kun je later bovenaan altijd wijzigen.</p></div></div>
-      <div class="btn-row">
-        <button class="btn btn-primary" data-group-choice="A">Groep A</button>
-        <button class="btn btn-secondary" data-group-choice="B">Groep B</button>
+    <div class="modal-card">
+      <h3 style="margin:0;">Kies je groep</h3>
+      <p class="muted" style="margin-top:8px;">Selecteer de groep waarin je zit. Dit kun je later altijd bovenaan aanpassen.</p>
+      <div class="picker-grid">
+        <button class="group-card" data-group="A"><strong>A</strong><span>Groep A</span></button>
+        <button class="group-card" data-group="B"><strong>B</strong><span>Groep B</span></button>
       </div>
     </div>
   </div>
 
   <div class="modal" id="loginModal">
-    <div class="login-card">
-      <div class="modal-head"><div><h3>Admin login</h3><p>Log in om de websitegegevens aan te passen.</p></div><button class="btn btn-secondary" id="closeLogin" type="button">Sluiten</button></div>
-      <div class="field"><label for="adminUsername">Gebruikersnaam</label><input id="adminUsername" type="text" value="admin" /></div>
-      <div class="field"><label for="adminPassword">Wachtwoord</label><input id="adminPassword" type="password" placeholder="Voer admin wachtwoord in" /></div>
-      <div class="btn-row" style="margin-top:12px;"><button class="btn btn-dark" id="loginBtn" type="button">Inloggen</button></div>
-      <p id="loginFeedback" class="note" style="margin-top:10px;"></p>
+    <div class="modal-card" style="max-width:440px;">
+      <h3 style="margin:0;">Admin login</h3>
+      <div class="field"><label>Gebruikersnaam</label><input id="adminUsername" type="text" value="admin" /></div>
+      <div class="field"><label>Wachtwoord</label><input id="adminPassword" type="password" /></div>
+      <div class="btn-row"><button class="btn btn-primary" id="loginBtn">Inloggen</button><button class="btn btn-secondary" id="closeLoginBtn">Sluiten</button></div>
+      <p class="muted" id="loginFeedback" style="margin-top:10px;"></p>
     </div>
   </div>
 
   <div class="modal" id="adminModal">
     <div class="modal-card">
-      <div class="modal-head">
-        <div><h3>Admin beheer</h3><p>Beheer gedeelde inhoud en pas Groep A of B apart aan.</p></div>
-        <div class="btn-row"><button class="btn btn-secondary" id="logoutBtn" type="button">Uitloggen</button><button class="btn btn-secondary" id="closeAdmin" type="button">Sluiten</button></div>
-      </div>
-
-      <div class="admin-block">
-        <h4 class="admin-title">1. Gedeeld voor beide groepen</h4>
-        <div class="form-grid two">
-          <div class="field"><label for="departureInput">Vertrekdatum en tijd</label><input id="departureInput" type="datetime-local" /></div>
+      <div style="display:flex; justify-content:space-between; gap:12px; align-items:center; flex-wrap:wrap;">
+        <div>
+          <h3 style="margin:0;">Admin beheer</h3>
+          <p class="muted" style="margin-top:6px;">Gedeelde mededelingen en Instagram. Groepsspecifiek: hotel, leiding, programma, kamers en kaart.</p>
         </div>
+        <div class="btn-row" style="margin-top:0;"><button class="btn btn-secondary" id="logoutBtn">Uitloggen</button><button class="btn btn-secondary" id="closeAdminBtn">Sluiten</button></div>
       </div>
 
       <div class="admin-block">
-        <h4 class="admin-title">2. Groep kiezen voor groepsgegevens</h4>
-        <div class="form-grid two">
-          <div class="field"><label for="adminGroupSelect">Groep</label><select id="adminGroupSelect"><option value="A">Groep A</option><option value="B">Groep B</option></select></div>
-          <div class="field"><label for="hotelInput">Hotelnaam</label><input id="hotelInput" type="text" /></div>
-        </div>
-        <div class="field" style="margin-top:12px;"><label for="leidingInput">Leiding</label><input id="leidingInput" type="text" placeholder="Bijv. Mevr. Jansen, Dhr. Bakker" /></div>
-        <div class="btn-row" style="margin-top:12px;"><button class="btn btn-primary" id="saveBasicsBtn" type="button">Groepsgegevens opslaan</button></div>
+        <h4>1. Basis en gekozen groep</h4>
+        <div class="field"><label>Bewerk groep</label><select id="adminGroupSelect"><option value="A">Groep A</option><option value="B">Groep B</option></select></div>
+        <div class="field"><label>Vertrekdatum en tijd</label><input id="departureInput" type="datetime-local" /></div>
+        <div class="field"><label>Instagram profiel</label><input id="instagramProfileInput" type="url" /></div>
+        <div class="field"><label>Hotelnaam</label><input id="hotelInput" type="text" /></div>
+        <div class="field"><label>Leiding</label><input id="leadersInput" type="text" /></div>
+        <div class="btn-row"><button class="btn btn-primary" id="saveBasicsBtn">Opslaan</button></div>
       </div>
 
       <div class="admin-block">
-        <h4 class="admin-title">3. Mededeling toevoegen (gedeeld)</h4>
-        <div class="form-grid two">
-          <div class="field"><label for="announcementTitle">Titel</label><input id="announcementTitle" type="text" /></div>
-          <div class="field"><label for="announcementType">Type</label><select id="announcementType"><option value="urgent">Urgent</option><option value="info">Info</option><option value="form">Evaluatieformulier</option></select></div>
-        </div>
-        <div class="field" style="margin-top:12px;"><label for="announcementText">Tekst</label><textarea id="announcementText"></textarea></div>
-        <div class="field" style="margin-top:12px;"><label for="announcementLink">Optionele link</label><input id="announcementLink" type="url" placeholder="https://..." /></div>
-        <div class="btn-row" style="margin-top:12px;"><button class="btn btn-primary" id="addAnnouncementBtn" type="button">Mededeling toevoegen</button></div>
-        <div id="announcementAdminList" class="list-admin"></div>
+        <h4>2. Mededeling toevoegen (gedeeld)</h4>
+        <div class="field"><label>Titel</label><input id="announcementTitle" type="text" /></div>
+        <div class="field"><label>Type</label><select id="announcementType"><option value="urgent">Urgent</option><option value="info">Info</option><option value="form">Formulier</option></select></div>
+        <div class="field"><label>Tekst</label><textarea id="announcementText"></textarea></div>
+        <div class="field"><label>Link</label><input id="announcementLink" type="url" /></div>
+        <div class="btn-row"><button class="btn btn-primary" id="addAnnouncementBtn">Toevoegen</button></div>
+        <div id="announcementAdminList" class="mini-list"></div>
       </div>
 
       <div class="admin-block">
-        <h4 class="admin-title">4. Instagram-link toevoegen (gedeeld)</h4>
-        <div class="form-grid two">
-          <div class="field"><label for="instaTitle">Titel</label><input id="instaTitle" type="text" /></div>
-          <div class="field"><label for="instaUrl">Instagram link</label><input id="instaUrl" type="url" placeholder="https://www.instagram.com/..." /></div>
-        </div>
-        <div class="btn-row" style="margin-top:12px;"><button class="btn btn-primary" id="addInstagramBtn" type="button">Instagram-link toevoegen</button></div>
-        <div id="instagramAdminList" class="list-admin"></div>
+        <h4>3. Instagram-link toevoegen (gedeeld)</h4>
+        <div class="field"><label>Titel</label><input id="instaTitle" type="text" /></div>
+        <div class="field"><label>Link</label><input id="instaUrl" type="url" /></div>
+        <div class="btn-row"><button class="btn btn-primary" id="addInstagramBtn">Toevoegen</button></div>
+        <div id="instagramAdminList" class="mini-list"></div>
       </div>
 
       <div class="admin-block">
-        <h4 class="admin-title">5. Programma aanpassen (geselecteerde groep)</h4>
-        <div id="scheduleAdminList" class="list-admin"></div>
+        <h4>4. Programma (gekozen groep)</h4>
+        <div id="scheduleAdminList" class="mini-list"></div>
       </div>
 
       <div class="admin-block">
-        <h4 class="admin-title">6. Kamerverdeling beheren (geselecteerde groep)</h4>
-        <div class="form-grid two">
-          <div class="field"><label for="roomName">Kamernaam / nummer</label><input id="roomName" type="text" /></div>
-          <div class="field"><label for="roomStudents">Leerlingen / bewoners</label><input id="roomStudents" type="text" /></div>
-        </div>
-        <div class="field" style="margin-top:12px;"><label for="roomNote">Opmerking</label><input id="roomNote" type="text" /></div>
-        <div class="btn-row" style="margin-top:12px;"><button class="btn btn-primary" id="addRoomBtn" type="button">Kamer toevoegen</button></div>
-        <div id="roomsAdminList" class="list-admin"></div>
+        <h4>5. Kamers (gekozen groep)</h4>
+        <div class="field"><label>Kamer</label><input id="roomName" type="text" /></div>
+        <div class="field"><label>Leerlingen</label><input id="roomStudents" type="text" /></div>
+        <div class="field"><label>Opmerking</label><input id="roomNote" type="text" /></div>
+        <div class="btn-row"><button class="btn btn-primary" id="addRoomBtn">Kamer toevoegen</button></div>
+        <div id="roomsAdminList" class="mini-list"></div>
+      </div>
+
+      <div class="admin-block">
+        <h4>6. Kaartlocaties (gekozen groep)</h4>
+        <div class="field"><label>Locaties worden aangepast als percentages op de kaart (X en Y).</label></div>
+        <div id="spotsAdminList" class="mini-list"></div>
       </div>
     </div>
   </div>
 
-  <script>
-    const GROUP_KEY = 'parijsGroupChoiceV03';
-    let siteData = null;
-    let currentGroup = localStorage.getItem(GROUP_KEY) || '';
-    let mapSelected = null;
-    let authStatus = false;
+<script>
+const state = {
+  site: null,
+  currentGroup: localStorage.getItem('selectedGroup') || '',
+  isAdmin: false,
+  adminGroup: 'A'
+};
 
-    const groupNames = { A: 'Groep A', B: 'Groep B' };
-    const countEls = document.querySelectorAll('#countdown .count strong');
-    const groupModal = document.getElementById('groupModal');
-    const loginModal = document.getElementById('loginModal');
-    const adminModal = document.getElementById('adminModal');
+const countdownEls = document.querySelectorAll('#countdownGrid .count strong');
+const groupModal = document.getElementById('groupModal');
+const loginModal = document.getElementById('loginModal');
+const adminModal = document.getElementById('adminModal');
 
-    function escapeHtml(str=''){return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;')}
-    function badge(type){if(type==='form') return '<span class="tag form">Formulier</span>'; if(type==='info') return '<span class="tag info">Info</span>'; return '<span class="tag">Urgent</span>'}
-    function activeGroupData(){return siteData.groups[currentGroup]}
-    function formatDeparture(value){const dt=new Date(value); if(Number.isNaN(dt.getTime())) return 'Nog niet ingesteld'; return dt.toLocaleString('nl-NL',{weekday:'long',day:'numeric',month:'long',year:'numeric',hour:'2-digit',minute:'2-digit'}).replace(',',' om')}
-    function normalizeInstagramEmbed(url){if(!url) return ''; try{const u=new URL(url); if(u.hostname.includes('instagram.com')){return url.split('?')[0].replace(/\/$/,'') + '/embed'}}catch{} return ''}
+function uid() { return Math.random().toString(36).slice(2, 10); }
+function escapeHtml(str='') { return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;'); }
+function currentGroupData() { return state.site.groups[state.currentGroup]; }
+function adminGroupData() { return state.site.groups[state.adminGroup]; }
+function tripLength() { return currentGroupData().program.length || 4; }
+function parseDate(v) { const d = new Date(v); return Number.isNaN(d.getTime()) ? null : d; }
+function tripStatus() {
+  const start = parseDate(state.site.shared.departure);
+  if (!start) return { mode: 'before', label: 'Nog niet ingesteld', dayNumber: null };
+  const perDay = 24 * 60 * 60 * 1000;
+  const now = new Date();
+  const diff = now - start;
+  if (diff < 0) return { mode: 'before', label: formatDate(start), dayNumber: null };
+  const day = Math.floor(diff / perDay) + 1;
+  if (day <= tripLength()) return { mode: 'during', label: `Dag ${day}`, dayNumber: day };
+  return { mode: 'after', label: 'Reis afgerond', dayNumber: null };
+}
+function formatDate(date) {
+  return date.toLocaleString('nl-NL', { weekday:'long', day:'numeric', month:'long', year:'numeric', hour:'2-digit', minute:'2-digit' }).replace(',', ' om');
+}
 
-    function updateCountdown(){
-      const departureDate = new Date(siteData.shared.departure);
-      const now = new Date();
-      const diff = departureDate - now;
-      if (Number.isNaN(departureDate.getTime()) || diff <= 0) { countEls.forEach(el => el.textContent = '0'); return; }
-      countEls[0].textContent = Math.floor(diff / (1000*60*60*24));
-      countEls[1].textContent = Math.floor((diff / (1000*60*60)) % 24);
-      countEls[2].textContent = Math.floor((diff / (1000*60)) % 60);
-      countEls[3].textContent = Math.floor((diff / 1000) % 60);
-    }
+async function api(url, options={}) {
+  const response = await fetch(url, {
+    headers: { 'Content-Type': 'application/json' },
+    credentials: 'same-origin',
+    ...options
+  });
+  if (!response.ok) throw new Error((await response.json().catch(()=>({}))).error || 'Er ging iets mis');
+  return response.json();
+}
 
-    function renderHero(){
-      const group = activeGroupData();
-      document.getElementById('heroGroup').textContent = groupNames[currentGroup];
-      document.getElementById('groupSwitchBtn').textContent = groupNames[currentGroup];
-      document.getElementById('heroHotel').textContent = group.hotel;
-      document.getElementById('heroLeiding').textContent = group.leiding || '—';
-      const formatted = formatDeparture(siteData.shared.departure);
-      document.getElementById('heroDeparture').textContent = formatted;
-      document.getElementById('departLabel').textContent = formatted;
-      document.getElementById('hotelNameText').textContent = group.hotel;
-      document.getElementById('praktischGroup').textContent = groupNames[currentGroup];
-      document.getElementById('programGroupLabel').textContent = `Programma van ${groupNames[currentGroup]}.`;
-      document.getElementById('leidingGroupLabel').textContent = `Begeleiders van ${groupNames[currentGroup]}.`;
-      document.getElementById('roomsGroupLabel').textContent = `Kamerverdeling van ${groupNames[currentGroup]}.`;
-      document.getElementById('mapGroupLabel').textContent = `Locaties van ${groupNames[currentGroup]}.`;
-    }
+function setGroup(group) {
+  state.currentGroup = group;
+  localStorage.setItem('selectedGroup', group);
+  document.getElementById('groupHeroBtn').textContent = group;
+  groupModal.classList.remove('show');
+  renderAll();
+}
 
-    function renderAnnouncements(){
-      const root = document.getElementById('announcementsList');
-      if (!siteData.shared.announcements.length) return root.innerHTML = '<div class="empty-state">Nog geen mededelingen geplaatst.</div>';
-      root.innerHTML = siteData.shared.announcements.map(item => `
-        <article class="announce-card">
-          <div class="announce-top"><h3>${escapeHtml(item.title)}</h3>${badge(item.type)}</div>
-          <p>${escapeHtml(item.text)}</p>
-          ${item.link ? `<div class="chip-row"><a class="btn btn-secondary" href="${escapeHtml(item.link)}" target="_blank" rel="noopener noreferrer">Open link</a></div>` : ''}
-        </article>`).join('');
-    }
+function ensureGroupChoice() {
+  if (!state.currentGroup || !state.site.groups[state.currentGroup]) groupModal.classList.add('show');
+  else groupModal.classList.remove('show');
+}
 
-    function renderInstagram(){
-      const root = document.getElementById('instagramList');
-      if (!siteData.shared.instagram.length) return root.innerHTML = '<div class="empty-state">Nog geen Instagram-links toegevoegd.</div>';
-      root.innerHTML = siteData.shared.instagram.map(item => {
-        const embedUrl = normalizeInstagramEmbed(item.url);
-        return `<article class="insta-card"><h3>${escapeHtml(item.title)}</h3>${embedUrl ? `<iframe class="insta-frame" src="${escapeHtml(embedUrl)}" loading="lazy"></iframe>` : '<div class="empty-state">Deze link kan niet als embed worden getoond.</div>'}<div class="chip-row"><a class="btn btn-secondary" href="${escapeHtml(item.url)}" target="_blank" rel="noopener noreferrer">Open op Instagram</a></div></article>`
-      }).join('');
-    }
+function renderHero() {
+  const group = currentGroupData();
+  document.getElementById('groupHeroBtn').textContent = state.currentGroup || 'A';
+  document.getElementById('heroHotel').textContent = group.hotel;
+  document.getElementById('hotelNameText').textContent = group.hotel;
+  document.getElementById('leadersText').textContent = group.leiding || '-';
+  const status = tripStatus();
+  document.getElementById('statusLabel').textContent = status.mode === 'during' ? 'Reisdag' : 'Vertrek';
+  document.getElementById('heroStatus').textContent = status.label;
+  document.getElementById('departLabel').textContent = parseDate(state.site.shared.departure) ? formatDate(parseDate(state.site.shared.departure)) : '-';
+  const countdownSection = document.getElementById('aftellen');
+  const navLink = document.getElementById('countdownNavLink');
+  const during = status.mode === 'during';
+  countdownSection.classList.toggle('hidden', during);
+  navLink.classList.toggle('hidden', during);
+}
 
-    function renderLeiding(){
-      const root = document.getElementById('leidingList');
-      const leads = (activeGroupData().leiding || '').split(',').map(s => s.trim()).filter(Boolean);
-      root.innerHTML = leads.length ? leads.map(name => `<article class="lead-card"><h3>${escapeHtml(name)}</h3><p>Begeleider van ${groupNames[currentGroup]}.</p></article>`).join('') : '<div class="empty-state">Nog geen leiding ingevuld.</div>';
-    }
+function updateCountdown() {
+  if (!state.site) return;
+  const status = tripStatus();
+  if (status.mode !== 'before') return;
+  const departure = parseDate(state.site.shared.departure);
+  const diff = departure - new Date();
+  const days = Math.floor(diff / 86400000);
+  const hours = Math.floor((diff / 3600000) % 24);
+  const minutes = Math.floor((diff / 60000) % 60);
+  const seconds = Math.floor((diff / 1000) % 60);
+  [days, hours, minutes, seconds].forEach((v, i) => countdownEls[i].textContent = Math.max(0, v));
+}
 
-    function renderSchedule(){
-      const root = document.getElementById('scheduleList');
-      root.innerHTML = activeGroupData().program.map(day => `
-        <div class="card schedule-card"><div class="day-pill"><strong>${escapeHtml(day.dayShort)}</strong><span>${escapeHtml(day.dayLabel)}</span></div><div><h3 style="margin:0 0 10px;">${escapeHtml(day.title)}</h3><div class="timeline">${day.items.map(it => `<div class="timeline-item"><strong>${escapeHtml(it.title)}</strong><p>${escapeHtml(it.text)}</p></div>`).join('')}</div></div></div>`).join('');
-    }
+function renderAnnouncements() {
+  const root = document.getElementById('announcementsList');
+  const list = state.site.shared.announcements;
+  if (!list.length) return root.innerHTML = '<div class="empty">Nog geen mededelingen.</div>';
+  root.innerHTML = list.map(item => `
+    <article class="notice">
+      <div style="display:flex;justify-content:space-between;gap:8px;align-items:flex-start;margin-bottom:8px;">
+        <h3>${escapeHtml(item.title)}</h3>
+        <span class="tag ${escapeHtml(item.type)}">${item.type === 'form' ? 'Formulier' : item.type === 'info' ? 'Info' : 'Urgent'}</span>
+      </div>
+      <p>${escapeHtml(item.text)}</p>
+      ${item.link ? `<p style="margin-top:10px;"><a href="${escapeHtml(item.link)}" target="_blank" rel="noopener">Open link</a></p>` : ''}
+    </article>
+  `).join('');
+}
 
-    function renderRooms(){
-      const root = document.getElementById('roomsList');
-      const rooms = activeGroupData().rooms;
-      root.innerHTML = rooms.length ? rooms.map(room => `<article class="room-card"><h3>${escapeHtml(room.name)}</h3><p><strong>Bewoners:</strong> ${escapeHtml(room.students)}</p>${room.note ? `<p style="margin-top:8px;">${escapeHtml(room.note)}</p>` : ''}</article>`).join('') : '<div class="empty-state">Nog geen kamerverdeling ingevuld.</div>';
-    }
+function renderSchedule() {
+  const root = document.getElementById('scheduleList');
+  root.innerHTML = currentGroupData().program.map(day => `
+    <div class="card timeline-card">
+      <div class="day-pill"><strong>${escapeHtml(day.dayShort)}</strong><span>${escapeHtml(day.dayLabel)}</span></div>
+      <div>
+        <h3 style="margin:0 0 10px;">${escapeHtml(day.title)}</h3>
+        <div class="timeline">
+          ${day.items.map(item => `<div class="timeline-item"><strong>${escapeHtml(item.title)}</strong><p>${escapeHtml(item.text)}</p></div>`).join('')}
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
 
-    function renderMap(){
-      const spots = activeGroupData().spots || [];
-      const root = document.getElementById('mapMarkers');
-      root.innerHTML = spots.map((spot, i) => `
-        <g class="map-marker" data-index="${i}" transform="translate(${spot.x},${spot.y})">
-          <circle r="2.6"></circle>
-          <text x="4" y="-4">${escapeHtml(spot.name)}</text>
-        </g>`).join('');
-      root.querySelectorAll('.map-marker').forEach(node => node.addEventListener('click', () => {
-        const spot = spots[Number(node.dataset.index)];
-        document.getElementById('mapInfoTitle').textContent = spot.name;
-        document.getElementById('mapInfoText').textContent = `${spot.note} • ${spot.coords[0].toFixed(4)}, ${spot.coords[1].toFixed(4)}`;
-      }));
-      if (spots[0]) {
-        document.getElementById('mapInfoTitle').textContent = spots[0].name;
-        document.getElementById('mapInfoText').textContent = `${spots[0].note} • ${spots[0].coords[0].toFixed(4)}, ${spots[0].coords[1].toFixed(4)}`;
-      }
-    }
+function renderInstagram() {
+  const root = document.getElementById('instagramList');
+  const profile = state.site.shared.instagramProfile || 'https://www.instagram.com/develsteincollegezwijndrecht/';
+  const links = state.site.shared.instagramLinks;
+  root.innerHTML = `
+    <article class="insta">
+      <h3>Schoolaccount</h3>
+      <p><a href="${escapeHtml(profile)}" target="_blank" rel="noopener">${escapeHtml(profile)}</a></p>
+      <p style="margin-top:10px;">Volg het schoolaccount voor filmpjes en updates.</p>
+    </article>
+    ${links.map(item => `
+      <article class="insta">
+        <h3>${escapeHtml(item.title)}</h3>
+        <p><a href="${escapeHtml(item.url)}" target="_blank" rel="noopener">Open op Instagram</a></p>
+      </article>
+    `).join('')}
+  `;
+}
 
-    function renderAdmin(){
-      if (!siteData) return;
-      document.getElementById('departureInput').value = siteData.shared.departure;
-      document.getElementById('adminGroupSelect').value = currentGroup;
-      hydrateGroupAdmin();
-      document.getElementById('announcementAdminList').innerHTML = siteData.shared.announcements.map(item => `<div class="mini-card"><strong>${escapeHtml(item.title)}</strong><p>${escapeHtml(item.text)}</p>${item.link?`<p>${escapeHtml(item.link)}</p>`:''}<div class="btn-row" style="margin-top:10px;"><button class="btn btn-danger" onclick="removeAnnouncement('${item.id}')">Verwijderen</button></div></div>`).join('');
-      document.getElementById('instagramAdminList').innerHTML = siteData.shared.instagram.map(item => `<div class="mini-card"><strong>${escapeHtml(item.title)}</strong><p>${escapeHtml(item.url)}</p><div class="btn-row" style="margin-top:10px;"><button class="btn btn-danger" onclick="removeInstagram('${item.id}')">Verwijderen</button></div></div>`).join('');
-    }
+function renderRooms() {
+  const root = document.getElementById('roomsList');
+  const rooms = currentGroupData().rooms;
+  if (!rooms.length) return root.innerHTML = '<div class="empty">Nog geen kamers ingevuld.</div>';
+  root.innerHTML = rooms.map(room => `
+    <article class="room">
+      <h3>${escapeHtml(room.name)}</h3>
+      <p><strong>Bewoners:</strong> ${escapeHtml(room.students)}</p>
+      ${room.note ? `<p style="margin-top:8px;">${escapeHtml(room.note)}</p>` : ''}
+    </article>
+  `).join('');
+}
 
-    function hydrateGroupAdmin(){
-      const adminGroup = document.getElementById('adminGroupSelect').value;
-      const group = siteData.groups[adminGroup];
-      document.getElementById('hotelInput').value = group.hotel;
-      document.getElementById('leidingInput').value = group.leiding || '';
-      document.getElementById('scheduleAdminList').innerHTML = group.program.map((day, index) => `<div class="mini-card"><div class="field"><label>Titel ${escapeHtml(day.dayShort)}</label><input value="${escapeHtml(day.title)}" onchange="updateProgramTitle('${adminGroup}',${index},this.value)"></div><div class="field" style="margin-top:10px;"><label>Programma-items (één per regel als Titel | Tekst)</label><textarea onchange="updateProgramItems('${adminGroup}',${index},this.value)">${escapeHtml(day.items.map(it=>`${it.title} | ${it.text}`).join('\n'))}</textarea></div></div>`).join('');
-      document.getElementById('roomsAdminList').innerHTML = group.rooms.map(room => `<div class="mini-card"><strong>${escapeHtml(room.name)}</strong><p>${escapeHtml(room.students)}</p>${room.note?`<p>${escapeHtml(room.note)}</p>`:''}<div class="btn-row" style="margin-top:10px;"><button class="btn btn-danger" onclick="removeRoom('${adminGroup}','${room.id}')">Verwijderen</button></div></div>`).join('');
-    }
+function renderMap() {
+  const group = currentGroupData();
+  document.getElementById('mapHotelHeader').textContent = `${group.hotel} en excursielocaties`;
+  const svg = document.getElementById('mapSvg');
+  const bg = `
+    <defs>
+      <linearGradient id="river" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#7dd3fc" /><stop offset="100%" stop-color="#60a5fa" /></linearGradient>
+    </defs>
+    <rect x="0" y="0" width="1000" height="700" fill="#f8fafc" />
+    <path d="M40 160 C 150 220, 250 170, 340 230 S 500 300, 620 350 S 760 470, 960 520" fill="none" stroke="url(#river)" stroke-width="36" stroke-linecap="round" opacity="0.9" />
+    <g stroke="#dbeafe" stroke-width="16" opacity="0.95">
+      <path d="M80 90 L920 90" /><path d="M120 220 L870 220" /><path d="M90 360 L940 360" /><path d="M70 520 L900 520" />
+      <path d="M160 40 L160 650" /><path d="M340 40 L340 650" /><path d="M530 40 L530 650" /><path d="M720 40 L720 650" /><path d="M860 80 L860 620" />
+    </g>`;
+  const pins = group.spots.map((spot, index) => {
+    const x = 40 + (spot.x / 100) * 920;
+    const y = 40 + (spot.y / 100) * 620;
+    return `
+      <g tabindex="0" onclick="selectSpot(${index})" onkeydown="if(event.key==='Enter'){selectSpot(${index})}">
+        <circle class="map-pin ${index===0 ? 'hotel' : ''}" cx="${x}" cy="${y}" r="16"></circle>
+        <circle cx="${x}" cy="${y}" r="5" fill="white"></circle>
+      </g>`;
+  }).join('');
+  const labels = `
+    <g>
+      <rect class="map-badge" x="26" y="24" width="240" height="52" rx="18" />
+      <text class="map-label" x="48" y="57">${escapeHtml(group.hotel)}</text>
+    </g>`;
+  svg.innerHTML = bg + labels + pins;
+  selectSpot(0);
+}
 
-    function renderAll(){renderHero(); renderAnnouncements(); renderInstagram(); renderLeiding(); renderSchedule(); renderRooms(); renderMap(); renderAdmin(); updateCountdown()}
+window.selectSpot = function(index) {
+  const spot = currentGroupData().spots[index];
+  document.getElementById('mapSelectedNote').textContent = `${spot.name} — ${spot.note}`;
+};
 
-    async function loadSiteData(){ const res = await fetch('/api/site-data'); siteData = await res.json(); renderAll(); }
-    async function saveSiteData(){ const res = await fetch('/api/site-data',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(siteData)}); if(!res.ok){alert('Opslaan is niet gelukt. Log opnieuw in.'); const s = await fetch('/api/auth/status').then(r=>r.json()); authStatus = s.authenticated; return;} renderAll(); }
-    async function refreshAuth(){ const res = await fetch('/api/auth/status'); const json = await res.json(); authStatus = json.authenticated; }
+function renderAdminLists() {
+  const shared = state.site.shared;
+  const group = adminGroupData();
+  document.getElementById('departureInput').value = shared.departure;
+  document.getElementById('instagramProfileInput').value = shared.instagramProfile || 'https://www.instagram.com/develsteincollegezwijndrecht/';
+  document.getElementById('hotelInput').value = group.hotel;
+  document.getElementById('leadersInput').value = group.leiding || '';
+  document.getElementById('adminGroupSelect').value = state.adminGroup;
 
-    function chooseGroup(group){ currentGroup = group; localStorage.setItem(GROUP_KEY, group); groupModal.classList.remove('show'); renderAll(); }
+  document.getElementById('announcementAdminList').innerHTML = shared.announcements.map(item => `
+    <div class="mini"><strong>${escapeHtml(item.title)}</strong><p class="muted">${escapeHtml(item.text)}</p><div class="btn-row"><button class="btn btn-danger" onclick="removeAnnouncement('${item.id}')">Verwijderen</button></div></div>
+  `).join('');
 
-    document.querySelectorAll('[data-group-choice]').forEach(btn => btn.addEventListener('click', () => chooseGroup(btn.dataset.groupChoice)));
-    document.getElementById('groupSwitchBtn').addEventListener('click', () => groupModal.classList.add('show'));
+  document.getElementById('instagramAdminList').innerHTML = shared.instagramLinks.map(item => `
+    <div class="mini"><strong>${escapeHtml(item.title)}</strong><p class="muted">${escapeHtml(item.url)}</p><div class="btn-row"><button class="btn btn-danger" onclick="removeInstagram('${item.id}')">Verwijderen</button></div></div>
+  `).join('');
 
-    document.getElementById('openAdminNav').addEventListener('click', async () => { await refreshAuth(); if(authStatus){ adminModal.classList.add('show'); renderAdmin(); } else { loginModal.classList.add('show'); } });
-    document.getElementById('fabAdmin').addEventListener('click', async () => { await refreshAuth(); if(authStatus){ adminModal.classList.add('show'); renderAdmin(); } else { loginModal.classList.add('show'); } });
-    document.getElementById('closeLogin').addEventListener('click', () => loginModal.classList.remove('show'));
-    document.getElementById('closeAdmin').addEventListener('click', () => adminModal.classList.remove('show'));
+  document.getElementById('scheduleAdminList').innerHTML = group.program.map((day, index) => `
+    <div class="mini">
+      <div class="field"><label>Titel ${escapeHtml(day.dayShort)}</label><input value="${escapeHtml(day.title)}" onchange="updateDayTitle(${index}, this.value)" /></div>
+      <div class="field"><label>Items (Titel | Tekst per regel)</label><textarea onchange="updateDayItems(${index}, this.value)">${escapeHtml(day.items.map(item => `${item.title} | ${item.text}`).join('\n'))}</textarea></div>
+    </div>
+  `).join('');
 
-    document.getElementById('loginBtn').addEventListener('click', async () => {
-      const username = document.getElementById('adminUsername').value.trim();
-      const password = document.getElementById('adminPassword').value;
-      const res = await fetch('/api/auth/login', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({username,password}) });
-      if(res.ok){ authStatus = true; loginModal.classList.remove('show'); adminModal.classList.add('show'); document.getElementById('loginFeedback').textContent=''; renderAdmin(); }
-      else { document.getElementById('loginFeedback').textContent = 'Onjuiste inloggegevens.'; }
-    });
+  document.getElementById('roomsAdminList').innerHTML = group.rooms.map(room => `
+    <div class="mini"><strong>${escapeHtml(room.name)}</strong><p class="muted">${escapeHtml(room.students)}</p>${room.note ? `<p class="muted">${escapeHtml(room.note)}</p>` : ''}<div class="btn-row"><button class="btn btn-danger" onclick="removeRoom('${room.id}')">Verwijderen</button></div></div>
+  `).join('');
 
-    document.getElementById('logoutBtn').addEventListener('click', async () => { await fetch('/api/auth/logout',{method:'POST'}); authStatus=false; adminModal.classList.remove('show'); });
-    document.getElementById('adminGroupSelect').addEventListener('change', hydrateGroupAdmin);
+  document.getElementById('spotsAdminList').innerHTML = group.spots.map(spot => `
+    <div class="mini">
+      <strong>${escapeHtml(spot.name)}</strong>
+      <div class="field"><label>Omschrijving</label><input value="${escapeHtml(spot.note)}" onchange="updateSpot('${spot.id}', 'note', this.value)" /></div>
+      <div class="field"><label>X positie (0-100)</label><input type="number" min="0" max="100" value="${spot.x}" onchange="updateSpot('${spot.id}', 'x', this.value)" /></div>
+      <div class="field"><label>Y positie (0-100)</label><input type="number" min="0" max="100" value="${spot.y}" onchange="updateSpot('${spot.id}', 'y', this.value)" /></div>
+    </div>
+  `).join('');
+}
 
-    document.getElementById('saveBasicsBtn').addEventListener('click', async () => {
-      siteData.shared.departure = document.getElementById('departureInput').value || siteData.shared.departure;
-      const g = document.getElementById('adminGroupSelect').value;
-      siteData.groups[g].hotel = document.getElementById('hotelInput').value.trim() || siteData.groups[g].hotel;
-      siteData.groups[g].leiding = document.getElementById('leidingInput').value.trim() || siteData.groups[g].leiding;
-      if(siteData.groups[g].spots[0]) siteData.groups[g].spots[0].name = `${siteData.groups[g].hotel} (hotel)`;
-      await saveSiteData();
-    });
+window.removeAnnouncement = async function(id) {
+  state.site.shared.announcements = state.site.shared.announcements.filter(x => x.id !== id);
+  await saveSite();
+};
+window.removeInstagram = async function(id) {
+  state.site.shared.instagramLinks = state.site.shared.instagramLinks.filter(x => x.id !== id);
+  await saveSite();
+};
+window.removeRoom = async function(id) {
+  adminGroupData().rooms = adminGroupData().rooms.filter(x => x.id !== id);
+  await saveSite();
+};
+window.updateDayTitle = async function(index, value) {
+  adminGroupData().program[index].title = value;
+  await saveSite();
+};
+window.updateDayItems = async function(index, value) {
+  adminGroupData().program[index].items = value.split('\n').map(line => line.trim()).filter(Boolean).map(line => {
+    const [title, ...rest] = line.split('|');
+    return { title: (title || '').trim() || 'Onderdeel', text: rest.join('|').trim() || 'Nog geen beschrijving' };
+  });
+  await saveSite();
+};
+window.updateSpot = async function(id, key, value) {
+  const spot = adminGroupData().spots.find(s => s.id === id);
+  spot[key] = key === 'x' || key === 'y' ? Number(value) : value;
+  await saveSite();
+};
 
-    document.getElementById('addAnnouncementBtn').addEventListener('click', async () => {
-      const title = document.getElementById('announcementTitle').value.trim(); const text = document.getElementById('announcementText').value.trim(); const type = document.getElementById('announcementType').value; const link = document.getElementById('announcementLink').value.trim();
-      if(!title || !text) return; siteData.shared.announcements.unshift({id:Math.random().toString(36).slice(2,10), title, text, type, link});
-      document.getElementById('announcementTitle').value=''; document.getElementById('announcementText').value=''; document.getElementById('announcementLink').value=''; await saveSiteData();
-    });
+async function saveSite() {
+  await api('/api/site-data', { method:'POST', body: JSON.stringify(state.site) });
+  renderAll();
+}
 
-    document.getElementById('addInstagramBtn').addEventListener('click', async () => {
-      const title = document.getElementById('instaTitle').value.trim(); const url = document.getElementById('instaUrl').value.trim(); if(!title || !url) return;
-      siteData.shared.instagram.unshift({id:Math.random().toString(36).slice(2,10), title, url}); document.getElementById('instaTitle').value=''; document.getElementById('instaUrl').value=''; await saveSiteData();
-    });
+async function renderAll() {
+  if (!state.site || !state.currentGroup || !state.site.groups[state.currentGroup]) return;
+  renderHero();
+  renderAnnouncements();
+  renderSchedule();
+  renderInstagram();
+  renderRooms();
+  renderMap();
+  renderAdminLists();
+  updateCountdown();
+}
 
-    document.getElementById('addRoomBtn').addEventListener('click', async () => {
-      const g = document.getElementById('adminGroupSelect').value; const name = document.getElementById('roomName').value.trim(); const students = document.getElementById('roomStudents').value.trim(); const note = document.getElementById('roomNote').value.trim();
-      if(!name || !students) return; siteData.groups[g].rooms.push({id:Math.random().toString(36).slice(2,10), name, students, note});
-      document.getElementById('roomName').value=''; document.getElementById('roomStudents').value=''; document.getElementById('roomNote').value=''; await saveSiteData();
-    });
+async function init() {
+  state.site = await api('/api/site-data');
+  try { state.isAdmin = (await api('/api/auth/status')).authenticated; } catch {}
+  if (!state.currentGroup || !state.site.groups[state.currentGroup]) state.currentGroup = '';
+  ensureGroupChoice();
+  if (state.currentGroup) renderAll();
+}
 
-    window.removeAnnouncement = async function(id){ siteData.shared.announcements = siteData.shared.announcements.filter(item => item.id !== id); await saveSiteData(); }
-    window.removeInstagram = async function(id){ siteData.shared.instagram = siteData.shared.instagram.filter(item => item.id !== id); await saveSiteData(); }
-    window.removeRoom = async function(group,id){ siteData.groups[group].rooms = siteData.groups[group].rooms.filter(item => item.id !== id); await saveSiteData(); }
-    window.updateProgramTitle = async function(group,index,value){ siteData.groups[group].program[index].title = value; await saveSiteData(); }
-    window.updateProgramItems = async function(group,index,value){ const lines=value.split('\n').map(line=>line.trim()).filter(Boolean); siteData.groups[group].program[index].items = lines.map(line=>{const parts=line.split('|'); return {title:(parts[0]||'').trim() || 'Onderdeel', text:(parts.slice(1).join('|')||'').trim() || 'Nog geen beschrijving'}}); await saveSiteData(); }
+document.querySelectorAll('[data-group]').forEach(btn => btn.addEventListener('click', () => setGroup(btn.dataset.group)));
+document.getElementById('groupHeroBtn').addEventListener('click', () => groupModal.classList.add('show'));
+document.getElementById('openAdminNav').addEventListener('click', () => loginModal.classList.add('show'));
+document.getElementById('closeLoginBtn').addEventListener('click', () => loginModal.classList.remove('show'));
+document.getElementById('closeAdminBtn').addEventListener('click', () => adminModal.classList.remove('show'));
+document.getElementById('adminGroupSelect').addEventListener('change', e => { state.adminGroup = e.target.value; renderAdminLists(); });
 
-    setInterval(() => { if(siteData) updateCountdown(); }, 1000);
+document.getElementById('loginBtn').addEventListener('click', async () => {
+  const username = document.getElementById('adminUsername').value.trim();
+  const password = document.getElementById('adminPassword').value;
+  try {
+    await api('/api/auth/login', { method:'POST', body: JSON.stringify({ username, password }) });
+    loginModal.classList.remove('show');
+    adminModal.classList.add('show');
+    document.getElementById('loginFeedback').textContent = '';
+    renderAdminLists();
+  } catch (e) {
+    document.getElementById('loginFeedback').textContent = e.message;
+  }
+});
 
-    document.getElementById('loginModal').addEventListener('click', e => { if(e.target === loginModal) loginModal.classList.remove('show'); });
-    document.getElementById('adminModal').addEventListener('click', e => { if(e.target === adminModal) adminModal.classList.remove('show'); });
-    document.getElementById('groupModal').addEventListener('click', e => { if(e.target === groupModal && currentGroup) groupModal.classList.remove('show'); });
+document.getElementById('logoutBtn').addEventListener('click', async () => {
+  await api('/api/auth/logout', { method:'POST', body:'{}' });
+  adminModal.classList.remove('show');
+});
 
-    (async function init(){
-      await loadSiteData();
-      await refreshAuth();
-      if(!currentGroup || !siteData.groups[currentGroup]) groupModal.classList.add('show');
-      else renderAll();
-    })();
-  </script>
+document.getElementById('saveBasicsBtn').addEventListener('click', async () => {
+  state.site.shared.departure = document.getElementById('departureInput').value || state.site.shared.departure;
+  state.site.shared.instagramProfile = document.getElementById('instagramProfileInput').value.trim() || 'https://www.instagram.com/develsteincollegezwijndrecht/';
+  const group = adminGroupData();
+  group.hotel = document.getElementById('hotelInput').value.trim() || group.hotel;
+  group.leiding = document.getElementById('leadersInput').value.trim() || group.leiding;
+  if (group.spots[0]) group.spots[0].name = `${group.hotel} (hotel)`;
+  await saveSite();
+});
+
+document.getElementById('addAnnouncementBtn').addEventListener('click', async () => {
+  const title = document.getElementById('announcementTitle').value.trim();
+  const text = document.getElementById('announcementText').value.trim();
+  if (!title || !text) return;
+  state.site.shared.announcements.unshift({ id: uid(), title, text, type: document.getElementById('announcementType').value, link: document.getElementById('announcementLink').value.trim() });
+  document.getElementById('announcementTitle').value = '';
+  document.getElementById('announcementText').value = '';
+  document.getElementById('announcementLink').value = '';
+  await saveSite();
+});
+
+document.getElementById('addInstagramBtn').addEventListener('click', async () => {
+  const title = document.getElementById('instaTitle').value.trim();
+  const url = document.getElementById('instaUrl').value.trim();
+  if (!title || !url) return;
+  state.site.shared.instagramLinks.unshift({ id: uid(), title, url });
+  document.getElementById('instaTitle').value = '';
+  document.getElementById('instaUrl').value = '';
+  await saveSite();
+});
+
+document.getElementById('addRoomBtn').addEventListener('click', async () => {
+  const name = document.getElementById('roomName').value.trim();
+  const students = document.getElementById('roomStudents').value.trim();
+  if (!name || !students) return;
+  adminGroupData().rooms.push({ id: uid(), name, students, note: document.getElementById('roomNote').value.trim() });
+  document.getElementById('roomName').value = '';
+  document.getElementById('roomStudents').value = '';
+  document.getElementById('roomNote').value = '';
+  await saveSite();
+});
+
+setInterval(updateCountdown, 1000);
+init();
+</script>
 </body>
 </html>
