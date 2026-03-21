@@ -1,0 +1,11 @@
+{
+  "name": "Parijs schoolreis",
+  "short_name": "Parijs",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f5f7fb",
+  "theme_color": "#2563eb",
+  "icons": [
+    { "src": "/assets/logo.png", "sizes": "192x192", "type": "image/png" }
+  ]
+}
