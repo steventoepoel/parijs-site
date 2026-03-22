@@ -92,10 +92,6 @@
     .hero-meta { display:flex; gap:10px; flex-wrap:wrap; margin-top:10px; }
     .hero-pill { display:inline-flex; align-items:center; gap:8px; padding:8px 12px; border-radius:999px; background:rgba(255,255,255,.14); border:1px solid rgba(255,255,255,.14); font-weight:700; }
     .spot-list { margin-top:12px; display:flex; flex-direction:column; gap:10px; }
-    .spot-row { display:flex; justify-content:space-between; gap:12px; align-items:flex-start; padding:12px 0; border-bottom:1px solid var(--line); }
-    .spot-row:last-child { border-bottom:0; }
-    .spot-row h3 { margin:0 0 6px; font-size:17px; }
-    .spot-row .btn-row { margin-top:0; flex:0 0 auto; }
     .admin-stack { display:flex; flex-direction:column; gap:12px; }
     .admin-inline { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:12px; }
     .admin-repeat { display:flex; flex-direction:column; gap:12px; margin-top:12px; }
@@ -190,7 +186,6 @@
     .hidden { display:none !important; }
     @media (max-width: 860px) {
       .quick-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
-      .spot-row { flex-direction:column; }
       .timeline-toggle { grid-template-columns:1fr 24px; }
       .timeline-day-label { display:none; }
       .timeline-grid { grid-template-columns:1fr; }
@@ -229,7 +224,6 @@
       </div>
       <div class="live-day-badge hidden" id="liveDayBadge">Vandaag: Dag 1</div>
       <div class="hero-meta">
-        <div class="hero-pill"><span>Groep</span><strong id="heroGroupLabel">-</strong></div>
         <div class="hero-pill"><span>Leiding</span><strong id="heroLeiding">-</strong></div>
       </div>
     </header>
@@ -289,7 +283,6 @@
         <div id="map"></div>
         <p class="map-note" id="mapSelectedNote" style="margin-top:12px;"></p>
       </div>
-      <div id="spotsList" class="card spot-list"></div>
     </section>
 
     <section id="praktisch">
@@ -314,7 +307,7 @@
       </div>
     </section>
 
-    <p class="footer">v0.18</p>
+    <p class="footer">v0.19</p>
   </div>
 
   <div class="modal" id="groupModal">
@@ -493,11 +486,10 @@
       const t = tripState();
       const liveDayBadge = document.getElementById('liveDayBadge');
       document.getElementById('groupBtn').textContent = state.currentGroup;
-      document.getElementById('heroGroupLabel').textContent = group.label || `Groep ${state.currentGroup}`;
       document.getElementById('heroLeiding').textContent = group.leiding;
       document.getElementById('departLabel').textContent = formatDate(state.site.shared.departure);
       document.getElementById('instagramProfileBtn').href = state.site.shared.instagramProfile || '#';
-      document.getElementById('mapCaption').textContent = `Alle bezienswaardigheden en locaties van ${group.label}`;
+      document.getElementById('mapCaption').textContent = `Bezienswaardigheden op de kaart van ${group.label}`;
       if (t.started && !t.finished) {
         liveDayBadge.textContent = `Vandaag: Dag ${t.day}`;
         liveDayBadge.classList.remove('hidden');
@@ -633,25 +625,6 @@
       if (bounds.length) state.map.fitBounds(bounds, { padding: [28, 28] });
       setTimeout(() => state.map.invalidateSize(), 120);
       selectSpot(0);
-      document.getElementById('spotsList').innerHTML = spots.map((spot, index) => `
-        <div class="spot-row">
-          <div>
-            <h3>${escapeHtml(spot.name)}</h3>
-            <p class="muted">${escapeHtml(spot.note || '')}</p>
-          </div>
-          <div class="btn-row"><button class="btn btn-secondary" type="button" data-spot-index="${index}">Toon op kaart</button></div>
-        </div>
-      `).join('');
-      document.querySelectorAll('[data-spot-index]').forEach(btn => {
-        btn.addEventListener('click', () => {
-          const index = Number(btn.dataset.spotIndex);
-          selectSpot(index);
-          const coords = spotCoords(spots[index]);
-          state.map.setView(coords, 13);
-          state.markers[index]?.openPopup();
-          document.getElementById('kaart').scrollIntoView({ behavior: 'smooth', block: 'start' });
-        });
-      });
     }
 
     function selectSpot(index) {
