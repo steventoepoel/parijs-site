@@ -22,9 +22,3 @@ Start command: `npm start`
 - Praktische info in admin bewerkbaar
 - Kleine foto's bij programma-items
 - Standaardfoto's toegevoegd voor Louvre, Eiffeltoren, Arc de Triomphe, Sacré-Cœur, Montmartre en Disneyland
-
-
-## Nieuw in v0.15
-- zichtbare installeerknop voor de PWA
-- live dag-highlight bovenin de hero
-- PWA-icons vervangen door aangeleverde iconen

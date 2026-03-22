@@ -4,977 +4,132 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>Buitenlandse reis Parijs • DevelsteinCollege</title>
-  <meta name="theme-color" content="#0f172a" />
+  <meta name="theme-color" content="#1d4ed8" />
   <meta name="description" content="Schoolreis-app voor de buitenlandse reis naar Parijs." />
   <link rel="manifest" href="/manifest.json" />
-  <link rel="apple-touch-icon" href="/assets/icon-192.png" />
+  <link rel="apple-touch-icon" href="/icon-192.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
   <style>
-    :root {
-      --bg: #f6f8fc;
-      --bg-soft: #eef3ff;
-      --card: rgba(255,255,255,.92);
-      --text: #0f172a;
-      --muted: #64748b;
-      --line: rgba(15,23,42,.1);
-      --primary: #2563eb;
-      --primary-2: #7c3aed;
-      --danger-bg: #fee2e2;
-      --danger-text: #991b1b;
-      --shadow: 0 18px 48px rgba(15,23,42,.08);
-      --radius: 24px;
-      --max: 1100px;
-    }
-    :root.dark {
-      --bg: #0b1120;
-      --bg-soft: #111827;
-      --card: rgba(15,23,42,.84);
-      --text: #f8fafc;
-      --muted: #94a3b8;
-      --line: rgba(255,255,255,.1);
-      --primary: #60a5fa;
-      --primary-2: #a78bfa;
-      --danger-bg: rgba(127,29,29,.35);
-      --danger-text: #fecaca;
-      --shadow: 0 18px 48px rgba(0,0,0,.3);
-    }
-    * { box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
-    body {
-      margin: 0;
-      font-family: Inter, system-ui, sans-serif;
-      background:
-        radial-gradient(circle at top right, rgba(37,99,235,.12), transparent 24%),
-        radial-gradient(circle at top left, rgba(124,58,237,.08), transparent 20%),
-        var(--bg);
-      color: var(--text);
-    }
-    img { display:block; max-width:100%; }
-    button, input, textarea, select { font: inherit; }
-    a { color: var(--primary); }
-    .app { max-width: var(--max); margin: 0 auto; padding: 18px 14px 96px; }
-    .hero {
-      background: linear-gradient(135deg, rgba(15,23,42,.98), rgba(37,99,235,.92));
-      color: white;
-      border-radius: 32px;
-      padding: 22px;
-      box-shadow: var(--shadow);
-    }
-    .hero-top { display:flex; gap:16px; justify-content:space-between; align-items:center; }
-    .brand { display:flex; gap:14px; align-items:center; min-width:0; }
-    .logo-wrap { width:64px; height:64px; flex:0 0 auto; display:grid; place-items:center; }
-    .logo-wrap img { width:100%; height:100%; object-fit:contain; filter:drop-shadow(0 8px 18px rgba(0,0,0,.25)); }
-    .title-wrap small { display:block; font-size:12px; opacity:.82; text-transform:uppercase; letter-spacing:.05em; margin-bottom:4px; }
-    .title-wrap h1 { margin:0; font-size:clamp(30px, 6vw, 44px); line-height:1.02; }
-    .hero-actions { display:flex; gap:10px; align-items:center; flex-wrap:wrap; justify-content:flex-end; }
-
-    .live-day-badge {
-      display:inline-flex; align-items:center; gap:8px; margin-top:14px; padding:10px 14px;
-      border-radius:999px; background:rgba(255,255,255,.18); color:#fff; font-weight:800;
-      border:1px solid rgba(255,255,255,.24); backdrop-filter:blur(10px);
-    }
-    .notice-title-urgent {
-      display:inline-block; background:#dc2626; color:#fff; padding:8px 12px; border-radius:12px;
-    }
-    .group-btn, .theme-btn { border:0; cursor:pointer; border-radius:18px; }
-    .group-btn {
-      width:72px; height:72px; background:rgba(255,255,255,.14); color:white; font-size:34px; font-weight:800;
-      box-shadow: inset 0 0 0 1px rgba(255,255,255,.14);
-    }
-    .theme-btn {
-      padding:12px 16px; background:rgba(255,255,255,.14); color:white; font-weight:700;
-      box-shadow: inset 0 0 0 1px rgba(255,255,255,.14);
-    }
-    .quick-grid, .auto-grid, .count-grid { display:grid; gap:12px; }
-    .quick-grid { margin-top:16px; grid-template-columns:repeat(3,minmax(0,1fr)); }
-    .count-grid { grid-template-columns:repeat(4,minmax(0,1fr)); }
-    .auto-grid { grid-template-columns:repeat(auto-fit,minmax(270px,1fr)); }
-    .quick, .card, .notice, .room, .practical, .timeline-day, .spot-card, .insta, .modal-card {
-      background: var(--card);
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      backdrop-filter: blur(14px);
-    }
-    .quick { padding:16px; color:white; background:rgba(255,255,255,.14); min-height:92px; }
-    .quick small { display:block; opacity:.8; }
-    .quick strong { display:block; margin-top:8px; font-size:16px; line-height:1.3; }
-    .nav {
-      position:sticky; top:10px; z-index:20; margin-top:14px; display:flex; gap:8px; overflow-x:auto;
-      scrollbar-width:none; padding-bottom:4px;
-    }
-    .nav::-webkit-scrollbar { display:none; }
-    .nav a, .nav button {
-      white-space:nowrap; border:1px solid var(--line); background:var(--card); color:var(--text);
-      border-radius:999px; padding:10px 14px; text-decoration:none; font-weight:700; cursor:pointer;
-      backdrop-filter: blur(14px);
-    }
-    section { margin-top:18px; }
-    .section-head { margin-bottom:12px; }
-    .section-head h2 { margin:0; font-size:22px; }
-    .card, .notice, .room, .practical, .insta, .spot-card { padding:16px; }
-    .muted, .notice p, .room p, .practical p, .insta p, .timeline-item p, .caption, .map-note {
-      color: var(--muted); line-height:1.55; margin:0;
-    }
-    .count { padding:16px 10px; text-align:center; border-radius:20px; background:var(--bg-soft); border:1px solid var(--line); }
-    .count strong { display:block; font-size:clamp(28px,6vw,38px); line-height:1; margin-bottom:6px; }
-    .tag { display:inline-flex; border-radius:999px; padding:6px 10px; font-size:11px; font-weight:800; }
-    .tag.urgent { background: var(--danger-bg); color: var(--danger-text); }
-    .tag.info { background: rgba(14,165,233,.18); color: #0369a1; }
-    .tag.form { background: rgba(34,197,94,.18); color: #166534; }
-    .notice-top { display:flex; justify-content:space-between; gap:12px; align-items:flex-start; margin-bottom:8px; }
-    .timeline-list { display:flex; flex-direction:column; gap:12px; }
-    .timeline-day { overflow:hidden; }
-    .timeline-toggle {
-      width:100%; border:0; background:transparent; color:inherit; text-align:left; cursor:pointer; padding:16px;
-      display:grid; grid-template-columns:120px 1fr 24px; gap:14px; align-items:center;
-    }
-    .timeline-day-label {
-      border-radius:18px; padding:12px 10px; text-align:center; color:white;
-      background: linear-gradient(135deg, var(--primary), var(--primary-2));
-    }
-    .timeline-day-label strong { display:block; font-size:16px; }
-    .timeline-day-label span { display:block; font-size:12px; opacity:.88; margin-top:4px; }
-    .timeline-chevron { font-size:20px; transition: transform .2s ease; }
-    .timeline-day.open .timeline-chevron { transform: rotate(180deg); }
-    .timeline-content { display:none; padding:0 16px 16px; }
-    .timeline-day.open .timeline-content { display:block; }
-    .timeline-items { display:flex; flex-direction:column; gap:12px; }
-    .timeline-item { border:1px solid var(--line); border-radius:18px; padding:14px; background:var(--bg-soft); }
-    .timeline-grid { display:grid; grid-template-columns:120px 1fr; gap:14px; align-items:start; }
-    .item-photo { width:100%; aspect-ratio:4/3; border-radius:14px; object-fit:cover; border:1px solid var(--line); }
-    details.more-info { margin-top:10px; }
-    details.more-info summary { cursor:pointer; font-weight:700; color:var(--primary); }
-    details.more-info p { margin-top:8px; }
-    #map { width:100%; height:420px; border-radius:20px; border:1px solid var(--line); overflow:hidden; }
-    .checklist { list-style:none; padding:0; margin:10px 0 0; display:flex; flex-direction:column; gap:10px; }
-    .checklist li label { display:flex; gap:10px; align-items:flex-start; }
-    .checklist input { margin-top:2px; }
-    .bullet-list { padding-left:18px; margin:10px 0 0; }
-    .bullet-list li { margin:8px 0; line-height:1.5; }
-    .btn-row { display:flex; flex-wrap:wrap; gap:10px; margin-top:12px; }
-    .btn { border:0; border-radius:14px; padding:12px 14px; font-weight:700; cursor:pointer; text-decoration:none; display:inline-flex; align-items:center; justify-content:center; gap:8px; }
-    .btn-primary { background:linear-gradient(135deg, var(--primary), var(--primary-2)); color:white; }
-    .btn-secondary { background:var(--bg-soft); color:var(--text); border:1px solid var(--line); }
-    .insta-empty { display:grid; place-items:center; min-height:180px; text-align:center; color:var(--muted); border:1px dashed var(--line); border-radius:18px; padding:20px; }
-    .footer { text-align:center; color:var(--muted); font-size:12px; margin-top:18px; }
-    .modal { position:fixed; inset:0; background:rgba(15,23,42,.62); display:none; align-items:center; justify-content:center; z-index:100; padding:14px; }
-    .modal.show { display:flex; }
-    .modal-card { width:min(100%, 920px); max-height:92vh; overflow:auto; padding:18px; }
-    .modal-head { display:flex; justify-content:space-between; gap:12px; align-items:flex-start; margin-bottom:14px; }
-    .field { display:flex; flex-direction:column; gap:6px; }
-    .field label { font-size:14px; font-weight:700; }
-    .field input, .field textarea, .field select {
-      width:100%; padding:12px 14px; border-radius:14px; border:1px solid var(--line); background:var(--bg-soft); color:var(--text);
-    }
-    .field textarea { min-height:100px; resize:vertical; }
-    .spot-list { display:flex; flex-direction:column; gap:8px; margin-top:12px; }
-    .spot-row { display:flex; gap:10px; justify-content:space-between; align-items:center; border:1px solid var(--line); border-radius:16px; padding:12px 14px; background:var(--card); }
-    .spot-row h3 { margin:0 0 4px; font-size:16px; }
-    .mini-list { display:flex; flex-direction:column; gap:10px; }
-    .mini { border:1px solid var(--line); border-radius:16px; padding:12px; background:var(--card); }
-    .admin-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:12px; }
-    .admin-block { border:1px solid var(--line); border-radius:20px; padding:14px; background:var(--bg-soft); margin-top:12px; }
-    .picker-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; }
-    .group-card { border:1px solid var(--line); border-radius:22px; padding:18px; background:var(--card); color:var(--text); cursor:pointer; font-weight:700; }
-    .group-card strong { display:block; font-size:42px; margin-bottom:8px; }
-    .hidden { display:none !important; }
-    @media (max-width: 860px) {
-      .quick-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
-      .timeline-toggle { grid-template-columns:1fr 24px; }
-      .timeline-day-label { display:none; }
-      .timeline-grid { grid-template-columns:1fr; }
-      #map { height:360px; }
-    }
-    @media (max-width: 620px) {
-      .hero-top { align-items:flex-start; flex-direction:column; }
-      .hero-actions { width:100%; justify-content:flex-start; }
-      .logo-wrap { width:56px; height:56px; }
-      .group-btn { width:54px; height:54px; font-size:24px; }
-      .theme-btn { padding:10px 12px; }
-      .quick-grid, .count-grid, .picker-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
-      #map { height:320px; }
-    }
+    :root{--bg:#eef2ff;--card:#ffffff;--text:#14213d;--muted:#64748b;--line:#d7deeb;--primary:#2563eb;--hero1:#172554;--hero2:#2563eb;--urgent:#dc2626;--shadow:0 14px 30px rgba(15,23,42,.08);--radius:22px;--max:980px}
+    :root.dark{--bg:#0f172a;--card:#162033;--text:#f8fafc;--muted:#a7b4c8;--line:#2d3b55;--primary:#60a5fa;--hero1:#0b1226;--hero2:#183b8f;--urgent:#ef4444;--shadow:0 14px 30px rgba(0,0,0,.28)}
+    *{box-sizing:border-box} html{scroll-behavior:smooth} body{margin:0;font-family:Inter,system-ui,sans-serif;background:var(--bg);color:var(--text)} img{max-width:100%;display:block} a{color:inherit} button,input,textarea,select{font:inherit}
+    .app{max-width:var(--max);margin:0 auto;padding:14px 14px 80px}.hero{background:linear-gradient(135deg,var(--hero1),var(--hero2));color:#fff;border-radius:32px;padding:16px 16px 18px;box-shadow:var(--shadow)}
+    .hero-top{display:flex;gap:12px;align-items:center}.brand{display:flex;gap:12px;align-items:center;min-width:0;flex:1}.logo-wrap{width:64px;height:64px}.logo-wrap img{width:100%;height:100%;object-fit:contain}.title-wrap small{display:block;opacity:.82;font-size:12px;letter-spacing:.05em;text-transform:uppercase}.title-wrap h1{margin:0;font-size:clamp(28px,7vw,46px);line-height:.95}.hero-actions{display:grid;grid-template-columns:1fr 1fr auto;gap:10px;margin-top:14px}.hero-btn,.group-btn{border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.12);color:#fff;border-radius:20px;padding:14px 16px;font-weight:800;cursor:pointer}.group-btn{min-width:64px}.today-badge{margin-top:12px;border-radius:18px;background:rgba(255,255,255,.12);padding:12px 14px;font-weight:700}
+    .nav{position:sticky;top:8px;z-index:20;display:flex;gap:8px;overflow-x:auto;padding:8px 0 2px;margin:10px 0 0;scrollbar-width:none}.nav::-webkit-scrollbar{display:none}.nav a,.nav button{white-space:nowrap;border:1px solid var(--line);background:rgba(255,255,255,.8);color:var(--text);border-radius:999px;padding:10px 14px;text-decoration:none;font-weight:700;cursor:pointer}
+    section{margin-top:18px}.section-head{margin-bottom:10px}.section-head h2{margin:0;font-size:20px}.card,.notice,.schedule-day,.room,.practical,.map-card,.insta,.modal-card,.mini,.spot-row{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
+    .card,.notice,.room,.practical,.map-card,.insta,.mini{padding:16px}.count-grid,.auto-grid,.admin-grid{display:grid;gap:12px}.count-grid{grid-template-columns:repeat(4,minmax(0,1fr))}.auto-grid{grid-template-columns:1fr}.admin-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.count{text-align:center;padding:18px 10px;border:1px solid var(--line);border-radius:18px;background:color-mix(in srgb, var(--card) 88%, var(--bg))}.count strong{display:block;font-size:42px;line-height:1;margin-bottom:6px}.muted{color:var(--muted)}
+    .notice-top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}.tag{display:inline-flex;align-items:center;border-radius:999px;padding:6px 10px;font-size:11px;font-weight:800;background:#e0f2fe;color:#075985}.tag.form{background:#dcfce7;color:#166534}.notice.urgent h3{display:inline-block;background:var(--urgent);color:#fff;padding:6px 10px;border-radius:12px}
+    .schedule-day{padding:0;overflow:hidden}.schedule-head{width:100%;display:flex;justify-content:space-between;align-items:center;gap:12px;padding:16px 18px;border:0;background:none;color:inherit;text-align:left;cursor:pointer}.schedule-head strong{font-size:17px}.schedule-head span{display:block;color:var(--muted);font-size:13px;margin-top:4px}.schedule-body{display:none;padding:0 18px 18px}.schedule-day.open .schedule-body{display:block}.timeline-item{display:grid;grid-template-columns:1fr 120px;gap:12px;padding:12px 0;border-top:1px solid var(--line)}.timeline-item:first-child{border-top:0}.item-photo{width:120px;height:90px;object-fit:cover;border-radius:14px;border:1px solid var(--line)}.more{margin-top:8px;font-size:14px;color:var(--muted)}
+    #map{height:360px;border-radius:18px;border:1px solid var(--line)} .spots-list{display:flex;flex-direction:column;gap:10px;margin-top:12px}.spot-row{display:flex;justify-content:space-between;gap:10px;align-items:center;padding:12px 14px}.btn{border:0;border-radius:14px;padding:10px 14px;font-weight:700;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:8px}.btn-primary{background:linear-gradient(135deg,#60a5fa,#8b5cf6);color:#0f172a}.btn-secondary{background:#e2e8f0;color:#0f172a}.btn-danger{background:#fee2e2;color:#991b1b}.field{display:flex;flex-direction:column;gap:6px}.field label{font-weight:700;font-size:14px}.field input,.field textarea,.field select{width:100%;padding:12px 14px;border:1px solid #cbd5e1;border-radius:14px;background:#fff;color:#0f172a}.field textarea{min-height:90px;resize:vertical}.modal{position:fixed;inset:0;background:rgba(15,23,42,.55);display:none;align-items:center;justify-content:center;z-index:100;padding:14px}.modal.show{display:flex}.modal-card{width:min(100%,920px);max-height:92vh;overflow:auto;padding:18px}.modal-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;margin-bottom:14px}.admin-block{border:1px solid var(--line);border-radius:18px;padding:14px;background:color-mix(in srgb, var(--card) 92%, var(--bg));margin-top:12px}.mini-list{display:flex;flex-direction:column;gap:10px}.picker-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.group-card{padding:18px;border-radius:18px;border:1px solid var(--line);background:var(--card);cursor:pointer;font-weight:800}.footer{text-align:center;color:var(--muted);font-size:12px;margin-top:18px}
+    @media (max-width:700px){.hero-actions{grid-template-columns:1fr 1fr;}.group-btn{grid-column:1/-1}.count-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.admin-grid{grid-template-columns:1fr}.timeline-item{grid-template-columns:1fr}.item-photo{width:100%;height:180px}.app{padding:10px 10px 70px}}
   </style>
 </head>
 <body>
-  <div class="app">
-    <header class="hero">
-      <div class="hero-top">
-        <div class="brand">
-          <div class="logo-wrap"><img src="/assets/logo.png" alt="DevelsteinCollege logo"></div>
-          <div class="title-wrap">
-            <small>DevelsteinCollege</small>
-            <h1>Buitenlandse reis Parijs</h1>
-          </div>
-        </div>
-        <div class="hero-actions">
-          <button class="theme-btn" id="themeBtn" type="button">Donkere modus</button>
-          <button class="theme-btn" id="installAppBtn" type="button">📱 Installeer app</button>
-          <button class="group-btn" id="groupBtn" type="button" aria-label="Wissel groep">A</button>
-        </div>
-      </div>
-      <div class="live-day-badge hidden" id="liveDayBadge">Vandaag: Dag 1</div>
-      <div class="quick-grid">
-        <div class="quick"><small>Leiding</small><strong id="heroLeiding">-</strong></div>
-      </div>
-    </header>
-
-    <nav class="nav">
-      <a href="#aftellen" id="countdownNav">Aftellen</a>
-      <a href="#mededelingen">Mededelingen</a>
-      <a href="#programma">Programma</a>
-      <a href="#instagram">Instagram</a>
-      <a href="#kamers">Kamers</a>
-      <a href="#kaart">Kaart</a>
-      <a href="#praktisch">Praktisch</a>
-      <button id="openAdminBtn" type="button">Admin</button>
-    </nav>
-
-    <section id="aftellen">
-      <div class="section-head"><h2>Aftelklok tot vertrek</h2></div>
-      <div class="card">
-        <div class="count-grid" id="countdownGrid">
-          <div class="count"><strong>0</strong><small>Dagen</small></div>
-          <div class="count"><strong>0</strong><small>Uren</small></div>
-          <div class="count"><strong>0</strong><small>Minuten</small></div>
-          <div class="count"><strong>0</strong><small>Seconden</small></div>
-        </div>
-        <p class="muted" style="margin-top:12px;">We vertrekken op <strong id="departLabel">-</strong></p>
-      </div>
-    </section>
-
-    <section id="mededelingen">
-      <div class="section-head"><h2>Mededelingen</h2></div>
-      <div id="announcementsList" class="auto-grid"></div>
-    </section>
-
-    <section id="programma">
-      <div class="section-head"><h2>Programma per dag</h2></div>
-      <div id="scheduleList" class="timeline-list"></div>
-    </section>
-
-    <section id="instagram">
-      <div class="section-head"><h2>Instagram</h2></div>
-      <div class="btn-row" style="margin-top:0;margin-bottom:12px;">
-        <a class="btn btn-secondary" id="instagramProfileBtn" href="#" target="_blank" rel="noopener noreferrer">Open schoolaccount</a>
-      </div>
-      <div id="instagramList" class="auto-grid"></div>
-    </section>
-
-    <section id="kamers">
-      <div class="section-head"><h2>Kamerverdeling</h2></div>
-      <div id="roomsList" class="auto-grid"></div>
-    </section>
-
-    <section id="kaart">
-      <div class="section-head"><h2>Kaart van Parijs</h2></div>
-      <div class="card">
-        <p class="caption" id="mapCaption"></p>
-        <div style="margin-top:12px;"></div>
-        <div id="map"></div>
-        <p class="map-note" id="mapSelectedNote" style="margin-top:12px;"></p>
-      </div>
-      <div id="spotsList" class="spot-list"></div>
-    </section>
-
-    <section id="praktisch">
-      <div class="section-head"><h2>Praktische informatie</h2></div>
-      <div class="auto-grid">
-        <article class="practical">
-          <h3>Zakgeld & verzekering</h3>
-          <ul class="bullet-list" id="moneyInsuranceList"></ul>
-        </article>
-        <article class="practical">
-          <h3>Paklijst</h3>
-          <ul class="checklist" id="packingList"></ul>
-        </article>
-        <article class="practical">
-          <h3>Checklist voor in de bus / handbagage</h3>
-          <ul class="checklist" id="busList"></ul>
-        </article>
-        <article class="practical" style="grid-column:1 / -1;">
-          <h3>Afspraken</h3>
-          <ul class="bullet-list" id="agreementsList"></ul>
-        </article>
-      </div>
-    </section>
-
-    <p class="footer">v0.16 • compactere header, nette admin-velden, Instagram direct na het programma en kaartlijst onder de kaart.</p>
-  </div>
-
-  <div class="modal" id="groupModal">
-    <div class="modal-card" style="max-width:540px;">
-      <div class="modal-head">
-        <div>
-          <h3 style="margin:0;">Kies je groep</h3>
-          <p class="muted" style="margin-top:6px;">Kies hieronder of je bij Groep A of Groep B hoort.</p>
-        </div>
-      </div>
-      <div class="picker-grid">
-        <button class="group-card" type="button" data-group="A"><strong>A</strong>Groep A</button>
-        <button class="group-card" type="button" data-group="B"><strong>B</strong>Groep B</button>
-      </div>
+<div class="app">
+  <header class="hero">
+    <div class="hero-top">
+      <div class="brand"><div class="logo-wrap"><img src="/assets/logo.png" alt="DevelsteinCollege logo"></div><div class="title-wrap"><small>DevelsteinCollege</small><h1>Buitenlandse reis Parijs</h1></div></div>
     </div>
-  </div>
-
-  <div class="modal" id="loginModal">
-    <div class="modal-card" style="max-width:440px;">
-      <div class="modal-head">
-        <div>
-          <h3 style="margin:0;">Admin login</h3>
-          <p class="muted" style="margin-top:6px;">Log in om gegevens aan te passen.</p>
-        </div>
-        <button class="btn btn-secondary" id="closeLoginBtn" type="button">Sluiten</button>
-      </div>
-      <div class="field"><label>Gebruikersnaam</label><input id="adminUsername" type="text" value="admin"></div>
-      <div class="field" style="margin-top:12px;"><label>Wachtwoord</label><input id="adminPassword" type="password"></div>
-      <div class="btn-row"><button class="btn btn-primary" id="loginBtn" type="button">Inloggen</button></div>
-      <p class="muted" id="loginFeedback" style="margin-top:10px;"></p>
+    <div class="hero-actions">
+      <button class="hero-btn" id="themeBtn">🌙 Donkere modus</button>
+      <button class="hero-btn" id="installBtn" hidden>📱 Installeer app</button>
+      <button class="group-btn" id="groupHeroBtn">Groep A</button>
     </div>
-  </div>
+    <div class="today-badge" id="todayBadge">Vandaag: nog niet gestart</div>
+  </header>
+  <nav class="nav"><a href="#aftellen" id="countdownNavLink">Aftellen</a><a href="#mededelingen">Mededelingen</a><a href="#schema">Programma</a><a href="#instagram">Instagram</a><a href="#kamers">Kamers</a><a href="#kaart">Kaart</a><a href="#praktisch">Praktisch</a><button id="openAdminNav">Admin</button></nav>
 
-  <div class="modal" id="adminModal">
-    <div class="modal-card">
-      <div class="modal-head">
-        <div>
-          <h3 style="margin:0;">Admin beheer</h3>
-          <p class="muted" style="margin-top:6px;">Pas alle inhoud aan met nette invoervelden.</p>
-        </div>
-        <div class="btn-row" style="margin-top:0;">
-          <button class="btn btn-secondary" id="logoutBtn" type="button">Uitloggen</button>
-          <button class="btn btn-secondary" id="closeAdminBtn" type="button">Sluiten</button>
-        </div>
-      </div>
+  <section id="aftellen"><div class="section-head"><h2>Aftelklok tot vertrek</h2></div><div class="card"><div class="count-grid" id="countdownGrid"><div class="count"><strong>0</strong><small>Dagen</small></div><div class="count"><strong>0</strong><small>Uren</small></div><div class="count"><strong>0</strong><small>Minuten</small></div><div class="count"><strong>0</strong><small>Seconden</small></div></div><p class="muted" style="margin-top:12px;">We vertrekken op <strong id="departLabel">-</strong></p></div></section>
+  <section id="mededelingen"><div class="section-head"><h2>Mededelingen</h2></div><div id="announcementsList" class="auto-grid"></div></section>
+  <section id="schema"><div class="section-head"><h2>Programma per dag</h2></div><div id="scheduleList" class="auto-grid"></div></section>
+  <section id="instagram"><div class="section-head"><h2>Instagram</h2></div><div style="margin-bottom:12px;"><a class="btn btn-secondary" id="instagramProfileBtn" href="#" target="_blank" rel="noopener noreferrer">Open schoolaccount</a></div><div id="instagramList" class="auto-grid"></div></section>
+  <section id="kamers"><div class="section-head"><h2>Kamerverdeling</h2></div><div id="roomsList" class="auto-grid"></div></section>
+  <section id="kaart"><div class="section-head"><h2>Kaart van Parijs</h2></div><div class="map-card"><div class="muted" id="mapCaption" style="margin-bottom:12px;"></div><div id="map"></div><div class="spots-list" id="spotsList"></div></div></section>
+  <section id="praktisch"><div class="section-head"><h2>Praktische informatie</h2></div><div class="auto-grid"><article class="practical"><h3>Algemene informatie</h3><ul id="practicalInfoList"></ul></article><article class="practical"><h3>Paklijst</h3><ul id="practicalPackingList"></ul></article><article class="practical"><h3>Checklist bus / handbagage</h3><ul id="practicalBusList"></ul></article><article class="practical"><h3>Afspraken</h3><ul id="practicalRulesList"></ul></article></div></section>
+  <p class="footer">v0.16</p>
+</div>
 
-      <div class="admin-block">
-        <h4 style="margin:0 0 12px;">Basisgegevens</h4>
-        <div class="admin-grid">
-          <div class="field"><label>Vertrekdatum en tijd</label><input id="departureInput" type="datetime-local"></div>
-          <div class="field"><label>Groep</label><select id="adminGroupSelect"><option value="A">Groep A</option><option value="B">Groep B</option></select></div>
-          <div class="field"><label>Hotel</label><input id="hotelInput" type="text"></div>
-          <div class="field"><label>Leiding</label><textarea id="leadersInput" style="min-height:84px;"></textarea></div>
-        </div>
-        <div class="btn-row"><button class="btn btn-primary" id="saveBasicsBtn" type="button">Basis opslaan</button></div>
-      </div>
+<div class="modal" id="groupModal"><div class="modal-card" style="max-width:520px;"><div class="modal-head"><div><h3>Kies je groep</h3><p class="muted">Kies hieronder of je bij Groep A of Groep B hoort.</p></div></div><div class="picker-grid"><button class="group-card" type="button" data-group="A">Groep A</button><button class="group-card" type="button" data-group="B">Groep B</button></div></div></div>
+<div class="modal" id="loginModal"><div class="modal-card" style="max-width:420px;"><div class="modal-head"><div><h3>Admin login</h3><p class="muted">Log in om gegevens aan te passen.</p></div><button class="btn btn-secondary" id="closeLoginBtn">Sluiten</button></div><div class="field"><label>Gebruikersnaam</label><input id="adminUsername" value="admin"></div><div class="field"><label>Wachtwoord</label><input id="adminPassword" type="password"></div><div style="margin-top:12px;"><button class="btn btn-primary" id="loginBtn">Inloggen</button></div><p id="loginFeedback" class="muted"></p></div></div>
+<div class="modal" id="adminModal"><div class="modal-card"><div class="modal-head"><div><h3>Admin beheer</h3><p class="muted">Overzichtelijke invoervelden zonder JSON.</p></div><div style="display:flex;gap:8px;"><button class="btn btn-secondary" id="logoutBtn">Uitloggen</button><button class="btn btn-secondary" id="closeAdminBtn">Sluiten</button></div></div>
+  <div class="admin-block"><h4>Basis</h4><div class="admin-grid"><div class="field"><label>Vertrekdatum en tijd</label><input id="departureInput" type="datetime-local"></div><div class="field"><label>Groep</label><select id="adminGroupSelect"><option value="A">Groep A</option><option value="B">Groep B</option></select></div><div class="field"><label>Hotel</label><input id="hotelInput"></div><div class="field"><label>Leiding</label><input id="leadersInput"></div></div><div style="margin-top:12px;"><button class="btn btn-primary" id="saveBasicsBtn">Basis opslaan</button></div></div>
+  <div class="admin-block"><h4>Praktische informatie</h4><div class="field"><label>Algemene info — één regel per bullet</label><textarea id="infoInput"></textarea></div><div class="field"><label>Paklijst — één regel per bullet</label><textarea id="packingInput"></textarea></div><div class="field"><label>Checklist bus / handbagage — één regel per bullet</label><textarea id="busInput"></textarea></div><div class="field"><label>Afspraken — één regel per bullet</label><textarea id="rulesInput"></textarea></div><div style="margin-top:12px;"><button class="btn btn-primary" id="savePracticalBtn">Praktische info opslaan</button></div></div>
+  <div class="admin-block"><h4>Mededelingen</h4><div class="admin-grid"><div class="field"><label>Titel</label><input id="announcementTitle"></div><div class="field"><label>Type</label><select id="announcementType"><option value="urgent">Urgent</option><option value="info">Info</option><option value="form">Formulier</option></select></div></div><div class="field"><label>Tekst</label><textarea id="announcementText"></textarea></div><div class="field"><label>Link</label><input id="announcementLink"></div><div style="margin-top:12px;"><button class="btn btn-primary" id="addAnnouncementBtn">Toevoegen</button></div><div class="mini-list" id="announcementAdminList"></div></div>
+  <div class="admin-block"><h4>Instagram</h4><div class="admin-grid"><div class="field"><label>Schoolaccount</label><input id="instaProfileUrl"></div><div class="field"><label>Titel</label><input id="instaTitle"></div></div><div class="field"><label>Link</label><input id="instaUrl"></div><div style="display:flex;gap:8px;margin-top:12px;"><button class="btn btn-primary" id="saveInstagramProfileBtn">Schoolaccount opslaan</button><button class="btn btn-primary" id="addInstagramBtn">Post toevoegen</button></div><div class="mini-list" id="instagramAdminList"></div></div>
+  <div class="admin-block"><h4>Programma</h4><div id="scheduleAdminList" class="mini-list"></div></div>
+  <div class="admin-block"><h4>Kamers</h4><div class="admin-grid"><div class="field"><label>Kamer</label><input id="roomName"></div><div class="field"><label>Leerlingen</label><input id="roomStudents"></div><div class="field" style="grid-column:1/-1"><label>Opmerking</label><input id="roomNote"></div></div><div style="margin-top:12px;"><button class="btn btn-primary" id="addRoomBtn">Kamer toevoegen</button></div><div id="roomsAdminList" class="mini-list"></div></div>
+  <div class="admin-block"><h4>Kaartlocaties</h4><div id="spotsAdminList" class="mini-list"></div></div>
+</div></div>
 
-      <div class="admin-block">
-        <h4 style="margin:0 0 12px;">Mededelingen</h4>
-        <div class="admin-grid">
-          <div class="field"><label>Titel</label><input id="announcementTitle" type="text"></div>
-          <div class="field"><label>Type</label><select id="announcementType"><option value="urgent">Urgent</option><option value="info">Info</option><option value="form">Formulier</option></select></div>
-          <div class="field" style="grid-column:1 / -1;"><label>Tekst</label><textarea id="announcementText"></textarea></div>
-          <div class="field" style="grid-column:1 / -1;"><label>Link</label><input id="announcementLink" type="url"></div>
-        </div>
-        <div class="btn-row"><button class="btn btn-primary" id="addAnnouncementBtn" type="button">Mededeling toevoegen</button></div>
-        <div id="announcementAdminList" class="mini-list" style="margin-top:12px;"></div>
-      </div>
-
-      <div class="admin-block">
-        <h4 style="margin:0 0 12px;">Instagram</h4>
-        <div class="admin-grid">
-          <div class="field"><label>Schoolaccount</label><input id="instaProfileUrl" type="url"></div>
-          <div class="field"><label>Preview titel</label><input id="instaTitle" type="text"></div>
-          <div class="field" style="grid-column:1 / -1;"><label>Preview link</label><input id="instaUrl" type="url"></div>
-        </div>
-        <div class="btn-row"><button class="btn btn-primary" id="saveInstagramProfileBtn" type="button">Schoolaccount opslaan</button><button class="btn btn-primary" id="addInstagramBtn" type="button">Preview toevoegen</button></div>
-        <div id="instagramAdminList" class="mini-list" style="margin-top:12px;"></div>
-      </div>
-
-      <div class="admin-block">
-        <h4 style="margin:0 0 12px;">Praktische informatie</h4>
-        <div class="field"><label>Zakgeld & verzekering — één regel per bullet</label><textarea id="moneyInsuranceInput"></textarea></div>
-        <div class="field"><label>Paklijst — één regel per bullet</label><textarea id="packingInput"></textarea></div>
-        <div class="field"><label>Bus / handbagage — één regel per bullet</label><textarea id="busInput"></textarea></div>
-        <div class="field"><label>Afspraken — één regel per bullet</label><textarea id="agreementsInput"></textarea></div>
-        <div class="btn-row"><button class="btn btn-primary" id="savePracticalBtn" type="button">Praktische info opslaan</button></div>
-      </div>
-
-      <div class="admin-block">
-        <h4 style="margin:0 0 12px;">Programma van gekozen groep</h4>
-        <p class="muted" style="margin:0 0 10px;">Gebruik per regel: Titel | Tekst | Meer info | Foto URL of pad</p>
-        <div id="scheduleAdminList" class="mini-list"></div>
-      </div>
-
-      <div class="admin-block">
-        <h4 style="margin:0 0 12px;">Kamers van gekozen groep</h4>
-        <div class="admin-grid">
-          <div class="field"><label>Kamer</label><input id="roomName" type="text"></div>
-          <div class="field"><label>Leerlingen</label><input id="roomStudents" type="text"></div>
-          <div class="field" style="grid-column:1 / -1;"><label>Opmerking</label><input id="roomNote" type="text"></div>
-        </div>
-        <div class="btn-row"><button class="btn btn-primary" id="addRoomBtn" type="button">Kamer toevoegen</button></div>
-        <div id="roomsAdminList" class="mini-list" style="margin-top:12px;"></div>
-      </div>
-
-      <div class="admin-block">
-        <h4 style="margin:0 0 12px;">Kaartlocaties van gekozen groep</h4>
-        <div id="spotsAdminList" class="mini-list"></div>
-      </div>
-    </div>
-  </div>
-
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-  <script>
-    const state = {
-      site: null,
-      currentGroup: localStorage.getItem('selectedGroup') || '',
-      adminGroup: 'A',
-      map: null,
-      markers: []
-    };
-
-    const countdownEls = document.querySelectorAll('#countdownGrid .count strong');
-    const groupModal = document.getElementById('groupModal');
-    const loginModal = document.getElementById('loginModal');
-    const adminModal = document.getElementById('adminModal');
-
-    let deferredInstallPrompt = null;
-
-    function updateInstallButton() {
-      const btn = document.getElementById('installAppBtn');
-      if (!btn) return;
-      btn.classList.remove('hidden');
-      btn.textContent = deferredInstallPrompt ? '📱 Installeer app' : '📱 Installeer app';
-    }
-
-
-    function escapeHtml(str = '') {
-      return String(str)
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#039;');
-    }
-
-    async function api(url, options = {}) {
-      const response = await fetch(url, {
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'same-origin',
-        ...options
-      });
-      const data = await response.json().catch(() => ({}));
-      if (!response.ok) throw new Error(data.error || 'Er ging iets mis');
-      return data;
-    }
-
-    function formatDate(value) {
-      const dt = new Date(value);
-      if (Number.isNaN(dt.getTime())) return '-';
-      return dt.toLocaleString('nl-NL', {
-        weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit'
-      }).replace(',', ' om');
-    }
-
-    function currentGroupData() {
-      return state.site.groups[state.currentGroup];
-    }
-
-    function tripState() {
-      const departure = new Date(state.site?.shared?.departure);
-      if (Number.isNaN(departure.getTime())) return { started: false, finished: false, day: 0 };
-      const now = new Date();
-      const diff = now - departure;
-      if (diff < 0) return { started: false, finished: false, day: 0 };
-      const day = Math.floor(diff / (1000 * 60 * 60 * 24)) + 1;
-      const length = currentGroupData()?.program?.length || 4;
-      return { started: true, finished: day > length, day: Math.min(day, length) };
-    }
-
-    function setTheme(theme) {
-      document.documentElement.classList.toggle('dark', theme === 'dark');
-      localStorage.setItem('theme', theme);
-      document.getElementById('themeBtn').textContent = theme === 'dark' ? 'Lichte modus' : 'Donkere modus';
-    }
-
-    function ensureTheme() {
-      setTheme(localStorage.getItem('theme') || 'light');
-    }
-
-    function ensureGroupChoice() {
-      if (!state.currentGroup || !state.site.groups[state.currentGroup]) groupModal.classList.add('show');
-      else groupModal.classList.remove('show');
-    }
-
-    function setGroup(group) {
-      state.currentGroup = group;
-      localStorage.setItem('selectedGroup', group);
-      document.getElementById('groupBtn').textContent = group;
-      groupModal.classList.remove('show');
-      renderAll();
-    }
-
-    function announcementBadge(type) {
-      const klass = type === 'info' ? 'info' : type === 'form' ? 'form' : 'urgent';
-      const label = type === 'info' ? 'Info' : type === 'form' ? 'Formulier' : 'Urgent';
-      return `<span class="tag ${klass}">${label}</span>`;
-    }
-
-    function renderHero() {
-      const group = currentGroupData();
-      const t = tripState();
-      const liveDayBadge = document.getElementById('liveDayBadge');
-      document.getElementById('groupBtn').textContent = state.currentGroup;
-            document.getElementById('heroLeiding').textContent = group.leiding;
-      document.getElementById('departLabel').textContent = formatDate(state.site.shared.departure);
-      document.getElementById('instagramProfileBtn').href = state.site.shared.instagramProfile || '#';
-      document.getElementById('mapCaption').textContent = `Hotel en excursielocaties van ${group.label}`;
-      if (t.started && !t.finished) {
-        document.getElementById('statusLabel').textContent = 'Reisdag';
-        document.getElementById('heroStatus').textContent = `Dag ${t.day}`;
-        liveDayBadge.textContent = `Vandaag: Dag ${t.day}`;
-        liveDayBadge.classList.remove('hidden');
-      } else if (t.finished) {
-        document.getElementById('statusLabel').textContent = 'Status';
-        document.getElementById('heroStatus').textContent = 'Reis afgerond';
-        liveDayBadge.classList.add('hidden');
-      } else {
-        document.getElementById('statusLabel').textContent = 'Vertrek';
-        document.getElementById('heroStatus').textContent = formatDate(state.site.shared.departure);
-        liveDayBadge.classList.add('hidden');
-      }
-      document.getElementById('aftellen').classList.toggle('hidden', t.started);
-      document.getElementById('countdownNav').classList.toggle('hidden', t.started);
-    }
-
-    function renderAnnouncements() {
-      const root = document.getElementById('announcementsList');
-      const items = state.site.shared.announcements || [];
-      if (!items.length) {
-        root.innerHTML = '<div class="insta-empty">Nog geen mededelingen geplaatst.</div>';
-        return;
-      }
-      root.innerHTML = items.map(item => `
-        <article class="notice">
-          <div class="notice-top">
-            <h3 class="${item.type === 'urgent' ? 'notice-title-urgent' : ''}" style="margin:0;">${escapeHtml(item.title)}</h3>
-            ${announcementBadge(item.type)}
-          </div>
-          <p>${escapeHtml(item.text)}</p>
-          ${item.link ? `<div class="btn-row"><a class="btn btn-secondary" href="${escapeHtml(item.link)}" target="_blank" rel="noopener noreferrer">Open link</a></div>` : ''}
-        </article>
-      `).join('');
-    }
-
-    function renderSchedule() {
-      const root = document.getElementById('scheduleList');
-      const days = currentGroupData().program || [];
-      const trip = tripState();
-      root.innerHTML = days.map((day, index) => {
-        const shouldOpen = trip.started && !trip.finished && trip.day === index + 1;
-        return `
-        <article class="timeline-day ${shouldOpen ? 'open' : ''}">
-          <button class="timeline-toggle" type="button">
-            <div class="timeline-day-label"><strong>${escapeHtml(day.dayShort)}</strong><span>${escapeHtml(day.dayLabel)}</span></div>
-            <div>
-              <h3 style="margin:0 0 6px;">${escapeHtml(day.dayLabel)} — ${escapeHtml(day.title)}</h3>
-              <p class="muted">Tik om deze dag ${shouldOpen ? 'in te klappen' : 'uit te klappen'}.</p>
-            </div>
-            <div class="timeline-chevron">⌄</div>
-          </button>
-          <div class="timeline-content">
-            <div class="timeline-items">
-              ${day.items.map(item => `
-                <div class="timeline-item">
-                  <div class="timeline-grid">
-                    ${item.image ? `<img class="item-photo" src="${escapeHtml(item.image)}" alt="${escapeHtml(item.title)}">` : ''}
-                    <div>
-                      <strong>${escapeHtml(item.title)}</strong>
-                      <p>${escapeHtml(item.text)}</p>
-                      ${item.moreInfo ? `<details class="more-info"><summary>Meer info over deze plek</summary><p>${escapeHtml(item.moreInfo)}</p></details>` : ''}
-                    </div>
-                  </div>
-                </div>
-              `).join('')}
-            </div>
-          </div>
-        </article>
-        `;
-      }).join('');
-      root.querySelectorAll('.timeline-day').forEach(dayEl => {
-        dayEl.querySelector('.timeline-toggle').addEventListener('click', () => {
-          dayEl.classList.toggle('open');
-        });
-      });
-    }
-
-    function renderRooms() {
-      const root = document.getElementById('roomsList');
-      const rooms = currentGroupData().rooms || [];
-      if (!rooms.length) {
-        root.innerHTML = '<div class="insta-empty">Nog geen kamerverdeling ingevuld.</div>';
-        return;
-      }
-      root.innerHTML = rooms.map(room => `
-        <article class="room">
-          <h3 style="margin:0 0 8px;">${escapeHtml(room.name)}</h3>
-          <p><strong>Bewoners:</strong> ${escapeHtml(room.students)}</p>
-          ${room.note ? `<p style="margin-top:8px;">${escapeHtml(room.note)}</p>` : ''}
-        </article>
-      `).join('');
-    }
-
-    function renderChecklist(rootId, items, storagePrefix) {
-      const root = document.getElementById(rootId);
-      root.innerHTML = items.map((line, index) => {
-        const key = `${storagePrefix}-${index}`;
-        const checked = localStorage.getItem(key) === '1' ? 'checked' : '';
-        return `<li><label><input type="checkbox" data-key="${key}" ${checked}> <span>${escapeHtml(line)}</span></label></li>`;
-      }).join('');
-      root.querySelectorAll('input[type="checkbox"]').forEach(input => {
-        input.addEventListener('change', () => {
-          localStorage.setItem(input.dataset.key, input.checked ? '1' : '0');
-        });
-      });
-    }
-
-    function renderPractical() {
-      const practical = state.site.shared.practical || {};
-      document.getElementById('moneyInsuranceList').innerHTML = (practical.moneyInsurance || []).map(line => `<li>${escapeHtml(line)}</li>`).join('');
-      document.getElementById('agreementsList').innerHTML = (practical.agreements || []).map(line => `<li>${escapeHtml(line)}</li>`).join('');
-      renderChecklist('packingList', practical.packing || [], `packing-${state.currentGroup}`);
-      renderChecklist('busList', practical.bus || [], `bus-${state.currentGroup}`);
-    }
-
-    function spotCoords(spot) {
-      return Array.isArray(spot.coords) && spot.coords.length === 2 ? [Number(spot.coords[0]), Number(spot.coords[1])] : [48.858, 2.34];
-    }
-
-    function renderMap() {
-      const spots = currentGroupData().spots || [];
-      if (!state.map) {
-        state.map = L.map('map', { scrollWheelZoom: false }).setView([48.858, 2.34], 11);
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-          attribution: '&copy; OpenStreetMap-bijdragers',
-          maxZoom: 19
-        }).addTo(state.map);
-      }
-      state.markers.forEach(marker => marker.remove());
-      state.markers = [];
-      const bounds = [];
-      spots.forEach((spot, index) => {
-        const coords = spotCoords(spot);
-        bounds.push(coords);
-        const marker = L.marker(coords).addTo(state.map).bindPopup(`<strong>${escapeHtml(spot.name)}</strong><br>${escapeHtml(spot.note || '')}`);
-        marker.on('click', () => selectSpot(index));
-        state.markers.push(marker);
-      });
-      if (bounds.length) state.map.fitBounds(bounds, { padding: [28, 28] });
-      setTimeout(() => state.map.invalidateSize(), 120);
-      selectSpot(0);
-      document.getElementById('spotsList').innerHTML = spots.map((spot, index) => `
-        <div class="spot-row">
-          <div>
-            <h3>${escapeHtml(spot.name)}</h3>
-            <p class="muted">${escapeHtml(spot.note || '')}</p>
-          </div>
-          <button class="btn btn-secondary" type="button" data-spot-index="${index}">Toon op kaart</button>
-        </div>
-      `).join('');
-      document.querySelectorAll('[data-spot-index]').forEach(btn => {
-        btn.addEventListener('click', () => {
-          const index = Number(btn.dataset.spotIndex);
-          selectSpot(index);
-          const coords = spotCoords(spots[index]);
-          state.map.setView(coords, 13);
-          state.markers[index]?.openPopup();
-          document.getElementById('kaart').scrollIntoView({ behavior: 'smooth', block: 'start' });
-        });
-      });
-    }
-
-    function selectSpot(index) {
-      const spot = currentGroupData().spots[index];
-      if (!spot) return;
-      document.getElementById('mapSelectedNote').textContent = `${spot.name}${spot.note ? ' — ' + spot.note : ''}`;
-    }
-
-    function toInstagramEmbedUrl(url = '') {
-      try {
-        const u = new URL(url);
-        if (!u.hostname.includes('instagram.com')) return '';
-        const parts = u.pathname.split('/').filter(Boolean);
-        if (['reel', 'p', 'tv'].includes(parts[0]) && parts[1]) return `https://www.instagram.com/${parts[0]}/${parts[1]}/embed/captioned/`;
-      } catch {}
-      return '';
-    }
-
-    function renderInstagram() {
-      const root = document.getElementById('instagramList');
-      const links = state.site.shared.instagramLinks || [];
-      if (!links.length) {
-        root.innerHTML = '<div class="insta-empty">Nog geen Instagram previews toegevoegd.</div>';
-        return;
-      }
-      root.innerHTML = links.map(item => {
-        const embed = toInstagramEmbedUrl(item.url);
-        return `
-          <article class="insta">
-            <h3 style="margin:0 0 8px;">${escapeHtml(item.title)}</h3>
-            ${embed ? `<iframe title="Instagram preview" src="${escapeHtml(embed)}" style="width:100%;min-height:420px;border:1px solid var(--line);border-radius:18px;background:white;" loading="lazy"></iframe>` : '<div class="insta-empty">Deze link kan niet als preview worden getoond.</div>'}
-            <div class="btn-row"><a class="btn btn-secondary" href="${escapeHtml(item.url)}" target="_blank" rel="noopener noreferrer">Open op Instagram</a></div>
-          </article>
-        `;
-      }).join('');
-    }
-
-    function updateCountdown() {
-      if (!state.site) return;
-      const departureDate = new Date(state.site.shared.departure);
-      const now = new Date();
-      const diff = departureDate - now;
-      if (Number.isNaN(departureDate.getTime()) || diff <= 0) {
-        countdownEls.forEach(el => el.textContent = '0');
-        return;
-      }
-      countdownEls[0].textContent = Math.floor(diff / (1000 * 60 * 60 * 24));
-      countdownEls[1].textContent = Math.floor((diff / (1000 * 60 * 60)) % 24);
-      countdownEls[2].textContent = Math.floor((diff / (1000 * 60)) % 60);
-      countdownEls[3].textContent = Math.floor((diff / 1000) % 60);
-    }
-
-    function fillAdmin() {
-      const shared = state.site.shared;
-      const group = state.site.groups[state.adminGroup];
-      document.getElementById('departureInput').value = shared.departure || '';
-      document.getElementById('adminGroupSelect').value = state.adminGroup;
-      document.getElementById('hotelInput').value = group.hotel || '';
-      document.getElementById('leadersInput').value = (group.leiding || '').replace(/, /g, '\n');
-      document.getElementById('moneyInsuranceInput').value = (shared.practical.moneyInsurance || []).join('\n');
-      document.getElementById('packingInput').value = (shared.practical.packing || []).join('\n');
-      document.getElementById('busInput').value = (shared.practical.bus || []).join('\n');
-      document.getElementById('agreementsInput').value = (shared.practical.agreements || []).join('\n');
-      document.getElementById('instaProfileUrl').value = shared.instagramProfile || '';
-      document.getElementById('announcementAdminList').innerHTML = (shared.announcements || []).map(item => `
-        <div class="mini">
-          <strong>${escapeHtml(item.title)}</strong>
-          <p class="muted" style="margin-top:6px;">${escapeHtml(item.text)}</p>
-          <div class="btn-row"><button class="btn btn-secondary" type="button" onclick="removeAnnouncement('${item.id}')">Verwijderen</button></div>
-        </div>`).join('');
-      document.getElementById('instagramAdminList').innerHTML = (shared.instagramLinks || []).map(item => `
-        <div class="mini">
-          <strong>${escapeHtml(item.title)}</strong>
-          <p class="muted" style="margin-top:6px;">${escapeHtml(item.url)}</p>
-          <div class="btn-row"><button class="btn btn-secondary" type="button" onclick="removeInstagram('${item.id}')">Verwijderen</button></div>
-        </div>`).join('');
-      document.getElementById('scheduleAdminList').innerHTML = (group.program || []).map((day, index) => `
-        <div class="mini">
-          <div class="field"><label>${escapeHtml(day.dayLabel)} — titel</label><input value="${escapeHtml(day.title)}" onchange="updateDayTitle(${index}, this.value)"></div>
-          <div class="field" style="margin-top:10px;"><label>${escapeHtml(day.dayLabel)} — onderdelen</label><textarea onchange="updateDayItems(${index}, this.value)">${escapeHtml(day.items.map(item => `${item.title} | ${item.text} | ${item.moreInfo || ''} | ${item.image || ''}`).join('\n'))}</textarea></div>
-        </div>`).join('');
-      document.getElementById('roomsAdminList').innerHTML = (group.rooms || []).map(room => `
-        <div class="mini">
-          <strong>${escapeHtml(room.name)}</strong>
-          <p class="muted" style="margin-top:6px;">${escapeHtml(room.students)}</p>
-          ${room.note ? `<p class="muted" style="margin-top:6px;">${escapeHtml(room.note)}</p>` : ''}
-          <div class="btn-row"><button class="btn btn-secondary" type="button" onclick="removeRoom('${room.id}')">Verwijderen</button></div>
-        </div>`).join('');
-      document.getElementById('spotsAdminList').innerHTML = (group.spots || []).map(spot => {
-        const coords = spotCoords(spot);
-        return `
-        <div class="mini">
-          <strong>${escapeHtml(spot.name)}</strong>
-          <div class="field" style="margin-top:10px;"><label>Omschrijving</label><input value="${escapeHtml(spot.note || '')}" onchange="updateSpot('${spot.id}','note',this.value)"></div>
-          <div class="admin-grid" style="margin-top:10px;">
-            <div class="field"><label>Latitude</label><input type="number" step="0.000001" value="${coords[0]}" onchange="updateSpotCoord('${spot.id}',0,this.value)"></div>
-            <div class="field"><label>Longitude</label><input type="number" step="0.000001" value="${coords[1]}" onchange="updateSpotCoord('${spot.id}',1,this.value)"></div>
-          </div>
-        </div>`;
-      }).join('');
-    }
-
-    async function saveSite() {
-      await api('/api/site-data', { method: 'POST', body: JSON.stringify(state.site) });
-      fillAdmin();
-      renderAll();
-    }
-
-    window.removeAnnouncement = async function(id) {
-      state.site.shared.announcements = (state.site.shared.announcements || []).filter(item => item.id !== id);
-      await saveSite();
-    };
-    window.removeInstagram = async function(id) {
-      state.site.shared.instagramLinks = (state.site.shared.instagramLinks || []).filter(item => item.id !== id);
-      await saveSite();
-    };
-    window.updateDayTitle = async function(index, value) {
-      const day = state.site.groups[state.adminGroup].program[index];
-      if (!day) return;
-      day.title = value;
-      await saveSite();
-    };
-    window.updateDayItems = async function(index, value) {
-      const day = state.site.groups[state.adminGroup].program[index];
-      if (!day) return;
-      day.items = value.split('\n').map(line => line.trim()).filter(Boolean).map(line => {
-        const parts = line.split('|');
-        return {
-          title: (parts[0] || '').trim() || 'Onderdeel',
-          text: (parts[1] || '').trim() || '',
-          moreInfo: (parts[2] || '').trim() || '',
-          image: parts.slice(3).join('|').trim() || ''
-        };
-      });
-      await saveSite();
-    };
-    window.removeRoom = async function(id) {
-      const group = state.site.groups[state.adminGroup];
-      group.rooms = (group.rooms || []).filter(item => item.id !== id);
-      await saveSite();
-    };
-    window.updateSpot = async function(id, key, value) {
-      const spot = (state.site.groups[state.adminGroup].spots || []).find(item => item.id === id);
-      if (!spot) return;
-      spot[key] = value;
-      await saveSite();
-    };
-    window.updateSpotCoord = async function(id, coordIndex, value) {
-      const spot = (state.site.groups[state.adminGroup].spots || []).find(item => item.id === id);
-      if (!spot) return;
-      const coords = spotCoords(spot);
-      coords[coordIndex] = Number(value);
-      spot.coords = coords;
-      await saveSite();
-    };
-
-    function renderAll() {
-      if (!state.site || !state.currentGroup || !state.site.groups[state.currentGroup]) return;
-      renderHero();
-      renderAnnouncements();
-      renderSchedule();
-      renderRooms();
-      renderPractical();
-      renderMap();
-      renderInstagram();
-      fillAdmin();
-      updateCountdown();
-    }
-
-    async function init() {
-      ensureTheme();
-      updateInstallButton();
-      state.site = await api('/api/site-data');
-      if (!state.currentGroup || !state.site.groups[state.currentGroup]) state.currentGroup = '';
-      ensureGroupChoice();
-      if (state.currentGroup) renderAll();
-    }
-
-    document.querySelectorAll('[data-group]').forEach(button => button.addEventListener('click', () => setGroup(button.dataset.group)));
-    document.getElementById('groupBtn').addEventListener('click', () => groupModal.classList.add('show'));
-    document.getElementById('themeBtn').addEventListener('click', () => {
-      const next = document.documentElement.classList.contains('dark') ? 'light' : 'dark';
-      setTheme(next);
-    });
-
-    document.getElementById('openAdminBtn').addEventListener('click', () => loginModal.classList.add('show'));
-    document.getElementById('closeLoginBtn').addEventListener('click', () => loginModal.classList.remove('show'));
-    document.getElementById('closeAdminBtn').addEventListener('click', () => adminModal.classList.remove('show'));
-    document.getElementById('adminGroupSelect').addEventListener('change', event => {
-      state.adminGroup = event.target.value;
-      fillAdmin();
-    });
-    document.getElementById('loginBtn').addEventListener('click', async () => {
-      try {
-        await api('/api/auth/login', {
-          method: 'POST',
-          body: JSON.stringify({
-            username: document.getElementById('adminUsername').value.trim(),
-            password: document.getElementById('adminPassword').value
-          })
-        });
-        document.getElementById('loginFeedback').textContent = '';
-        loginModal.classList.remove('show');
-        adminModal.classList.add('show');
-        fillAdmin();
-      } catch (error) {
-        document.getElementById('loginFeedback').textContent = error.message;
-      }
-    });
-    document.getElementById('logoutBtn').addEventListener('click', async () => {
-      await api('/api/auth/logout', { method: 'POST', body: '{}' });
-      adminModal.classList.remove('show');
-    });
-    document.getElementById('saveBasicsBtn').addEventListener('click', async () => {
-      state.site.shared.departure = document.getElementById('departureInput').value || state.site.shared.departure;
-      const group = state.site.groups[state.adminGroup];
-      group.hotel = document.getElementById('hotelInput').value.trim() || group.hotel;
-      group.leiding = document.getElementById('leadersInput').value.split('\n').map(line => line.trim()).filter(Boolean).join(', ') || group.leiding;
-      if (Array.isArray(group.spots) && group.spots[0]) group.spots[0].name = `${group.hotel} (hotel)`;
-      await saveSite();
-    });
-    document.getElementById('savePracticalBtn').addEventListener('click', async () => {
-      const practical = state.site.shared.practical;
-      practical.moneyInsurance = document.getElementById('moneyInsuranceInput').value.split('\n').map(line => line.trim()).filter(Boolean);
-      practical.packing = document.getElementById('packingInput').value.split('\n').map(line => line.trim()).filter(Boolean);
-      practical.bus = document.getElementById('busInput').value.split('\n').map(line => line.trim()).filter(Boolean);
-      practical.agreements = document.getElementById('agreementsInput').value.split('\n').map(line => line.trim()).filter(Boolean);
-      await saveSite();
-    });
-    document.getElementById('addAnnouncementBtn').addEventListener('click', async () => {
-      const title = document.getElementById('announcementTitle').value.trim();
-      const textValue = document.getElementById('announcementText').value.trim();
-      if (!title || !textValue) return;
-      state.site.shared.announcements.unshift({ id: Math.random().toString(36).slice(2,10), title, text: textValue, type: document.getElementById('announcementType').value, link: document.getElementById('announcementLink').value.trim() });
-      document.getElementById('announcementTitle').value = '';
-      document.getElementById('announcementText').value = '';
-      document.getElementById('announcementLink').value = '';
-      await saveSite();
-    });
-    document.getElementById('saveInstagramProfileBtn').addEventListener('click', async () => {
-      state.site.shared.instagramProfile = document.getElementById('instaProfileUrl').value.trim();
-      await saveSite();
-    });
-    document.getElementById('addInstagramBtn').addEventListener('click', async () => {
-      const title = document.getElementById('instaTitle').value.trim();
-      const url = document.getElementById('instaUrl').value.trim();
-      if (!title || !url) return;
-      state.site.shared.instagramLinks.unshift({ id: Math.random().toString(36).slice(2,10), title, url });
-      document.getElementById('instaTitle').value = '';
-      document.getElementById('instaUrl').value = '';
-      await saveSite();
-    });
-    document.getElementById('addRoomBtn').addEventListener('click', async () => {
-      const name = document.getElementById('roomName').value.trim();
-      const students = document.getElementById('roomStudents').value.trim();
-      if (!name || !students) return;
-      state.site.groups[state.adminGroup].rooms.push({ id: Math.random().toString(36).slice(2,10), name, students, note: document.getElementById('roomNote').value.trim() });
-      document.getElementById('roomName').value = '';
-      document.getElementById('roomStudents').value = '';
-      document.getElementById('roomNote').value = '';
-      await saveSite();
-    });
-
-    loginModal.addEventListener('click', event => { if (event.target === loginModal) loginModal.classList.remove('show'); });
-    adminModal.addEventListener('click', event => { if (event.target === adminModal) adminModal.classList.remove('show'); });
-    groupModal.addEventListener('click', event => { if (event.target === groupModal && state.currentGroup) groupModal.classList.remove('show'); });
-
-    window.addEventListener('beforeinstallprompt', event => {
-      event.preventDefault();
-      deferredInstallPrompt = event;
-      updateInstallButton();
-    });
-
-    document.getElementById('installAppBtn').addEventListener('click', async () => {
-      if (deferredInstallPrompt) {
-        deferredInstallPrompt.prompt();
-        await deferredInstallPrompt.userChoice.catch(() => null);
-        deferredInstallPrompt = null;
-        updateInstallButton();
-        return;
-      }
-      alert('Je kunt deze app installeren via het browsermenu: kies bijvoorbeeld "Toevoegen aan beginscherm" of "App installeren".');
-    });
-
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => navigator.serviceWorker.register('/sw.js').catch(() => {}));
-    }
-
-    setInterval(updateCountdown, 1000);
-    init();
-  </script>
-</body>
-</html>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+<script>
+const state = { site:null, currentGroup: localStorage.getItem('selectedGroup') || 'A', adminGroup:'A', map:null, markers:[], deferredPrompt:null };
+const countdownEls = document.querySelectorAll('#countdownGrid .count strong');
+const groupModal = document.getElementById('groupModal'); const loginModal = document.getElementById('loginModal'); const adminModal = document.getElementById('adminModal');
+const uid = () => Math.random().toString(36).slice(2,10);
+const escapeHtml = (s='') => String(s).replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[ch]));
+async function api(url, options={}){ const res = await fetch(url,{headers:{'Content-Type':'application/json'},credentials:'same-origin',...options}); const data = await res.json().catch(()=>({})); if(!res.ok) throw new Error(data.error || 'Er ging iets mis'); return data; }
+const currentGroupData = () => state.site.groups[state.currentGroup]; const adminGroupData = () => state.site.groups[state.adminGroup];
+function formatDate(v){ const d = new Date(v); return Number.isNaN(d.getTime()) ? '-' : d.toLocaleString('nl-NL',{weekday:'long',day:'numeric',month:'long',year:'numeric',hour:'2-digit',minute:'2-digit'}).replace(',',' om'); }
+function tripState(){ const dep = new Date(state.site?.shared?.departure); if (Number.isNaN(dep.getTime())) return {started:false, finished:false, day:0}; const diff = new Date() - dep; if (diff < 0) return {started:false, finished:false, day:0}; const day = Math.floor(diff / 86400000) + 1; const len = currentGroupData().program.length || 4; return {started:true, finished: day > len, day: Math.min(day, len)}; }
+function renderHero(){ document.getElementById('groupHeroBtn').textContent = `Groep ${state.currentGroup}`; const t = tripState(); document.getElementById('todayBadge').textContent = t.started && !t.finished ? `Vandaag: Dag ${t.day}` : (t.finished ? 'Vandaag: reis afgerond' : 'Vandaag: nog niet gestart'); document.getElementById('departLabel').textContent = formatDate(state.site.shared.departure); document.getElementById('instagramProfileBtn').href = state.site.shared.instagramProfile || '#'; document.getElementById('mapCaption').textContent = `Hotel en excursielocaties van Groep ${state.currentGroup}`; const countdownSection = document.getElementById('aftellen'); const countdownLink = document.getElementById('countdownNavLink'); if (t.started) { countdownSection.style.display='none'; countdownLink.style.display='none'; } else { countdownSection.style.display=''; countdownLink.style.display=''; }}
+function badge(type){ if(type==='form') return '<span class="tag form">Formulier</span>'; if(type==='info') return '<span class="tag">Info</span>'; return '<span class="tag" style="background:#fee2e2;color:#991b1b;">Urgent</span>'; }
+function renderAnnouncements(){ const items = state.site.shared.announcements || []; const root = document.getElementById('announcementsList'); root.innerHTML = items.length ? items.map(i => `<article class="notice ${i.type==='urgent'?'urgent':''}"><div class="notice-top"><h3 style="margin:0">${escapeHtml(i.title)}</h3>${badge(i.type)}</div><p class="muted">${escapeHtml(i.text)}</p>${i.link ? `<div style="margin-top:12px;"><a class="btn btn-secondary" href="${escapeHtml(i.link)}" target="_blank">Open link</a></div>` : ''}</article>`).join('') : '<div class="card muted">Nog geen mededelingen geplaatst.</div>'; }
+function renderSchedule(){ const t = tripState(); const root = document.getElementById('scheduleList'); root.innerHTML = currentGroupData().program.map((day, idx) => { const items = day.items.map(item => `<div class="timeline-item"><div><strong>${escapeHtml(item.title)}</strong><p class="muted" style="margin:6px 0 0">${escapeHtml(item.text)}</p>${item.more ? `<div class="more">${escapeHtml(item.more)}</div>` : ''}</div>${item.image ? `<img class="item-photo" src="${escapeHtml(item.image)}" alt="${escapeHtml(item.title)}">` : ''}</div>`).join(''); const openClass = t.started && !t.finished && t.day === idx + 1 ? 'open' : ''; return `<article class="schedule-day ${openClass}" data-index="${idx}"><button class="schedule-head" type="button"><div><strong>${escapeHtml(day.dayLabel)} — ${escapeHtml(day.title)}</strong><span>${escapeHtml(day.dayShort)}</span></div><div>${openClass ? '−' : '+'}</div></button><div class="schedule-body">${items}</div></article>`; }).join(''); root.querySelectorAll('.schedule-head').forEach(btn => btn.addEventListener('click', ()=> { const card = btn.closest('.schedule-day'); const isOpen = card.classList.contains('open'); root.querySelectorAll('.schedule-day').forEach(c => c.classList.remove('open')); if (!isOpen) card.classList.add('open'); root.querySelectorAll('.schedule-head > div:last-child').forEach(el => el.textContent = '+'); card.querySelector('.schedule-head > div:last-child').textContent = card.classList.contains('open') ? '−' : '+'; })); }
+function toInstagramEmbedUrl(url=''){ try{ const u=new URL(url); if(!u.hostname.includes('instagram.com')) return ''; const parts=u.pathname.split('/').filter(Boolean); if(['reel','p','tv'].includes(parts[0]) && parts[1]) return `https://www.instagram.com/${parts[0]}/${parts[1]}/embed/captioned/`; } catch{} return ''; }
+function renderInstagram(){ const links=state.site.shared.instagramLinks||[]; const root=document.getElementById('instagramList'); root.innerHTML = links.length ? links.map(item=>{ const embed=toInstagramEmbedUrl(item.url); return `<article class="insta"><h3 style="margin-top:0">${escapeHtml(item.title)}</h3>${embed?`<iframe style="width:100%;min-height:420px;border:0;border-radius:16px;" src="${escapeHtml(embed)}" loading="lazy"></iframe>`:`<p class="muted">Deze link kan niet als preview worden getoond.</p>`}<div style="margin-top:12px;"><a class="btn btn-secondary" href="${escapeHtml(item.url)}" target="_blank">Open op Instagram</a></div></article>`; }).join('') : '<div class="card muted">Nog geen Instagram-posts toegevoegd.</div>'; }
+function renderRooms(){ const rooms=currentGroupData().rooms||[]; document.getElementById('roomsList').innerHTML = rooms.length ? rooms.map(r => `<article class="room"><h3 style="margin-top:0">${escapeHtml(r.name)}</h3><p class="muted"><strong>Bewoners:</strong> ${escapeHtml(r.students)}</p>${r.note ? `<p class="muted">${escapeHtml(r.note)}</p>` : ''}</article>`).join('') : '<div class="card muted">Nog geen kamerverdeling ingevuld.</div>'; }
+function checklistHtml(prefix, arr){ return arr.map((line, idx) => { const id=`${prefix}-${idx}`; const checked = localStorage.getItem(id)==='1'?'checked':''; return `<li><label><input type="checkbox" data-check-id="${id}" ${checked}> ${escapeHtml(line)}</label></li>`; }).join(''); }
+function bindChecklists(){ document.querySelectorAll('input[data-check-id]').forEach(i => i.addEventListener('change', ()=> localStorage.setItem(i.dataset.checkId, i.checked ? '1' : '0'))); }
+function renderPractical(){ const p = state.site.shared.practical; document.getElementById('practicalInfoList').innerHTML = (p.info||[]).map(line=>`<li>${escapeHtml(line)}</li>`).join(''); document.getElementById('practicalPackingList').innerHTML = checklistHtml('packing', p.packing||[]); document.getElementById('practicalBusList').innerHTML = checklistHtml('bus', p.bus||[]); document.getElementById('practicalRulesList').innerHTML = (p.rules||[]).map(line=>`<li>${escapeHtml(line)}</li>`).join(''); bindChecklists(); }
+function spotCoords(spot){ return Array.isArray(spot.coords)&&spot.coords.length===2?[Number(spot.coords[0]),Number(spot.coords[1])]:[48.858,2.34]; }
+function renderMap(){ const spots=currentGroupData().spots||[]; if(!state.map){ state.map = L.map('map', {scrollWheelZoom:false}).setView([48.858,2.34], 11); L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',{attribution:'&copy; OpenStreetMap &copy; CARTO', maxZoom:20}).addTo(state.map); }
+ state.markers.forEach(m=>m.remove()); state.markers=[]; const bounds=[]; spots.forEach((spot, index)=>{ const coords=spotCoords(spot); bounds.push(coords); const marker=L.marker(coords).addTo(state.map).bindPopup(`<strong>${escapeHtml(spot.name)}</strong><br>${escapeHtml(spot.note||'')}`); state.markers.push(marker); }); if(bounds.length) state.map.fitBounds(bounds,{padding:[28,28]}); setTimeout(()=>state.map.invalidateSize(),120); document.getElementById('spotsList').innerHTML = spots.map((spot, idx) => `<div class="spot-row"><div><strong>${escapeHtml(spot.name)}</strong><div class="muted">${escapeHtml(spot.note||'')}</div></div><button class="btn btn-secondary" type="button" onclick="focusSpot(${idx})">Toon op kaart</button></div>`).join(''); }
+window.focusSpot = function(index){ const spot = currentGroupData().spots[index]; if(!spot) return; const coords = spotCoords(spot); state.map.setView(coords, 14); state.markers[index]?.openPopup(); };
+function updateCountdown(){ if(!state.site) return; const dep = new Date(state.site.shared.departure); const diff = dep - new Date(); if (Number.isNaN(dep.getTime()) || diff <= 0) { countdownEls.forEach(el => el.textContent='0'); return; } countdownEls[0].textContent = Math.floor(diff/86400000); countdownEls[1].textContent = Math.floor(diff/3600000 % 24); countdownEls[2].textContent = Math.floor(diff/60000 % 60); countdownEls[3].textContent = Math.floor(diff/1000 % 60); }
+function renderAdminLists(){ const shared=state.site.shared; const group=adminGroupData(); departureInput.value=shared.departure; adminGroupSelect.value=state.adminGroup; hotelInput.value=group.hotel; leadersInput.value=group.leiding||''; infoInput.value=(shared.practical.info||[]).join('
+'); packingInput.value=(shared.practical.packing||[]).join('
+'); busInput.value=(shared.practical.bus||[]).join('
+'); rulesInput.value=(shared.practical.rules||[]).join('
+'); instaProfileUrl.value=shared.instagramProfile||'';
+ announcementAdminList.innerHTML = (shared.announcements||[]).map(item=>`<div class="mini"><strong>${escapeHtml(item.title)}</strong><p class="muted">${escapeHtml(item.text)}</p><div style="margin-top:10px;"><button class="btn btn-danger" onclick="removeAnnouncement('${item.id}')">Verwijderen</button></div></div>`).join('');
+ instagramAdminList.innerHTML = (shared.instagramLinks||[]).map(item=>`<div class="mini"><strong>${escapeHtml(item.title)}</strong><p class="muted">${escapeHtml(item.url)}</p><div style="margin-top:10px;"><button class="btn btn-danger" onclick="removeInstagram('${item.id}')">Verwijderen</button></div></div>`).join('');
+ scheduleAdminList.innerHTML = group.program.map((day,index)=>`<div class="mini"><div class="field"><label>${escapeHtml(day.dayLabel)} titel</label><input value="${escapeHtml(day.title)}" onchange="updateDayTitle(${index}, this.value)"></div><div class="field"><label>Items — één per regel: Titel | Tekst | Meer info | FotoURL</label><textarea onchange="updateDayItems(${index}, this.value)">${escapeHtml(day.items.map(item=>`${item.title} | ${item.text} | ${item.more || ''} | ${item.image || ''}`).join('
+'))}</textarea></div></div>`).join('');
+ roomsAdminList.innerHTML = group.rooms.map(room=>`<div class="mini"><strong>${escapeHtml(room.name)}</strong><p class="muted">${escapeHtml(room.students)}</p>${room.note ? `<p class="muted">${escapeHtml(room.note)}</p>`:''}<div style="margin-top:10px;"><button class="btn btn-danger" onclick="removeRoom('${room.id}')">Verwijderen</button></div></div>`).join('');
+ spotsAdminList.innerHTML = group.spots.map(spot=>{ const coords=spotCoords(spot); return `<div class="mini"><strong>${escapeHtml(spot.name)}</strong><div class="field"><label>Omschrijving</label><input value="${escapeHtml(spot.note || '')}" onchange="updateSpot('${spot.id}','note',this.value)"></div><div class="admin-grid"><div class="field"><label>Latitude</label><input type="number" step="0.000001" value="${coords[0]}" onchange="updateSpotCoord('${spot.id}',0,this.value)"></div><div class="field"><label>Longitude</label><input type="number" step="0.000001" value="${coords[1]}" onchange="updateSpotCoord('${spot.id}',1,this.value)"></div></div></div>`; }).join(''); }
+async function saveSite(){ await api('/api/site-data',{method:'POST', body:JSON.stringify(state.site)}); renderAll(); }
+window.removeAnnouncement = async id => { state.site.shared.announcements = state.site.shared.announcements.filter(i => i.id !== id); await saveSite(); };
+window.removeInstagram = async id => { state.site.shared.instagramLinks = state.site.shared.instagramLinks.filter(i => i.id !== id); await saveSite(); };
+window.removeRoom = async id => { adminGroupData().rooms = adminGroupData().rooms.filter(i => i.id !== id); await saveSite(); };
+window.updateDayTitle = async (index, value) => { adminGroupData().program[index].title = value; await saveSite(); };
+window.updateDayItems = async (index, value) => { adminGroupData().program[index].items = value.split('
+').map(line=>line.trim()).filter(Boolean).map(line=>{ const parts=line.split('|').map(s=>s.trim()); return { title: parts[0] || 'Onderdeel', text: parts[1] || '', more: parts[2] || '', image: parts[3] || '' }; }); await saveSite(); };
+window.updateSpot = async (id,key,value) => { const spot=adminGroupData().spots.find(s=>s.id===id); if(!spot) return; spot[key]=value; await saveSite(); };
+window.updateSpotCoord = async (id, idx, value) => { const spot=adminGroupData().spots.find(s=>s.id===id); if(!spot) return; const coords=spotCoords(spot); coords[idx]=Number(value); spot.coords=coords; await saveSite(); };
+function renderAll(){ if(!state.site) return; renderHero(); renderAnnouncements(); renderSchedule(); renderInstagram(); renderRooms(); renderPractical(); renderMap(); renderAdminLists(); updateCountdown(); }
+async function init(){ state.site = await api('/api/site-data'); renderAll(); }
+document.querySelectorAll('[data-group]').forEach(btn => btn.addEventListener('click', ()=> { state.currentGroup=btn.dataset.group; localStorage.setItem('selectedGroup', state.currentGroup); groupModal.classList.remove('show'); renderAll(); }));
+groupHeroBtn.addEventListener('click', ()=> groupModal.classList.add('show')); openAdminNav.addEventListener('click', ()=> loginModal.classList.add('show')); closeLoginBtn.addEventListener('click', ()=> loginModal.classList.remove('show')); closeAdminBtn.addEventListener('click', ()=> adminModal.classList.remove('show')); adminGroupSelect.addEventListener('change', e => { state.adminGroup=e.target.value; renderAdminLists(); });
+loginBtn.addEventListener('click', async ()=> { try { await api('/api/auth/login',{method:'POST', body:JSON.stringify({username: adminUsername.value.trim(), password: adminPassword.value})}); loginFeedback.textContent=''; loginModal.classList.remove('show'); adminModal.classList.add('show'); renderAdminLists(); } catch(err){ loginFeedback.textContent = err.message; } });
+logoutBtn.addEventListener('click', async ()=> { await api('/api/auth/logout',{method:'POST', body:'{}'}); adminModal.classList.remove('show'); });
+saveBasicsBtn.addEventListener('click', async ()=> { state.site.shared.departure = departureInput.value || state.site.shared.departure; const g=adminGroupData(); g.hotel=hotelInput.value.trim()||g.hotel; g.leiding=leadersInput.value.trim()||g.leiding; if(g.spots[0]) g.spots[0].name = `${g.hotel} (hotel)`; await saveSite(); });
+savePracticalBtn.addEventListener('click', async ()=> { state.site.shared.practical.info = infoInput.value.split('
+').map(s=>s.trim()).filter(Boolean); state.site.shared.practical.packing = packingInput.value.split('
+').map(s=>s.trim()).filter(Boolean); state.site.shared.practical.bus = busInput.value.split('
+').map(s=>s.trim()).filter(Boolean); state.site.shared.practical.rules = rulesInput.value.split('
+').map(s=>s.trim()).filter(Boolean); await saveSite(); });
+addAnnouncementBtn.addEventListener('click', async ()=> { const title=announcementTitle.value.trim(), text=announcementText.value.trim(); if(!title || !text) return; state.site.shared.announcements.unshift({id:uid(), title, text, type:announcementType.value, link:announcementLink.value.trim()}); announcementTitle.value=''; announcementText.value=''; announcementLink.value=''; await saveSite(); });
+saveInstagramProfileBtn.addEventListener('click', async ()=> { state.site.shared.instagramProfile = instaProfileUrl.value.trim(); await saveSite(); });
+addInstagramBtn.addEventListener('click', async ()=> { const title=instaTitle.value.trim(), url=instaUrl.value.trim(); if(!title || !url) return; state.site.shared.instagramLinks.unshift({id:uid(), title, url}); instaTitle.value=''; instaUrl.value=''; await saveSite(); });
+addRoomBtn.addEventListener('click', async ()=> { const name=roomName.value.trim(), students=roomStudents.value.trim(); if(!name||!students) return; adminGroupData().rooms.push({id:uid(), name, students, note:roomNote.value.trim()}); roomName.value=''; roomStudents.value=''; roomNote.value=''; await saveSite(); });
+loginModal.addEventListener('click', e => { if(e.target===loginModal) loginModal.classList.remove('show'); }); adminModal.addEventListener('click', e => { if(e.target===adminModal) adminModal.classList.remove('show'); }); groupModal.addEventListener('click', e => { if(e.target===groupModal) groupModal.classList.remove('show'); });
+themeBtn.addEventListener('click', ()=> { const dark = !document.documentElement.classList.contains('dark'); document.documentElement.classList.toggle('dark', dark); localStorage.setItem('theme', dark ? 'dark' : 'light'); themeBtn.textContent = dark ? '☀️ Lichte modus' : '🌙 Donkere modus'; }); if(localStorage.getItem('theme')==='dark'){ document.documentElement.classList.add('dark'); themeBtn.textContent='☀️ Lichte modus'; }
+window.addEventListener('beforeinstallprompt', e => { e.preventDefault(); state.deferredPrompt = e; installBtn.hidden = false; }); installBtn.addEventListener('click', async ()=> { if(!state.deferredPrompt) return; state.deferredPrompt.prompt(); await state.deferredPrompt.userChoice; state.deferredPrompt = null; installBtn.hidden = true; });
+if ('serviceWorker' in navigator) navigator.serviceWorker.register('/sw.js').catch(()=>{});
+setInterval(updateCountdown, 1000); init();
+</script>
+</body></html>
