@@ -87,7 +87,6 @@ function dayItem(title, text, image = '', moreInfo = '') {
 
 function defaultSpots(hotelName) {
   return [
-    { id: uid(), name: `${hotelName} (hotel)`, note: 'Hotel / uitvalsbasis', coords: DEFAULT_COORDS[`${hotelName.toLowerCase()} (hotel)`] || [48.8786, 2.3707] },
     { id: uid(), name: 'Arc de Triomphe', note: 'Maandag middag', coords: DEFAULT_COORDS['arc de triomphe'] },
     { id: uid(), name: 'Seine boottocht', note: 'Maandag avond', coords: DEFAULT_COORDS['seine boottocht'] },
     { id: uid(), name: 'Disneyland Paris', note: 'Dinsdag hele dag', coords: DEFAULT_COORDS['disneyland paris'] },
@@ -268,7 +267,13 @@ function normalizeData(data) {
       students: room.students || '',
       note: room.note || ''
     })) : fallback.rooms;
-    group.spots = (Array.isArray(group.spots) && group.spots.length ? group.spots : fallback.spots).map(spot => normalizeSpot(spot, group.hotel));
+    group.spots = (Array.isArray(group.spots) && group.spots.length ? group.spots : fallback.spots)
+      .filter(spot => {
+        const name = String(spot?.name || '').toLowerCase();
+        const note = String(spot?.note || '').toLowerCase();
+        return !name.includes('(hotel)') && note !== 'hotel / uitvalsbasis';
+      })
+      .map(spot => normalizeSpot(spot, group.hotel));
     groups[groupKey] = group;
   });
 
