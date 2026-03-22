@@ -1,24 +1,494 @@
-{
-  "name": "parijs-schoolreis-app",
-  "version": "0.11.0",
-  "description": "Buitenlandse reis Parijs - DevelsteinCollege",
-  "main": "server.js",
-  "scripts": {
-    "start": "node server.js"
-  },
-  "engines": {
-    "node": "20.x"
-  },
-  "dependencies": {
-    "connect-sqlite3": "^0.9.15",
-    "dotenv": "^16.4.7",
-    "express": "^4.21.2",
-    "express-rate-limit": "^7.5.0",
-    "express-session": "^1.18.1",
-    "helmet": "^8.1.0",
-    "multer": "^1.4.5-lts.2",
-    "pg": "^8.13.1",
-    "sqlite3": "^5.1.7",
-    "web-push": "^3.6.7"
-  }
-}
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Buitenlandse reis Parijs • DevelsteinCollege</title>
+  <meta name="theme-color" content="#0f172a" />
+  <meta name="description" content="Schoolreis-app voor de buitenlandse reis naar Parijs." />
+  <link rel="manifest" href="/manifest.json" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+  <style>
+    :root {
+      --bg: #f5f7fb;
+      --card: #ffffff;
+      --card-soft: #f8fafc;
+      --text: #0f172a;
+      --muted: #64748b;
+      --line: rgba(15, 23, 42, .09);
+      --primary: #1d4ed8;
+      --primary-soft: rgba(29,78,216,.12);
+      --radius: 24px;
+      --shadow: 0 16px 36px rgba(15,23,42,.08);
+      --max: 1100px;
+      --heroA: rgba(15,23,42,.97);
+      --heroB: rgba(29,78,216,.90);
+    }
+    html.dark {
+      --bg: #0b1220;
+      --card: #111c2f;
+      --card-soft: #152238;
+      --text: #e5eef9;
+      --muted: #9bb0ca;
+      --line: rgba(255,255,255,.08);
+      --primary: #7cb4ff;
+      --primary-soft: rgba(124,180,255,.14);
+      --shadow: 0 16px 36px rgba(0,0,0,.24);
+      --heroA: rgba(2,8,23,.96);
+      --heroB: rgba(30,64,175,.85);
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth;scrollbar-gutter:stable}
+    body{margin:0;font-family:Inter,system-ui,sans-serif;background:radial-gradient(circle at top right, rgba(29,78,216,.08), transparent 28%), radial-gradient(circle at top left, rgba(14,165,233,.06), transparent 22%), var(--bg); color:var(--text)}
+    img{display:block;max-width:100%}
+    button,input,textarea,select{font:inherit}
+    a{color:var(--primary)}
+    .app{max-width:var(--max);margin:0 auto;padding:18px 14px 110px}
+    .hero{background:linear-gradient(135deg, var(--heroA), var(--heroB));color:#fff;border-radius:32px;padding:22px;box-shadow:var(--shadow)}
+    .hero-top{display:flex;align-items:center;justify-content:space-between;gap:16px}
+    .brand{display:flex;align-items:center;gap:14px;min-width:0;flex:1}
+    .logo-wrap{width:84px;height:84px;display:grid;place-items:center;flex:0 0 auto}
+    .logo-wrap img{width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 8px 16px rgba(0,0,0,.24))}
+    .title-wrap small{display:block;opacity:.84;margin-bottom:4px;font-size:12px;letter-spacing:.04em;text-transform:uppercase}
+    .title-wrap h1{margin:0;font-size:clamp(30px,7vw,44px);line-height:1.03}
+    .group-hero-btn{width:78px;height:78px;border:0;border-radius:24px;background:rgba(255,255,255,.16);color:#fff;font-size:42px;font-weight:800;cursor:pointer;flex:0 0 auto;box-shadow:inset 0 0 0 1px rgba(255,255,255,.16);backdrop-filter:blur(10px)}
+    .quick-grid,.count-grid,.auto-grid,.admin-grid,.picker-grid{display:grid;gap:12px}
+    .quick-grid{grid-template-columns:repeat(2,minmax(0,1fr));margin-top:16px}
+    .count-grid{grid-template-columns:repeat(4,minmax(0,1fr))}
+    .auto-grid{grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
+    .admin-grid{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+    .picker-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+    .card,.quick,.count,.notice,.room,.insta,.timeline-card,.map-card,.practical,.modal-card,.mini,.group-card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
+    .quick{padding:16px;background:rgba(255,255,255,.14);color:#fff;border-color:rgba(255,255,255,.16);min-height:88px}
+    .quick small{display:block;opacity:.78}.quick strong{display:block;margin-top:8px;font-size:16px;line-height:1.25}
+    section{margin-top:18px}.section-head{margin-bottom:12px}.section-head h2{margin:0;font-size:22px}
+    .nav{position:sticky;top:10px;z-index:20;display:flex;gap:8px;overflow-x:auto;margin-top:14px;padding-bottom:4px;scrollbar-width:none}.nav::-webkit-scrollbar{display:none}
+    .nav a,.nav button{white-space:nowrap;border:1px solid var(--line);background:rgba(255,255,255,.88);color:var(--text);border-radius:999px;padding:10px 14px;text-decoration:none;font-weight:700;cursor:pointer}
+    html.dark .nav a,html.dark .nav button{background:rgba(17,28,47,.92)}
+    .card{padding:16px}.count{text-align:center;padding:16px 10px}.count strong{display:block;font-size:clamp(26px,7vw,38px);line-height:1;margin-bottom:6px}
+    .count small,.muted,.notice p,.room p,.insta p,.timeline-item p,.practical p,.mini p,.caption,.detail-body,.map-note{color:var(--muted);line-height:1.5;margin:0}
+    .notice,.room,.insta,.practical{padding:16px;height:100%}.notice h3,.room h3,.insta h3,.practical h3{margin:0 0 8px;font-size:17px}
+    .timeline-card{padding:0;overflow:hidden}
+    .timeline-toggle{width:100%;border:0;background:transparent;color:inherit;display:grid;grid-template-columns:110px 1fr 26px;gap:14px;align-items:start;padding:16px;cursor:pointer;text-align:left}
+    .day-pill{background:linear-gradient(135deg, #1d4ed8, #0f172a);color:#fff;border-radius:20px;padding:12px 8px;text-align:center}.day-pill strong{display:block;font-size:16px}.day-pill span{display:block;font-size:11px;opacity:.85;margin-top:4px}
+    .toggle-chevron{font-size:22px;line-height:1;color:var(--muted);padding-top:4px}
+    .timeline-panel{display:none;padding:0 16px 16px 16px}.timeline-card.open .timeline-panel{display:block}.timeline-card.open .toggle-chevron{transform:rotate(180deg)}
+    .timeline{display:flex;flex-direction:column;gap:10px}.timeline-item{background:var(--card-soft);border:1px solid var(--line);border-radius:18px;padding:14px;display:grid;grid-template-columns:120px 1fr;gap:12px;align-items:start}.timeline-item strong{display:block;margin-bottom:4px}
+    .item-photo{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:14px;border:1px solid var(--line)}
+    .details-box{margin-top:10px;padding:10px 12px;border-radius:14px;background:var(--primary-soft);border:1px solid var(--line)}
+    .details-box summary{cursor:pointer;font-weight:700;color:var(--text)}
+    .detail-body{margin-top:8px;white-space:pre-line}
+    .notice-top{display:flex;justify-content:space-between;gap:10px;align-items:flex-start;margin-bottom:8px}
+    .tag{display:inline-flex;align-items:center;border-radius:999px;padding:6px 10px;font-size:11px;font-weight:700;background:#fee2e2;color:#991b1b}.tag.info{background:#e0f2fe;color:#075985}.tag.form{background:#dcfce7;color:#166534}
+    .btn-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px}.btn{border:0;border-radius:14px;padding:12px 14px;font-weight:700;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:8px}.btn-primary{background:linear-gradient(135deg, #60a5fa, #a78bfa);color:#0f172a}.btn-secondary{background:#e2e8f0;color:#0f172a}.btn-danger{background:#fee2e2;color:#991b1b}
+    html.dark .btn-secondary{background:#243247;color:#e5eef9}
+    .map-card{padding:14px}.map-caption{padding:0 4px 12px;color:var(--muted);font-size:14px} #map{width:100%;height:420px;border-radius:20px;overflow:hidden;border:1px solid var(--line)}
+    .practical ul{padding-left:18px;margin:10px 0 0}.practical li{margin:8px 0;line-height:1.5}
+    .checklist{list-style:none;padding-left:0}.checklist li{margin:10px 0}.checklist label{display:flex;gap:10px;align-items:flex-start}.checklist input{margin-top:3px}
+    .footer{text-align:center;color:var(--muted);font-size:12px;margin-top:18px}
+    .modal{position:fixed;inset:0;background:rgba(15,23,42,.58);display:none;align-items:center;justify-content:center;z-index:100;padding:14px}.modal.show{display:flex}.modal-card{width:min(100%,900px);max-height:92vh;overflow:auto;padding:18px;background:var(--card);border-radius:28px}.modal-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;margin-bottom:14px}.modal-head h3{margin:0;font-size:22px}.modal-head p{margin:4px 0 0;color:var(--muted);font-size:14px}
+    .field{display:flex;flex-direction:column;gap:6px}.field label{font-weight:700;font-size:14px}.field input,.field textarea,.field select{width:100%;padding:12px 14px;border:1px solid #cbd5e1;border-radius:14px;background:var(--card);color:var(--text)}.field textarea{min-height:96px;resize:vertical}
+    html.dark .field input, html.dark .field textarea, html.dark .field select{border-color:#334155}
+    .admin-block{border:1px solid var(--line);border-radius:20px;padding:14px;background:var(--card-soft)}.admin-block + .admin-block{margin-top:12px}.mini-list{display:flex;flex-direction:column;gap:10px}.mini{padding:12px}.group-card{padding:18px;text-align:center;cursor:pointer;border:1px solid var(--line)} .group-card strong{display:block;font-size:42px;margin-bottom:8px}
+    .insta-preview{width:100%;min-height:420px;border:1px solid var(--line);border-radius:18px;overflow:hidden;background:var(--card-soft)}.insta-preview iframe{width:100%;min-height:420px;border:0}.insta-empty{display:grid;place-items:center;min-height:220px;padding:20px;text-align:center;color:var(--muted);border:1px dashed rgba(100,116,139,.28);border-radius:18px;background:rgba(255,255,255,.55)}
+    @media (max-width: 840px){.timeline-toggle{grid-template-columns:1fr;}.day-pill{max-width:160px}#map{height:360px}.timeline-item{grid-template-columns:1fr}}
+    @media (max-width: 620px){.logo-wrap{width:70px;height:70px}.group-hero-btn{width:64px;height:64px;font-size:34px;border-radius:20px}.count-grid,.picker-grid,.quick-grid{grid-template-columns:repeat(2,minmax(0,1fr))}#map{height:320px}}
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header class="hero">
+      <div class="hero-top">
+        <div class="brand">
+          <div class="logo-wrap"><img src="/assets/logo.png" alt="DevelsteinCollege logo" /></div>
+          <div class="title-wrap">
+            <small>DevelsteinCollege</small>
+            <h1>Buitenlandse reis Parijs</h1>
+          </div>
+        </div>
+        <button class="group-hero-btn" id="groupHeroBtn" aria-label="Wissel groep">A</button>
+      </div>
+      <div class="quick-grid">
+        <div class="quick"><small>Hotel</small><strong id="heroHotel">-</strong></div>
+        <div class="quick"><small id="statusLabel">Vertrek</small><strong id="heroStatus">-</strong></div>
+      </div>
+    </header>
+
+    <nav class="nav" id="mainNav">
+      <a href="#aftellen" id="countdownNavLink">Aftellen</a>
+      <a href="#mededelingen">Mededelingen</a>
+      <a href="#schema">Schema</a>
+      <a href="#instagram">Instagram</a>
+      <a href="#kamers">Kamers</a>
+      <a href="#kaart">Kaart</a>
+      <a href="#praktisch">Praktisch</a>
+      <button id="toggleThemeBtn" type="button">Donker</button>
+      <button id="openAdminNav" type="button">Admin</button>
+    </nav>
+
+    <section id="aftellen">
+      <div class="section-head"><h2>Aftelklok tot vertrek</h2></div>
+      <div class="card">
+        <div class="count-grid" id="countdownGrid">
+          <div class="count"><strong>0</strong><small>Dagen</small></div>
+          <div class="count"><strong>0</strong><small>Uren</small></div>
+          <div class="count"><strong>0</strong><small>Minuten</small></div>
+          <div class="count"><strong>0</strong><small>Seconden</small></div>
+        </div>
+        <p class="muted" style="margin-top:12px;">We vertrekken op <strong id="departLabel">-</strong></p>
+      </div>
+    </section>
+
+    <section id="mededelingen">
+      <div class="section-head"><h2>Mededelingen</h2></div>
+      <div id="announcementsList" class="auto-grid"></div>
+    </section>
+
+    <section id="schema">
+      <div class="section-head"><h2>Programma per dag</h2></div>
+      <div id="scheduleList" class="auto-grid"></div>
+    </section>
+
+    <section id="instagram">
+      <div class="section-head"><h2>Instagram</h2></div>
+      <div class="btn-row" style="margin-top:0;margin-bottom:12px;"><a class="btn btn-secondary" id="instagramProfileBtn" href="#" target="_blank" rel="noopener noreferrer">Open schoolaccount</a></div>
+      <div id="instagramList" class="auto-grid"></div>
+    </section>
+
+    <section id="kamers">
+      <div class="section-head"><h2>Kamerverdeling</h2></div>
+      <div id="roomsList" class="auto-grid"></div>
+    </section>
+
+    <section id="kaart">
+      <div class="section-head"><h2>Kaart van Parijs + hotel</h2></div>
+      <div class="map-card">
+        <div class="map-caption" id="mapCaption"></div>
+        <div id="map"></div>
+        <div class="map-note" id="mapSelectedNote"></div>
+      </div>
+    </section>
+
+    <section id="praktisch">
+      <div class="section-head"><h2>Praktische informatie</h2></div>
+      <div class="auto-grid">
+        <article class="practical">
+          <h3>Hotel & reis</h3>
+          <ul id="practicalTravelList"></ul>
+        </article>
+        <article class="practical">
+          <h3>Paklijst</h3>
+          <ul id="practicalPackingList" class="checklist"></ul>
+        </article>
+        <article class="practical">
+          <h3>Checklist voor in de bus/handbagage</h3>
+          <ul id="practicalBusList" class="checklist"></ul>
+        </article>
+        <article class="practical">
+          <h3>Afspraken</h3>
+          <ul id="practicalRulesList"></ul>
+        </article>
+      </div>
+    </section>
+
+    <p class="footer">v0.13 • mobiel, online, als PWA en per groep beheersbaar.</p>
+  </div>
+
+  <div class="modal" id="groupModal">
+    <div class="modal-card" style="max-width:540px;">
+      <div class="modal-head"><div><h3>Kies je groep</h3><p>Kies hieronder of je bij Groep A of Groep B hoort.</p></div></div>
+      <div class="picker-grid">
+        <button class="group-card" type="button" data-group="A"><strong>A</strong><span>Groep A</span></button>
+        <button class="group-card" type="button" data-group="B"><strong>B</strong><span>Groep B</span></button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="loginModal">
+    <div class="modal-card" style="max-width:440px;">
+      <div class="modal-head"><div><h3>Admin login</h3><p>Log in om gegevens aan te passen.</p></div><button class="btn btn-secondary" id="closeLoginBtn" type="button">Sluiten</button></div>
+      <div class="field"><label>Gebruikersnaam</label><input id="adminUsername" type="text" value="admin" /></div>
+      <div class="field"><label>Wachtwoord</label><input id="adminPassword" type="password" /></div>
+      <div class="btn-row"><button class="btn btn-primary" id="loginBtn" type="button">Inloggen</button></div>
+      <p class="muted" id="loginFeedback" style="margin-top:10px;"></p>
+    </div>
+  </div>
+
+  <div class="modal" id="adminModal">
+    <div class="modal-card">
+      <div class="modal-head">
+        <div><h3>Admin beheer</h3><p>Mededelingen, Instagram en praktische info zijn gedeeld. Hotel, leiding, programma, kamers en kaart zijn per groep.</p></div>
+        <div class="btn-row" style="margin-top:0;"><button class="btn btn-secondary" id="logoutBtn" type="button">Uitloggen</button><button class="btn btn-secondary" id="closeAdminBtn" type="button">Sluiten</button></div>
+      </div>
+
+      <div class="admin-block">
+        <h4>1. Basisgegevens</h4>
+        <div class="admin-grid">
+          <div class="field"><label>Vertrekdatum en tijd</label><input id="departureInput" type="datetime-local" /></div>
+          <div class="field"><label>Admin bewerkt groep</label><select id="adminGroupSelect"><option value="A">Groep A</option><option value="B">Groep B</option></select></div>
+          <div class="field"><label>Hotel</label><input id="hotelInput" type="text" /></div>
+          <div class="field"><label>Leiding</label><input id="leadersInput" type="text" /></div>
+        </div>
+        <div class="btn-row"><button class="btn btn-primary" id="saveBasicsBtn" type="button">Basis opslaan</button></div>
+      </div>
+
+      <div class="admin-block">
+        <h4>2. Praktische informatie (gedeeld)</h4>
+        <div class="field"><label>Hotel & reis — één regel per bullet</label><textarea id="travelInfoInput"></textarea></div>
+        <div class="field"><label>Paklijst — één regel per bullet</label><textarea id="packingInfoInput"></textarea></div>
+        <div class="field"><label>Checklist bus/handbagage — één regel per bullet</label><textarea id="busInfoInput"></textarea></div>
+        <div class="field"><label>Afspraken — één regel per bullet</label><textarea id="rulesInfoInput"></textarea></div>
+        <div class="btn-row"><button class="btn btn-primary" id="savePracticalBtn">Praktische info opslaan</button></div>
+      </div>
+
+      <div class="admin-block">
+        <h4>3. Mededeling toevoegen (gedeeld)</h4>
+        <div class="admin-grid">
+          <div class="field"><label>Titel</label><input id="announcementTitle" type="text" /></div>
+          <div class="field"><label>Type</label><select id="announcementType"><option value="urgent">Urgent</option><option value="info">Info</option><option value="form">Formulier</option></select></div>
+        </div>
+        <div class="field"><label>Tekst</label><textarea id="announcementText"></textarea></div>
+        <div class="field"><label>Link</label><input id="announcementLink" type="url" /></div>
+        <div class="btn-row"><button class="btn btn-primary" id="addAnnouncementBtn">Toevoegen</button></div>
+        <div id="announcementAdminList" class="mini-list"></div>
+      </div>
+
+      <div class="admin-block">
+        <h4>4. Instagram</h4>
+        <div class="admin-grid">
+          <div class="field"><label>Schoolaccount</label><input id="instaProfileUrl" type="url" value="https://www.instagram.com/develsteincollegezwijndrecht/" /></div>
+          <div class="field"><label>Nieuwe reel/post titel</label><input id="instaTitle" type="text" /></div>
+          <div class="field" style="grid-column:1 / -1;"><label>Nieuwe reel/post link</label><input id="instaUrl" type="url" placeholder="https://www.instagram.com/reel/..." /></div>
+        </div>
+        <div class="btn-row"><button class="btn btn-primary" id="saveInstagramProfileBtn">Schoolaccount opslaan</button><button class="btn btn-primary" id="addInstagramBtn">Preview-link toevoegen</button></div>
+        <div id="instagramAdminList" class="mini-list"></div>
+      </div>
+
+      <div class="admin-block">
+        <h4>5. Programma (gekozen groep)</h4>
+        <p class="muted" style="margin:0 0 10px;">Gebruik per regel: Titel | Tekst | Foto URL of pad | Meer info tekst. Laat het derde deel leeg voor de standaardfoto.</p>
+        <div id="scheduleAdminList" class="mini-list"></div>
+      </div>
+
+      <div class="admin-block">
+        <h4>6. Kamers (gekozen groep)</h4>
+        <div class="admin-grid">
+          <div class="field"><label>Kamer</label><input id="roomName" type="text" /></div>
+          <div class="field"><label>Leerlingen</label><input id="roomStudents" type="text" /></div>
+          <div class="field" style="grid-column:1 / -1;"><label>Opmerking</label><input id="roomNote" type="text" /></div>
+        </div>
+        <div class="btn-row"><button class="btn btn-primary" id="addRoomBtn">Kamer toevoegen</button></div>
+        <div id="roomsAdminList" class="mini-list"></div>
+      </div>
+
+      <div class="admin-block">
+        <h4>7. Kaartlocaties (gekozen groep)</h4>
+        <div id="spotsAdminList" class="mini-list"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <script>
+    const DEFAULT_PHOTOS = {
+      'arc de triomphe': '/assets/photos/arc.jpg',
+      'disneyland': '/assets/photos/disney.jpg',
+      'disneyland paris': '/assets/photos/disney.jpg',
+      'louvre': '/assets/photos/louvre.jpg',
+      'eiffeltoren': '/assets/photos/eiffel.jpg',
+      'eiffel': '/assets/photos/eiffel.jpg',
+      'sacré-cœur': '/assets/photos/sacrecoeur.jpg',
+      'sacre-coeur': '/assets/photos/sacrecoeur.jpg',
+      'sacre coeur': '/assets/photos/sacrecoeur.jpg',
+      'montmartre': '/assets/photos/montmartre.jpg'
+    };
+
+    const state = { site:null, currentGroup: localStorage.getItem('selectedGroup') || '', adminGroup:'A', map:null, markers:[] };
+    const countdownEls = document.querySelectorAll('#countdownGrid .count strong');
+    const groupModal = document.getElementById('groupModal');
+    const loginModal = document.getElementById('loginModal');
+    const adminModal = document.getElementById('adminModal');
+
+    function uid(){ return Math.random().toString(36).slice(2,10); }
+    function escapeHtml(str=''){ return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;'); }
+    async function api(url, options={}) {
+      const response = await fetch(url, { headers:{'Content-Type':'application/json'}, credentials:'same-origin', ...options });
+      const data = await response.json().catch(()=>({}));
+      if (!response.ok) throw new Error(data.error || 'Er ging iets mis');
+      return data;
+    }
+    function currentGroupData(){ return state.site.groups[state.currentGroup]; }
+    function adminGroupData(){ return state.site.groups[state.adminGroup]; }
+    function tripLength(){ return currentGroupData().program.length || 4; }
+    function formatDate(value){ const dt=new Date(value); if (Number.isNaN(dt.getTime())) return '-'; return dt.toLocaleString('nl-NL',{weekday:'long',day:'numeric',month:'long',year:'numeric',hour:'2-digit',minute:'2-digit'}).replace(',',' om'); }
+    function tripState(){
+      const departure = new Date(state.site?.shared?.departure);
+      if (Number.isNaN(departure.getTime())) return { started:false, finished:false, day:0 };
+      const now = new Date();
+      const diff = now - departure;
+      if (diff < 0) return { started:false, finished:false, day:0 };
+      const day = Math.floor(diff / (1000*60*60*24)) + 1;
+      const finished = day > tripLength();
+      return { started:true, finished, day: Math.min(day, tripLength()) };
+    }
+    function guessPhoto(title='', text=''){ const value=`${title} ${text}`.toLowerCase(); for (const [key,url] of Object.entries(DEFAULT_PHOTOS)) { if (value.includes(key)) return url; } return ''; }
+    function ensureItemImage(item){ if (!item.image) item.image = guessPhoto(item.title, item.text); return item.image || ''; }
+    function ensureGroupChoice(){ if (!state.currentGroup || !state.site.groups[state.currentGroup]) groupModal.classList.add('show'); else groupModal.classList.remove('show'); }
+    function setGroup(group){ state.currentGroup = group; localStorage.setItem('selectedGroup', group); document.getElementById('groupHeroBtn').textContent = group; groupModal.classList.remove('show'); renderAll(); }
+    function renderHero(){
+      const group = currentGroupData();
+      const t = tripState();
+      document.getElementById('groupHeroBtn').textContent = state.currentGroup || 'A';
+      document.getElementById('heroHotel').textContent = group.hotel;
+      const statusLabel = document.getElementById('statusLabel');
+      const heroStatus = document.getElementById('heroStatus');
+      if (t.started && !t.finished) { statusLabel.textContent = 'Reisdag'; heroStatus.textContent = `Dag ${t.day}`; }
+      else if (t.finished) { statusLabel.textContent = 'Status'; heroStatus.textContent = 'Reis afgerond'; }
+      else { statusLabel.textContent = 'Vertrek'; heroStatus.textContent = formatDate(state.site.shared.departure); }
+      document.getElementById('departLabel').textContent = formatDate(state.site.shared.departure);
+      document.getElementById('instagramProfileBtn').href = state.site.shared.instagramProfile || '#';
+      document.getElementById('mapCaption').textContent = `${group.hotel} en de excursielocaties`;
+      const countdownSection = document.getElementById('aftellen');
+      const countdownLink = document.getElementById('countdownNavLink');
+      if (t.started) { countdownSection.style.display = 'none'; countdownLink.style.display = 'none'; }
+      else { countdownSection.style.display = ''; countdownLink.style.display = ''; }
+    }
+    function announcementBadge(type){ if (type==='form') return '<span class="tag form">Formulier</span>'; if (type==='info') return '<span class="tag info">Info</span>'; return '<span class="tag">Urgent</span>'; }
+    function renderAnnouncements(){
+      const root=document.getElementById('announcementsList');
+      const items=state.site.shared.announcements || [];
+      if (!items.length) { root.innerHTML='<div class="insta-empty">Nog geen mededelingen geplaatst.</div>'; return; }
+      root.innerHTML=items.map(item=>`<article class="notice"><div class="notice-top"><h3>${escapeHtml(item.title)}</h3>${announcementBadge(item.type)}</div><p>${escapeHtml(item.text)}</p>${item.link?`<div class="btn-row"><a class="btn btn-secondary" href="${escapeHtml(item.link)}" target="_blank" rel="noopener noreferrer">Open link</a></div>`:''}</article>`).join('');
+    }
+    function renderSchedule(){
+      const root=document.getElementById('scheduleList');
+      root.innerHTML=currentGroupData().program.map((day, index)=>`<article class="timeline-card ${index===0?'open':''}"><button class="timeline-toggle" type="button" data-day-index="${index}"><div class="day-pill"><strong>${escapeHtml(day.dayShort)}</strong><span>${escapeHtml(day.dayLabel)}</span></div><div><h3 style="margin:0 0 6px;">${escapeHtml(day.title)}</h3><p class="muted">Tik om het programma van ${escapeHtml(day.dayLabel.toLowerCase())} te bekijken.</p></div><div class="toggle-chevron">⌄</div></button><div class="timeline-panel"><div class="timeline">${day.items.map(item=>{ const image=ensureItemImage(item); return `<div class="timeline-item">${image?`<img class="item-photo" src="${escapeHtml(image)}" alt="${escapeHtml(item.title)}">`:''}<div><strong>${escapeHtml(item.title)}</strong><p>${escapeHtml(item.text)}</p>${item.details?`<details class="details-box"><summary>Meer info over deze plek</summary><div class="detail-body">${escapeHtml(item.details)}</div></details>`:''}</div></div>`; }).join('')}</div></div></article>`).join('');
+      root.querySelectorAll('.timeline-toggle').forEach(button => button.addEventListener('click', () => button.closest('.timeline-card').classList.toggle('open')));
+    }
+    function toInstagramEmbedUrl(url=''){
+      try {
+        const u = new URL(url);
+        if (!u.hostname.includes('instagram.com')) return '';
+        const parts = u.pathname.split('/').filter(Boolean);
+        if (!parts.length) return '';
+        if (['reel','p','tv'].includes(parts[0]) && parts[1]) return `https://www.instagram.com/${parts[0]}/${parts[1]}/embed/captioned/`;
+        return '';
+      } catch { return ''; }
+    }
+    function renderInstagram(){
+      const root=document.getElementById('instagramList');
+      const links=state.site.shared.instagramLinks || [];
+      if (!links.length) { root.innerHTML='<div class="insta-empty">Voeg in de admin een reel- of postlink toe om hier een preview te tonen.</div>'; return; }
+      root.innerHTML=links.map(item=>{ const embed=toInstagramEmbedUrl(item.url); return `<article class="insta"><h3>${escapeHtml(item.title)}</h3>${embed?`<div class="insta-preview"><iframe src="${escapeHtml(embed)}" loading="lazy" allowtransparency="true"></iframe></div>`:`<div class="insta-empty">Deze link kan niet als preview worden getoond. Gebruik een post- of reellink.</div>`}<div class="btn-row"><a class="btn btn-secondary" href="${escapeHtml(item.url)}" target="_blank" rel="noopener noreferrer">Open op Instagram</a></div></article>`; }).join('');
+    }
+    function renderRooms(){
+      const root=document.getElementById('roomsList');
+      const rooms=currentGroupData().rooms || [];
+      if (!rooms.length) { root.innerHTML='<div class="insta-empty">Nog geen kamerverdeling ingevuld.</div>'; return; }
+      root.innerHTML=rooms.map(room=>`<article class="room"><h3>${escapeHtml(room.name)}</h3><p><strong>Bewoners:</strong> ${escapeHtml(room.students)}</p>${room.note?`<p style="margin-top:8px;">${escapeHtml(room.note)}</p>`:''}</article>`).join('');
+    }
+    function renderChecklist(rootId, items, prefix){
+      const root = document.getElementById(rootId);
+      root.innerHTML = items.map((line, idx) => {
+        const key = `${prefix}-${idx}`;
+        const checked = localStorage.getItem(key) === '1' ? 'checked' : '';
+        return `<li><label><input type="checkbox" data-check-key="${key}" ${checked}> <span>${escapeHtml(line)}</span></label></li>`;
+      }).join('');
+      root.querySelectorAll('input[type="checkbox"]').forEach(input => {
+        input.addEventListener('change', () => localStorage.setItem(input.dataset.checkKey, input.checked ? '1' : '0'));
+      });
+    }
+    function renderPractical(){
+      const travel = ['Hotel: ' + currentGroupData().hotel].concat(state.site.shared.practical.travel || []);
+      const packing = state.site.shared.practical.packing || [];
+      const bus = state.site.shared.practical.bus || [];
+      const rules = state.site.shared.practical.rules || [];
+      document.getElementById('practicalTravelList').innerHTML = travel.map(line=>`<li>${escapeHtml(line)}</li>`).join('');
+      renderChecklist('practicalPackingList', packing, 'packing');
+      renderChecklist('practicalBusList', bus, 'bus');
+      document.getElementById('practicalRulesList').innerHTML = rules.map(line=>`<li>${escapeHtml(line)}</li>`).join('');
+    }
+    function spotCoords(spot){ return Array.isArray(spot.coords)&&spot.coords.length===2 ? [Number(spot.coords[0]), Number(spot.coords[1])] : [48.858,2.34]; }
+    function renderMap(){
+      const spots=currentGroupData().spots || [];
+      if (!state.map){
+        state.map = L.map('map', { scrollWheelZoom:false }).setView([48.858, 2.34], 11);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution:'&copy; OpenStreetMap', maxZoom:20 }).addTo(state.map);
+      }
+      state.markers.forEach(marker=>marker.remove()); state.markers=[];
+      const bounds=[];
+      spots.forEach((spot,index)=>{ const coords=spotCoords(spot); bounds.push(coords); const marker=L.marker(coords).addTo(state.map).bindPopup(`<strong>${escapeHtml(spot.name)}</strong><br>${escapeHtml(spot.note||'')}`); marker.on('click',()=>selectSpot(index)); state.markers.push(marker); });
+      if (bounds.length) state.map.fitBounds(bounds,{padding:[28,28]});
+      setTimeout(()=>state.map.invalidateSize(),120);
+      selectSpot(0);
+    }
+    window.selectSpot = function(index){ const spot=currentGroupData().spots[index]; if (!spot) return; document.getElementById('mapSelectedNote').textContent = `${spot.name}${spot.note ? ' — ' + spot.note : ''}`; };
+    function updateCountdown(){
+      if (!state.site) return;
+      const departureDate=new Date(state.site.shared.departure); const now=new Date(); const diff=departureDate-now;
+      if (Number.isNaN(departureDate.getTime()) || diff<=0) { countdownEls.forEach(el=>el.textContent='0'); return; }
+      countdownEls[0].textContent=Math.floor(diff/(1000*60*60*24));
+      countdownEls[1].textContent=Math.floor((diff/(1000*60*60))%24);
+      countdownEls[2].textContent=Math.floor((diff/(1000*60))%60);
+      countdownEls[3].textContent=Math.floor((diff/1000)%60);
+    }
+    function renderAdminLists(){
+      const shared=state.site.shared; const group=adminGroupData();
+      document.getElementById('departureInput').value=shared.departure;
+      document.getElementById('hotelInput').value=group.hotel;
+      document.getElementById('leadersInput').value=group.leiding||'';
+      document.getElementById('adminGroupSelect').value=state.adminGroup;
+      document.getElementById('travelInfoInput').value=(shared.practical.travel||[]).join('\n');
+      document.getElementById('packingInfoInput').value=(shared.practical.packing||[]).join('\n');
+      document.getElementById('busInfoInput').value=(shared.practical.bus||[]).join('\n');
+      document.getElementById('rulesInfoInput').value=(shared.practical.rules||[]).join('\n');
+      document.getElementById('instaProfileUrl').value=shared.instagramProfile || 'https://www.instagram.com/develsteincollegezwijndrecht/';
+      document.getElementById('announcementAdminList').innerHTML = shared.announcements.map(item=>`<div class="mini"><strong>${escapeHtml(item.title)}</strong><p>${escapeHtml(item.text)}</p><div class="btn-row"><button class="btn btn-danger" onclick="removeAnnouncement('${item.id}')">Verwijderen</button></div></div>`).join('');
+      document.getElementById('instagramAdminList').innerHTML = shared.instagramLinks.map(item=>`<div class="mini"><strong>${escapeHtml(item.title)}</strong><p>${escapeHtml(item.url)}</p><div class="btn-row"><button class="btn btn-danger" onclick="removeInstagram('${item.id}')">Verwijderen</button></div></div>`).join('');
+      document.getElementById('scheduleAdminList').innerHTML = group.program.map((day,index)=>`<div class="mini"><div class="field"><label>Titel ${escapeHtml(day.dayShort)}</label><input value="${escapeHtml(day.title)}" onchange="updateDayTitle(${index}, this.value)" /></div><div class="field"><label>Items (Titel | Tekst | FotoURL | Meer info)</label><textarea onchange="updateDayItems(${index}, this.value)">${escapeHtml(day.items.map(item=>`${item.title} | ${item.text} | ${item.image || ''} | ${item.details || ''}`).join('\n'))}</textarea></div></div>`).join('');
+      document.getElementById('roomsAdminList').innerHTML = group.rooms.map(room=>`<div class="mini"><strong>${escapeHtml(room.name)}</strong><p>${escapeHtml(room.students)}</p>${room.note?`<p>${escapeHtml(room.note)}</p>`:''}<div class="btn-row"><button class="btn btn-danger" onclick="removeRoom('${room.id}')">Verwijderen</button></div></div>`).join('');
+      document.getElementById('spotsAdminList').innerHTML = group.spots.map(spot=>{ const coords=spotCoords(spot); return `<div class="mini"><strong>${escapeHtml(spot.name)}</strong><div class="field"><label>Omschrijving</label><input value="${escapeHtml(spot.note||'')}" onchange="updateSpot('${spot.id}','note',this.value)" /></div><div class="admin-grid"><div class="field"><label>Latitude</label><input type="number" step="0.0001" value="${coords[0]}" onchange="updateSpotCoord('${spot.id}',0,this.value)" /></div><div class="field"><label>Longitude</label><input type="number" step="0.0001" value="${coords[1]}" onchange="updateSpotCoord('${spot.id}',1,this.value)" /></div></div></div>`; }).join('');
+    }
+    async function saveSite(){ await api('/api/site-data',{ method:'POST', body:JSON.stringify(state.site) }); renderAll(); }
+    window.removeAnnouncement = async function(id){ state.site.shared.announcements = state.site.shared.announcements.filter(item=>item.id!==id); await saveSite(); };
+    window.removeInstagram = async function(id){ state.site.shared.instagramLinks = state.site.shared.instagramLinks.filter(item=>item.id!==id); await saveSite(); };
+    window.removeRoom = async function(id){ adminGroupData().rooms = adminGroupData().rooms.filter(item=>item.id!==id); await saveSite(); };
+    window.updateDayTitle = async function(index,value){ adminGroupData().program[index].title=value; await saveSite(); };
+    window.updateDayItems = async function(index, value){ adminGroupData().program[index].items = value.split('\n').map(line=>line.trim()).filter(Boolean).map(line=>{ const parts=line.split('|'); const title=(parts[0]||'').trim()||'Onderdeel'; const text=(parts[1]||'').trim()||''; const image=(parts[2]||'').trim() || guessPhoto(title, text); const details=parts.slice(3).join('|').trim(); return { title, text, image, details }; }); await saveSite(); };
+    window.updateSpot = async function(id,key,value){ const spot=adminGroupData().spots.find(item=>item.id===id); if (!spot) return; spot[key]=value; await saveSite(); };
+    window.updateSpotCoord = async function(id, coordIndex, value){ const spot=adminGroupData().spots.find(item=>item.id===id); if (!spot) return; const coords=spotCoords(spot); coords[coordIndex]=Number(value); spot.coords=coords; await saveSite(); };
+    function renderAll(){ if (!state.site || !state.currentGroup || !state.site.groups[state.currentGroup]) return; renderHero(); renderAnnouncements(); renderSchedule(); renderInstagram(); renderRooms(); renderPractical(); renderMap(); renderAdminLists(); updateCountdown(); }
+    async function init(){ state.site = await api('/api/site-data'); if (!state.currentGroup || !state.site.groups[state.currentGroup]) state.currentGroup=''; ensureGroupChoice(); if (state.currentGroup) renderAll(); }
+
+    document.querySelectorAll('[data-group]').forEach(button=>button.addEventListener('click',()=>setGroup(button.dataset.group)));
+    document.getElementById('groupHeroBtn').addEventListener('click',()=>groupModal.classList.add('show'));
+    document.getElementById('openAdminNav').addEventListener('click',()=>loginModal.classList.add('show'));
+    document.getElementById('closeLoginBtn').addEventListener('click',()=>loginModal.classList.remove('show'));
+    document.getElementById('closeAdminBtn').addEventListener('click',()=>{ adminModal.classList.remove('show'); setTimeout(()=>state.map && state.map.invalidateSize(), 50); });
+    document.getElementById('adminGroupSelect').addEventListener('change', event=>{ state.adminGroup=event.target.value; renderAdminLists(); });
+    document.getElementById('loginBtn').addEventListener('click', async ()=>{ const username=document.getElementById('adminUsername').value.trim(); const password=document.getElementById('adminPassword').value; try { await api('/api/auth/login',{ method:'POST', body:JSON.stringify({username,password})}); document.getElementById('loginFeedback').textContent=''; loginModal.classList.remove('show'); adminModal.classList.add('show'); renderAdminLists(); } catch(error){ document.getElementById('loginFeedback').textContent=error.message; } });
+    document.getElementById('logoutBtn').addEventListener('click', async ()=>{ await api('/api/auth/logout',{ method:'POST', body:'{}' }); adminModal.classList.remove('show'); });
+    document.getElementById('saveBasicsBtn').addEventListener('click', async ()=>{ state.site.shared.departure=document.getElementById('departureInput').value||state.site.shared.departure; const group=adminGroupData(); group.hotel=document.getElementById('hotelInput').value.trim()||group.hotel; group.leiding=document.getElementById('leadersInput').value.trim()||group.leiding; if (group.spots[0]) group.spots[0].name=`${group.hotel} (hotel)`; await saveSite(); });
+    document.getElementById('savePracticalBtn').addEventListener('click', async ()=>{ state.site.shared.practical.travel=document.getElementById('travelInfoInput').value.split('\n').map(line=>line.trim()).filter(Boolean); state.site.shared.practical.packing=document.getElementById('packingInfoInput').value.split('\n').map(line=>line.trim()).filter(Boolean); state.site.shared.practical.bus=document.getElementById('busInfoInput').value.split('\n').map(line=>line.trim()).filter(Boolean); state.site.shared.practical.rules=document.getElementById('rulesInfoInput').value.split('\n').map(line=>line.trim()).filter(Boolean); await saveSite(); });
+    document.getElementById('addAnnouncementBtn').addEventListener('click', async ()=>{ const title=document.getElementById('announcementTitle').value.trim(); const text=document.getElementById('announcementText').value.trim(); if(!title||!text) return; state.site.shared.announcements.unshift({ id:uid(), title, text, type:document.getElementById('announcementType').value, link:document.getElementById('announcementLink').value.trim() }); document.getElementById('announcementTitle').value=''; document.getElementById('announcementText').value=''; document.getElementById('announcementLink').value=''; await saveSite(); });
+    document.getElementById('saveInstagramProfileBtn').addEventListener('click', async ()=>{ state.site.shared.instagramProfile = document.getElementById('instaProfileUrl').value.trim() || state.site.shared.instagramProfile; await saveSite(); });
+    document.getElementById('addInstagramBtn').addEventListener('click', async ()=>{ const title=document.getElementById('instaTitle').value.trim(); const url=document.getElementById('instaUrl').value.trim(); if(!title||!url) return; state.site.shared.instagramLinks.unshift({ id:uid(), title, url }); document.getElementById('instaTitle').value=''; document.getElementById('instaUrl').value=''; await saveSite(); });
+    document.getElementById('addRoomBtn').addEventListener('click', async ()=>{ const name=document.getElementById('roomName').value.trim(); const students=document.getElementById('roomStudents').value.trim(); if(!name||!students) return; adminGroupData().rooms.push({ id:uid(), name, students, note:document.getElementById('roomNote').value.trim() }); document.getElementById('roomName').value=''; document.getElementById('roomStudents').value=''; document.getElementById('roomNote').value=''; await saveSite(); });
+    loginModal.addEventListener('click', e=>{ if(e.target===loginModal) loginModal.classList.remove('show'); });
+    adminModal.addEventListener('click', e=>{ if(e.target===adminModal) { adminModal.classList.remove('show'); setTimeout(()=>state.map && state.map.invalidateSize(), 50); } });
+    groupModal.addEventListener('click', e=>{ if(e.target===groupModal && state.currentGroup) groupModal.classList.remove('show'); });
+    setInterval(updateCountdown, 1000);
+
+    const themeBtn = document.getElementById('toggleThemeBtn');
+    function applyTheme(theme){ document.documentElement.classList.toggle('dark', theme === 'dark'); localStorage.setItem('theme', theme); themeBtn.textContent = theme === 'dark' ? 'Licht' : 'Donker'; }
+    themeBtn.addEventListener('click', () => applyTheme(document.documentElement.classList.contains('dark') ? 'light' : 'dark'));
+    applyTheme(localStorage.getItem('theme') || 'light');
+
+    if ('serviceWorker' in navigator) { window.addEventListener('load', () => navigator.serviceWorker.register('/sw.js').catch(()=>{})); }
+    init();
+  </script>
+</body>
+</html>
