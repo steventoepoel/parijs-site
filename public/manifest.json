@@ -1,11 +1,20 @@
 {
-  "name": "Parijs schoolreis",
-  "short_name": "Parijs",
+  "name": "Parijs Schoolreis App",
+  "short_name": "Parijs Reis",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#f5f7fb",
-  "theme_color": "#2563eb",
+  "background_color": "#0f172a",
+  "theme_color": "#0f172a",
   "icons": [
-    { "src": "/assets/logo.png", "sizes": "192x192", "type": "image/png" }
+    {
+      "src": "/assets/logo.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/assets/logo.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
   ]
 }
