@@ -18,14 +18,15 @@ if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
 const db = new sqlite3.Database(DB_FILE);
 const SQLiteStore = SQLiteStoreFactory(session);
 
-function uid() { return Math.random().toString(36).slice(2, 10); }
+function uid() {
+  return Math.random().toString(36).slice(2, 10);
+}
 
 const DEFAULT_PHOTOS = {
   'arc de triomphe': '/assets/photos/arc.jpg',
   'disneyland': '/assets/photos/disney.jpg',
   'disneyland paris': '/assets/photos/disney.jpg',
   'louvre': '/assets/photos/louvre.jpg',
-  'musee le louvre': '/assets/photos/louvre.jpg',
   'eiffeltoren': '/assets/photos/eiffel.jpg',
   'eiffel': '/assets/photos/eiffel.jpg',
   'sacré-cœur': '/assets/photos/sacrecoeur.jpg',
@@ -38,21 +39,13 @@ const DEFAULT_COORDS = {
   'generator paris (hotel)': [48.8786, 2.3707],
   'the people paris marais (hotel)': [48.8517, 2.3652],
   'arc de triomphe': [48.8738, 2.2950],
-  'seine boottocht': [48.8623, 2.2877],
+  'seine boottocht': [48.857462306372966, 2.341009422467063],
   'disneyland paris': [48.8706, 2.7797],
   'louvre': [48.8606, 2.3376],
   'eiffeltoren': [48.8584, 2.2945],
   'montmartre': [48.8867, 2.3431],
   'sacré-cœur': [48.8867, 2.3431],
   'sacre-coeur': [48.8867, 2.3431]
-};
-
-const DETAILS = {
-  arc: 'Napoleon gaf opdracht tot de bouw van deze triomfboog, maar hij maakte de voltooiing zelf niet meer mee. Van de top heb je een mooi en veilig zicht op het drukste plein van Parijs. Bekijk ook de prachtige reliëfs in de boog zelf.',
-  eiffel: 'De Eiffeltoren is hét symbool van Parijs en het meest bezochte monument ter wereld. De toren is 300 meter hoog, maar kan in de winter tot wel 8 centimeter krimpen door de kou. Kies je voor de trap naar boven, dan moet je maar liefst 1600 treden beklimmen.',
-  montmartre: 'De bekende wijk Montmartre is een van de leukste wijken in Parijs en staat bekend als kunstenaarswijk. Leuke straatjes om doorheen te lopen zijn Rue Abbesses met schattige winkeltjes en Rue Chevalier de La Barre. Let op: in Montmartre zijn veel straatverkopers actief, zeker bij de Sacré-Cœur. Laat je hand niet pakken voor een armbandje en loop direct door. Let ook goed op je spullen vanwege zakkenrollers.',
-  sacre: 'Basilique du Sacré-Cœur: deze sneeuwwitte kerk wordt ook wel oneerbiedig de suikertaart genoemd. De buitenkant is omstreden, maar binnenin zie je prachtige beelden en mozaïeken. Ook dit is weer een mooi uitzichtpunt, want de kerk ligt op de heuvel Montmartre, het hoogste punt van Parijs.',
-  louvre: 'In het Louvre, het meest bezochte museum ter wereld, ga je een aantal topstukken bekijken uit de kunstgeschiedenis, zoals de Mona Lisa van Leonardo da Vinci. Het Louvre was oorspronkelijk een kasteel uit de 12e en 13e eeuw onder koning Filips II. Toen Versailles klaar was, verhuisde de monarchie daarheen en werd het Louvre een plek om de collectie tentoon te stellen. Tijdens de Tweede Wereldoorlog gebruikten de nazi’s het Louvre om gestolen kunst op te slaan. Alle galerijen samen zijn meer dan 60.000 m² groot; je hebt ongeveer 100 dagen nodig om alle kunstwerken te bekijken.'
 };
 
 function guessPhoto(title = '', text = '') {
@@ -63,8 +56,33 @@ function guessPhoto(title = '', text = '') {
   return '';
 }
 
-function dayItem(title, text, image = '', details = '') {
-  return { title, text, image: image || guessPhoto(title, text), details };
+function attractionInfo(title = '', text = '') {
+  const value = `${title} ${text}`.toLowerCase();
+  if (value.includes('eiffeltoren') || value.includes('eiffel')) {
+    return 'De Eiffeltoren is hét symbool van Parijs en het meest bezochte monument ter wereld. De toren is 300 meter hoog maar kan in de winter tot wel 8 centimeter krimpen door de kou. Mocht je voor de trap kiezen om naar boven te gaan op de Eiffeltoren, dan moet je maar liefst 1600 treden beklimmen.';
+  }
+  if (value.includes('arc de triomphe')) {
+    return 'Napoleon gaf opdracht tot de bouw van deze triomfboog maar hij maakte de voltooiing zelf niet meer mee. Van de top heb je een mooi en veilig zicht op het drukste plein van Parijs, maar bekijk ook de prachtige reliëfs in de boog zelf.';
+  }
+  if (value.includes('montmartre')) {
+    return 'De bekende wijk Montmartre is een van de leukste wijken in Parijs. Het wordt ook wel de kunstenaarswijk van Parijs genoemd en dat zie je meteen terug. Leuke straatjes om doorheen te lopen zijn Rue Abbesses met schattige winkeltjes en Rue Chevalier de La Barre. Let op: in Montmartre en zeker bij de Sacré-Cœur lopen veel straatverkopers rond. Laat je hand niet pakken voor een armbandje, loop direct door en let goed op je spullen vanwege zakkenrollers.';
+  }
+  if (value.includes('sacré-cœur') || value.includes('sacre-coeur') || value.includes('sacre coeur')) {
+    return 'Basilique du Sacré-Cœur, deze sneeuwwitte kerk wordt wel oneerbiedig de suikertaart genoemd. De buitenkant is omstreden, maar binnenin zie je prachtige beelden en mozaïeken. Ook dit is een mooi uitzichtpunt, want de kerk ligt op de heuvel Montmartre, het hoogste punt van Parijs.';
+  }
+  if (value.includes('louvre')) {
+    return 'In het Louvre, het meest bezochte museum ter wereld, ga je een aantal topstukken bekijken uit de kunstgeschiedenis. Een voorbeeld daarvan is de Mona Lisa van Leonardo Da Vinci, het schilderij dat ooit in de slaapkamer van Napoleon heeft gehangen. Het Louvre was oorspronkelijk een kasteel uit de 12e en 13e eeuw onder koning Philip II. Toen Versailles klaar was, verhuisde de monarchie daarheen en bleef het Louvre achter als tentoonstellingsplek. Tijdens de Tweede Wereldoorlog gebruikten de nazi’s het Louvre om gestolen kunst op te slaan. Alle galerijen samen zijn meer dan 60.000 m² groot; je hebt ongeveer 100 dagen nodig om alles te bekijken.';
+  }
+  return '';
+}
+
+function dayItem(title, text, image = '', moreInfo = '') {
+  return {
+    title,
+    text,
+    image: image || guessPhoto(title, text),
+    moreInfo: moreInfo || attractionInfo(title, text)
+  };
 }
 
 function defaultSpots(hotelName) {
@@ -80,61 +98,34 @@ function defaultSpots(hotelName) {
   ];
 }
 
-function defaultProgramA() {
+function defaultProgramBase(groupLabel) {
   return [
     {
       id: uid(), dayShort: 'Maandag', dayLabel: 'Dag 1', title: 'Vertrek, aankomst Parijs, Arc de Triomphe en bootreis',
       items: [
         dayItem('Ochtend — vertrek & aankomst', 'Verzamelen en vertrek in het Develpark en aankomst in Parijs. Daarna naar het hotel.'),
-        dayItem('Middag — Arc de Triomphe', 'Bezoek aan de Arc de Triomphe en omgeving.', '', DETAILS.arc),
+        dayItem('Middag — Arc de Triomphe', 'Bezoek aan de Arc de Triomphe en omgeving.'),
         dayItem('Avond — vaartocht over de Seine', 'Boottocht langs de bekendste plekken van Parijs.')
       ]
     },
-    { id: uid(), dayShort: 'Dinsdag', dayLabel: 'Dag 2', title: 'Disneyland Paris', items: [dayItem('Hele dag — Disney', 'Een volledige dag in Disneyland Paris.')] },
+    {
+      id: uid(), dayShort: 'Dinsdag', dayLabel: 'Dag 2', title: 'Disneyland Paris',
+      items: [dayItem('Hele dag — Disneyland Paris', 'Een volledige dag in Disneyland Paris met de nieuwe "World of Frozen". We sluiten deze dag uiteraard af met de sprookjesachtige en indrukwekkende vuurwerkshow!')]
+    },
     {
       id: uid(), dayShort: 'Woensdag', dayLabel: 'Dag 3', title: 'Louvre, Eiffeltoren en vrije tijd',
       items: [
-        dayItem('Ochtend — Louvre', 'Bezoek aan het museum.', '', DETAILS.louvre),
-        dayItem('Middag — Eiffeltoren', 'Bezoek aan de Eiffeltoren.', '', DETAILS.eiffel),
-        dayItem('Later — vrije tijd', 'Vrije tijd volgens de groepsafspraken.')
+        dayItem('Ochtend — Musée du Louvre', 'Bezoek aan het museum en verschillende topstukken uit de kunstgeschiedenis.'),
+        dayItem('Middag — Eiffeltoren', 'Bezoek aan de Eiffeltoren en omgeving.'),
+        dayItem('Later — vrije tijd', `Vrije tijd volgens de groepsafspraken van ${groupLabel}.`)
       ]
     },
     {
       id: uid(), dayShort: 'Donderdag', dayLabel: 'Dag 4', title: 'Montmartre, Sacré-Cœur en terugreis',
       items: [
-        dayItem('Ochtend — Montmartre', 'Wandeling door Montmartre.', '', DETAILS.montmartre),
-        dayItem('Middag — Sacré-Cœur', 'Bezoek aan de basiliek.', '', DETAILS.sacre),
+        dayItem('Ochtend — Montmartre', 'Wandeling door Montmartre.'),
+        dayItem('Middag — Basilique du Sacré-Cœur', 'Bezoek aan de basiliek en het uitzichtpunt.'),
         dayItem('Later — terugreis', 'Vertrek uit Parijs en terugreis naar huis.')
-      ]
-    }
-  ];
-}
-
-function defaultProgramB() {
-  return [
-    {
-      id: uid(), dayShort: 'Maandag', dayLabel: 'Dag 1', title: 'Vertrek, aankomst Parijs, Arc de Triomphe en bootreis',
-      items: [
-        dayItem('Ochtend — vertrek & aankomst', 'Verzamelen en vertrek in het Develpark en aankomst in Parijs. Daarna naar het hotel.'),
-        dayItem('Middag — Arc de Triomphe', 'Gezamenlijk bezoek met leiding.', '', DETAILS.arc),
-        dayItem('Avond — vaartocht over de Seine', 'Boottocht met de groep.')
-      ]
-    },
-    { id: uid(), dayShort: 'Dinsdag', dayLabel: 'Dag 2', title: 'Disneyland Paris', items: [dayItem('Hele dag — Disney', 'Volledige dag Disneyland Paris.')] },
-    {
-      id: uid(), dayShort: 'Woensdag', dayLabel: 'Dag 3', title: 'Louvre, Eiffeltoren en vrije tijd',
-      items: [
-        dayItem('Ochtend — Louvre', 'Cultureel bezoek aan het Louvre.', '', DETAILS.louvre),
-        dayItem('Middag — Eiffeltoren', 'Bezoek en fotomoment.', '', DETAILS.eiffel),
-        dayItem('Later — vrije tijd', 'Vrije tijd volgens de afspraken van groep B.')
-      ]
-    },
-    {
-      id: uid(), dayShort: 'Donderdag', dayLabel: 'Dag 4', title: 'Montmartre, Sacré-Cœur en terugreis',
-      items: [
-        dayItem('Ochtend — Montmartre', 'Wandeling door de wijk.', '', DETAILS.montmartre),
-        dayItem('Middag — Sacré-Cœur', 'Bezoek aan de basiliek en uitzichtpunt.', '', DETAILS.sacre),
-        dayItem('Later — terugreis', 'Vertrek naar huis.')
       ]
     }
   ];
@@ -146,58 +137,68 @@ function defaultData() {
       departure: '2026-04-13T07:00',
       instagramProfile: 'https://www.instagram.com/develsteincollegezwijndrecht/',
       announcements: [
-        { id: uid(), title: 'Vergeet je ID en borg niet', text: 'Neem op de dag van vertrek een geldig identiteitsbewijs en een envelop met daar in 20 euro borg mee. Zonder ID kun je niet mee op reis.', type: 'urgent', link: '' }
+        {
+          id: uid(),
+          title: 'Verplicht meenemen bij vertrek',
+          text: 'Neem op de dag van vertrek een geldig identiteitsbewijs en een envelop met daar in 20 euro borg mee. Zonder ID kun je niet mee op reis.',
+          type: 'urgent',
+          link: ''
+        }
       ],
       instagramLinks: [],
       practical: {
-        travel: [
-          'Bestemming: Parijs, Frankrijk',
-          'Reisduur: maandag t/m donderdag',
-          'Vervoer: bus of trein, volgens de afspraken van school',
-          'Zakgeld: behalve de lunch op de heenreis zijn alle maaltijden en excursies inbegrepen in de prijs. Je zakgeld is dus voor als je een souvenir wilt kopen of bijvoorbeeld een keer zin hebt in een ijsje of een macaron. Richtprijs: 50 euro.',
-          'Verzekering: er is een collectieve scholierenreisongevallenverzekering afgesloten. Voor de details verwijzen we naar de schoolgids 2025 2026. Een eventuele annuleringsverzekering voor of tijdens de reis moet zelf afgesloten worden.'
+        travel: [],
+        moneyInsurance: [
+          'Zakgeld: behalve de lunch op de heenreis zijn alle maaltijden en excursies inbegrepen in de prijs.',
+          'Je zakgeld is dus voor als je een souvenir wilt kopen of bijvoorbeeld een keer zin hebt in een ijsje of een macaron.',
+          'Richtprijs: 50 euro.',
+          'Verzekering: er is een collectieve scholierenreisongevallenverzekering afgesloten.',
+          'Voor de details verwijzen we naar de schoolgids 2025 2026.',
+          'Een eventuele annuleringsverzekering voor of tijdens de reis moet zelf afgesloten worden.'
         ],
         packing: [
           'Je goede humeur',
-          'geldig paspoort of Europese identiteitskaart',
-          'pinpas en zakgeld',
-          'gegevens van je ziektekostenverzekering en reisverzekering',
-          'regenkleding',
-          'handdoek(en)',
-          'kleding en nachtgoed',
-          'toiletartikelen',
-          'eventuele medicijnen',
-          'wandelschoenen',
-          'spelletjes (kaarten, e.d.)',
-          'oplader en powerbank voor je telefoon'
+          'Geldig paspoort of Europese identiteitskaart',
+          'Pinpas en zakgeld',
+          'Gegevens van je ziektekostenverzekering en reisverzekering',
+          'Regenkleding',
+          'Handdoek(en)',
+          'Kleding en nachtgoed',
+          'Toiletartikelen',
+          'Eventuele medicijnen',
+          'Wandelschoenen',
+          'Spelletjes (kaarten, e.d.)',
+          'Oplader en powerbank voor je telefoon'
         ],
         bus: [
-          '20 euro borg in envelop met je naam er op !!',
-          'paspoort of ID-kaart meenemen als handbagage, dus niet in je koffer!!',
+          '20 euro borg in envelop met je naam erop',
+          'Paspoort of ID-kaart meenemen als handbagage, dus niet in je koffer',
           'Lunchpakket heenreis',
-          'Kleingeld voor toiletten.',
+          'Kleingeld voor toiletten',
           'Pen',
-          'Doe een label met naam, adres en telefoonnummer op je handbagage en koffer.'
+          'Doe een label met naam, adres en telefoonnummer op je handbagage en koffer'
         ],
-        rules: [
-          'Er wordt niet gerookt (ook geen e-sigaret of vape)',
+        agreements: [
+          'Er wordt niet gerookt, ook geen e-sigaret of vape.',
           'Geen gebruik van alcohol of drugs.',
-          'Op roken en drinken in de hotelkamers staan hoge boetes. Bij constatering van een van deze zaken zal de leiding direct een van deze boetes innen. Dit geldt ook voor beschadigingen en vervuiling!',
+          'Op roken en drinken in de hotelkamers staan hoge boetes. Bij constatering zal de leiding direct een van deze boetes innen. Dit geldt ook voor beschadigingen en vervuiling.',
           'Zorg dat je hotelkamer netjes blijft, schade komt voor eigen rekening.',
-          'Laat geen kostbaarheden achter in de hotelkamer (dus ook niet je paspoort of ID-kaart!!).',
+          'Laat geen kostbaarheden achter in de hotelkamer, dus ook niet je paspoort of ID-kaart.',
           'Kom altijd op tijd op de vertrek- en verzamelpunten.',
-          'Na 23.00 uur is het rustig op de kamers (denk aan de overige gasten). Bij overlast word je uit het hotel verwijderd (hotel regel).',
+          'Na 23.00 uur is het rustig op de kamers. Denk aan de overige gasten. Bij overlast word je uit het hotel verwijderd.',
           'Je mag het hotel nooit op eigen houtje verlaten.',
-          'Ga in de stad in je vrije tijd nooit alleen op stap (minimaal met 3 personen).',
-          'Let op zakkenrollers, neem evt. een klein slotje mee of een paperclip om je rits van je tas mee dicht te maken.',
+          'Ga in de stad in je vrije tijd nooit alleen op stap, maar minimaal met 3 personen.',
+          'Let op zakkenrollers. Neem eventueel een klein slotje mee of een paperclip om je rits van je tas dicht te maken.',
           'Houd rekening met anderen.'
         ]
       }
     },
     groups: {
       A: {
-        label: 'Groep A', hotel: 'Generator Paris', leiding: 'Mevr. Brandsma, Dhr. Franken, Mevr. Meeder, Dhr. Toepoel',
-        program: defaultProgramA(),
+        label: 'Groep A',
+        hotel: 'Generator Paris',
+        leiding: 'Mevr. Brandsma, Dhr. Franken, Mevr. Meeder, Dhr. Toepoel',
+        program: defaultProgramBase('Groep A'),
         rooms: [
           { id: uid(), name: 'Kamer 201', students: 'Emma, Noor, Mila', note: 'Dicht bij de trap' },
           { id: uid(), name: 'Kamer 202', students: 'Daan, Sem, Lucas', note: '' }
@@ -205,8 +206,10 @@ function defaultData() {
         spots: defaultSpots('Generator Paris')
       },
       B: {
-        label: 'Groep B', hotel: 'The People Paris Marais', leiding: 'Mevr. Jansen, Dhr. Meijer, Mevr. Pauw, Dhr. Scholtes',
-        program: defaultProgramB(),
+        label: 'Groep B',
+        hotel: 'The People Paris Marais',
+        leiding: 'Mevr. Jansen, Dhr. Meijer, Mevr. Pauw, Dhr. Scholtes',
+        program: defaultProgramBase('Groep B'),
         rooms: [
           { id: uid(), name: 'Kamer 301', students: 'Sara, Lotte, Yara', note: '' },
           { id: uid(), name: 'Kamer 302', students: 'Finn, Milan, Ties', note: 'Naast begeleiderskamer' }
@@ -222,7 +225,8 @@ function normalizeSpot(spot, hotelName) {
   const name = spot.name || 'Locatie';
   const key = name.toLowerCase();
   let coords = Array.isArray(spot.coords) && spot.coords.length === 2 ? spot.coords : null;
-  if (!coords) {
+  if (key === 'seine boottocht') coords = DEFAULT_COORDS['seine boottocht'];
+  else if (!coords) {
     if (key.includes('(hotel)')) coords = DEFAULT_COORDS[`${hotelName.toLowerCase()} (hotel)`] || [48.8786, 2.3707];
     else coords = DEFAULT_COORDS[key] || [48.8606, 2.3376];
   }
@@ -233,14 +237,14 @@ function normalizeProgram(program, fallbackProgram) {
   const source = Array.isArray(program) && program.length ? program : fallbackProgram;
   return source.map((day, idx) => ({
     id: day.id || uid(),
-    dayShort: day.dayShort || fallbackProgram[idx]?.dayShort || 'Dag',
+    dayShort: day.dayShort || fallbackProgram[idx]?.dayShort || `Dag ${idx + 1}`,
     dayLabel: day.dayLabel || fallbackProgram[idx]?.dayLabel || `Dag ${idx + 1}`,
     title: day.title || fallbackProgram[idx]?.title || `Dag ${idx + 1}`,
-    items: Array.isArray(day.items) ? day.items.map((item, itemIdx) => ({
+    items: Array.isArray(day.items) && day.items.length ? day.items.map(item => ({
       title: item.title || 'Onderdeel',
-      text: item.text || '',
+      text: (item.text === 'Een volledige dag in Disneyland Paris.' ? 'Een volledige dag in Disneyland Paris met de nieuwe "World of Frozen". We sluiten deze dag uiteraard af met de sprookjesachtige en indrukwekkende vuurwerkshow!' : (item.text || '')),
       image: item.image || guessPhoto(item.title, item.text),
-      details: item.details || fallbackProgram[idx]?.items?.[itemIdx]?.details || ''
+      moreInfo: item.moreInfo || attractionInfo(item.title, item.text)
     })) : fallbackProgram[idx].items
   }));
 }
@@ -254,7 +258,7 @@ function normalizeData(data) {
   ['A', 'B'].forEach(groupKey => {
     const fallback = defaults.groups[groupKey];
     const group = groups[groupKey] || fallback;
-    group.label = group.label || `Groep ${groupKey}`;
+    group.label = group.label || fallback.label;
     group.hotel = group.hotel || fallback.hotel;
     group.leiding = group.leiding || fallback.leiding;
     group.program = normalizeProgram(group.program, fallback.program);
@@ -264,8 +268,8 @@ function normalizeData(data) {
       students: room.students || '',
       note: room.note || ''
     })) : fallback.rooms;
-    group.spots = (Array.isArray(group.spots) && group.spots.length ? group.spots : fallback.spots)
-      .map(spot => normalizeSpot(spot, group.hotel));
+    group.spots = (Array.isArray(group.spots) && group.spots.length ? group.spots : fallback.spots).map(spot => normalizeSpot(spot, group.hotel));
+    groups[groupKey] = group;
   });
 
   return {
@@ -276,9 +280,10 @@ function normalizeData(data) {
       instagramLinks: Array.isArray(shared.instagramLinks) ? shared.instagramLinks : defaults.shared.instagramLinks,
       practical: {
         travel: Array.isArray(shared.practical?.travel) ? shared.practical.travel : defaults.shared.practical.travel,
+        moneyInsurance: Array.isArray(shared.practical?.moneyInsurance) ? shared.practical.moneyInsurance : defaults.shared.practical.moneyInsurance,
         packing: Array.isArray(shared.practical?.packing) ? shared.practical.packing : defaults.shared.practical.packing,
         bus: Array.isArray(shared.practical?.bus) ? shared.practical.bus : defaults.shared.practical.bus,
-        rules: Array.isArray(shared.practical?.rules) ? shared.practical.rules : defaults.shared.practical.rules
+        agreements: Array.isArray(shared.practical?.agreements) ? shared.practical.agreements : defaults.shared.practical.agreements
       }
     },
     groups
@@ -293,6 +298,7 @@ function run(sql, params = []) {
     });
   });
 }
+
 function get(sql, params = []) {
   return new Promise((resolve, reject) => {
     db.get(sql, params, (err, row) => {
@@ -303,7 +309,7 @@ function get(sql, params = []) {
 }
 
 async function initDb() {
-  await run(`CREATE TABLE IF NOT EXISTS settings (key TEXT PRIMARY KEY, value TEXT NOT NULL)`);
+  await run('CREATE TABLE IF NOT EXISTS settings (key TEXT PRIMARY KEY, value TEXT NOT NULL)');
   const row = await get('SELECT value FROM settings WHERE key = ?', ['siteData']);
   if (!row) {
     await run('INSERT INTO settings(key, value) VALUES(?, ?)', ['siteData', JSON.stringify(defaultData())]);
@@ -312,10 +318,12 @@ async function initDb() {
     await run('UPDATE settings SET value = ? WHERE key = ?', [JSON.stringify(normalized), 'siteData']);
   }
 }
+
 async function readData() {
   const row = await get('SELECT value FROM settings WHERE key = ?', ['siteData']);
   return normalizeData(JSON.parse(row.value));
 }
+
 async function writeData(data) {
   await run('UPDATE settings SET value = ? WHERE key = ?', [JSON.stringify(normalizeData(data)), 'siteData']);
 }
@@ -326,7 +334,7 @@ function requireAuth(req, res, next) {
 }
 
 app.set('trust proxy', 1);
-app.use(express.json({ limit: '4mb' }));
+app.use(express.json({ limit: '8mb' }));
 app.use(session({
   store: new SQLiteStore({ db: 'app.db', dir: DATA_DIR }),
   secret: SESSION_SECRET,
@@ -344,10 +352,17 @@ app.use('/assets', express.static(path.join(__dirname, 'public/assets')));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/api/site-data', async (req, res) => {
-  try { res.json(await readData()); }
-  catch { res.status(500).json({ error: 'Kon data niet laden' }); }
+  try {
+    res.json(await readData());
+  } catch {
+    res.status(500).json({ error: 'Kon data niet laden' });
+  }
 });
-app.get('/api/auth/status', (req, res) => res.json({ authenticated: !!(req.session && req.session.authenticated) }));
+
+app.get('/api/auth/status', (req, res) => {
+  res.json({ authenticated: !!(req.session && req.session.authenticated) });
+});
+
 app.post('/api/auth/login', (req, res) => {
   const { username, password } = req.body || {};
   if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
@@ -356,7 +371,11 @@ app.post('/api/auth/login', (req, res) => {
   }
   res.status(401).json({ error: 'Onjuiste inloggegevens' });
 });
-app.post('/api/auth/logout', (req, res) => req.session.destroy(() => res.json({ ok: true })));
+
+app.post('/api/auth/logout', (req, res) => {
+  req.session.destroy(() => res.json({ ok: true }));
+});
+
 app.post('/api/site-data', requireAuth, async (req, res) => {
   try {
     const nextData = req.body;
@@ -370,11 +389,13 @@ app.post('/api/site-data', requireAuth, async (req, res) => {
   }
 });
 
-app.get('*', (req, res) => res.sendFile(path.join(__dirname, 'public/index.html')));
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public/index.html'));
+});
 
 initDb().then(() => {
   app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
-}).catch((error) => {
+}).catch(error => {
   console.error(error);
   process.exit(1);
 });

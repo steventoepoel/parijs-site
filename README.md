@@ -1,4 +1,4 @@
-# Parijs site v0.13
+# Parijs site v0.06
 
 ## Start lokaal
 
@@ -17,15 +17,14 @@ Open daarna `http://localhost:3000`.
 Build command: `npm install`
 Start command: `npm start`
 
-## Nieuw in v0.13
+## Nieuw in v0.06
 - Instagram previews voor reel- en postlinks
 - Praktische info in admin bewerkbaar
 - Kleine foto's bij programma-items
 - Standaardfoto's toegevoegd voor Louvre, Eiffeltoren, Arc de Triomphe, Sacré-Cœur, Montmartre en Disneyland
 
-- Donker/licht modus
-- PWA met manifest en service worker
-- Uitklapbaar programma per dag
-- Volledig uitgeschreven dagen
-- Afvinkbare paklijst en handbagage-checklist
-- Nieuwe standaardteksten voor praktische informatie, afspraken en bezienswaardigheden
+
+## Nieuw in v0.15
+- zichtbare installeerknop voor de PWA
+- live dag-highlight bovenin de hero
+- PWA-icons vervangen door aangeleverde iconen
