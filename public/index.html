@@ -861,5 +861,36 @@
     setInterval(updateCountdown, 1000);
     init();
   </script>
+
+<!-- V0.20 updates -->
+<section id="mededelingen">
+<h2>Mededelingen</h2>
+<ul id="announcements"></ul>
+</section>
+
+<section>
+<h2>Reels 2025</h2>
+<ul>
+<li><a href="https://www.instagram.com/reel/DPNoZkjirNl/">Dag 1</a></li>
+<li><a href="https://www.instagram.com/reel/DPQLpZQig86/">Dag 2</a></li>
+<li><a href="https://www.instagram.com/reel/DPRFMWCCjXl/">Dag 3A</a></li>
+<li><a href="https://www.instagram.com/reel/DPRr9ZcCs61/">Dag 3B</a></li>
+<li><a href="https://www.instagram.com/reel/DPTjJerilcc/">Dag 4</a></li>
+</ul>
+</section>
+
+<script>
+const announcements = [
+  {text: "Welkom! Dit is een mededeling.", urgent: false, link: ""},
+];
+
+const list = document.getElementById("announcements");
+announcements.forEach(a=>{
+  const li = document.createElement("li");
+  li.innerHTML = (a.urgent ? "<strong>URGENT:</strong> " : "") + a.text + (a.link ? ' <a href="'+a.link+'">link</a>' : "");
+  list.appendChild(li);
+});
+</script>
+
 </body>
 </html>
