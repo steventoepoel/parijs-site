@@ -85,19 +85,21 @@ function dayItem(title, text, image = '', moreInfo = '') {
   };
 }
 
-function defaultSpots(hotelName) {
+function defaultSpots(hotelName, groupKey = 'A') {
+  const isGroupB = groupKey === 'B';
   return [
     { id: uid(), name: 'Arc de Triomphe', note: 'Maandag middag', coords: DEFAULT_COORDS['arc de triomphe'] },
     { id: uid(), name: 'Seine boottocht', note: 'Maandag avond', coords: DEFAULT_COORDS['seine boottocht'] },
-    { id: uid(), name: 'Disneyland Paris', note: 'Dinsdag hele dag', coords: DEFAULT_COORDS['disneyland paris'] },
-    { id: uid(), name: 'Louvre', note: 'Woensdag ochtend', coords: DEFAULT_COORDS['louvre'] },
-    { id: uid(), name: 'Eiffeltoren', note: 'Woensdag middag', coords: DEFAULT_COORDS['eiffeltoren'] },
+    { id: uid(), name: 'Disneyland Paris', note: 'Dinsdag hele dag (groepen samen)', coords: DEFAULT_COORDS['disneyland paris'] },
+    { id: uid(), name: isGroupB ? 'Eiffeltoren' : 'Louvre', note: 'Woensdag ochtend', coords: DEFAULT_COORDS[isGroupB ? 'eiffeltoren' : 'louvre'] },
+    { id: uid(), name: isGroupB ? 'Louvre' : 'Eiffeltoren', note: 'Woensdag middag', coords: DEFAULT_COORDS[isGroupB ? 'louvre' : 'eiffeltoren'] },
     { id: uid(), name: 'Montmartre', note: 'Donderdag ochtend', coords: DEFAULT_COORDS['montmartre'] },
-    { id: uid(), name: 'Sacré-Cœur', note: 'Donderdag middag', coords: DEFAULT_COORDS['sacré-cœur'] }
+    { id: uid(), name: 'Sacré-Cœur', note: 'Donderdag ochtend', coords: DEFAULT_COORDS['sacré-cœur'] }
   ];
 }
 
-function defaultProgramBase(groupLabel) {
+function defaultProgramBase(groupLabel, groupKey = 'A') {
+  const isGroupB = groupKey === 'B';
   return [
     {
       id: uid(), dayShort: 'Maandag', dayLabel: 'Dag 1', title: 'Vertrek, aankomst Parijs, Arc de Triomphe en bootreis',
@@ -108,22 +110,21 @@ function defaultProgramBase(groupLabel) {
       ]
     },
     {
-      id: uid(), dayShort: 'Dinsdag', dayLabel: 'Dag 2', title: 'Disneyland Paris',
-      items: [dayItem('Hele dag — Disneyland Paris', 'Een volledige dag in Disneyland Paris met de nieuwe "World of Frozen". We sluiten deze dag uiteraard af met de sprookjesachtige en indrukwekkende vuurwerkshow!')]
+      id: uid(), dayShort: 'Dinsdag', dayLabel: 'Dag 2', title: 'Disneyland Paris (groepen samen)',
+      items: [dayItem('Hele dag — Disneyland Paris', 'Groep A en Groep B bezoeken samen Disneyland Paris met de nieuwe "World of Frozen". We sluiten deze dag uiteraard af met de sprookjesachtige en indrukwekkende vuurwerkshow!')]
     },
     {
-      id: uid(), dayShort: 'Woensdag', dayLabel: 'Dag 3', title: 'Louvre, Eiffeltoren en vrije tijd',
+      id: uid(), dayShort: 'Woensdag', dayLabel: 'Dag 3', title: isGroupB ? 'Eiffeltoren, Louvre en vrije tijd' : 'Louvre, Eiffeltoren en vrije tijd',
       items: [
-        dayItem('Ochtend — Musée du Louvre', 'Bezoek aan het museum en verschillende topstukken uit de kunstgeschiedenis.'),
-        dayItem('Middag — Eiffeltoren', 'Bezoek aan de Eiffeltoren en omgeving.'),
+        dayItem(isGroupB ? 'Ochtend — Eiffeltoren' : 'Ochtend — Musée du Louvre', isGroupB ? 'Bezoek aan de Eiffeltoren en omgeving.' : 'Bezoek aan het museum en verschillende topstukken uit de kunstgeschiedenis.'),
+        dayItem(isGroupB ? 'Middag — Musée du Louvre' : 'Middag — Eiffeltoren', isGroupB ? 'Bezoek aan het museum en verschillende topstukken uit de kunstgeschiedenis.' : 'Bezoek aan de Eiffeltoren en omgeving.'),
         dayItem('Later — vrije tijd', `Vrije tijd volgens de groepsafspraken van ${groupLabel}.`)
       ]
     },
     {
       id: uid(), dayShort: 'Donderdag', dayLabel: 'Dag 4', title: 'Montmartre, Sacré-Cœur en terugreis',
       items: [
-        dayItem('Ochtend — Montmartre', 'Wandeling door Montmartre.'),
-        dayItem('Middag — Basilique du Sacré-Cœur', 'Bezoek aan de basiliek en het uitzichtpunt.'),
+        dayItem('Ochtend — Montmartre en Sacré-Cœur', 'Groep A en Groep B bezoeken in de ochtend Montmartre en de Basilique du Sacré-Cœur.'),
         dayItem('Later — terugreis', 'Vertrek uit Parijs en terugreis naar huis.')
       ]
     }
@@ -144,7 +145,13 @@ function defaultData() {
           link: ''
         }
       ],
-      instagramLinks: [],
+      instagramLinks: [
+        { id: uid(), title: '2025 dag 1', url: 'https://www.instagram.com/reel/DPNoZkjirNl/?igsh=OWVoZW9jZjB3Ym1y&wa_status_inline=true' },
+        { id: uid(), title: '2025 dag 2', url: 'https://www.instagram.com/reel/DPQLpZQig86/?igsh=MWZ6Y2dkMHlrMzBxdg%3D%3D&wa_status_inline=true' },
+        { id: uid(), title: '2025 dag 3A', url: 'https://www.instagram.com/reel/DPRFMWCCjXl/?igsh=cWsyNTUwMDEyNW05&wa_status_inline=true' },
+        { id: uid(), title: '2025 dag 3B', url: 'https://www.instagram.com/reel/DPRr9ZcCs61/?igsh=eTJydjF3ZmRyd3pw&wa_status_inline=true' },
+        { id: uid(), title: '2025 dag 4', url: 'https://www.instagram.com/reel/DPTjJerilcc/?igsh=MW5rYW9yYzRqZGxvaA%3D%3D&wa_status_inline=true' }
+      ],
       practical: {
         travel: [],
         moneyInsurance: [
@@ -197,23 +204,23 @@ function defaultData() {
         label: 'Groep A',
         hotel: 'Generator Paris',
         leiding: 'Mevr. Brandsma, Dhr. Franken, Mevr. Meeder, Dhr. Toepoel',
-        program: defaultProgramBase('Groep A'),
+        program: defaultProgramBase('Groep A', 'A'),
         rooms: [
           { id: uid(), name: 'Kamer 201', students: 'Emma, Noor, Mila', note: 'Dicht bij de trap' },
           { id: uid(), name: 'Kamer 202', students: 'Daan, Sem, Lucas', note: '' }
         ],
-        spots: defaultSpots('Generator Paris')
+        spots: defaultSpots('Generator Paris', 'A')
       },
       B: {
         label: 'Groep B',
         hotel: 'The People Paris Marais',
         leiding: 'Mevr. Jansen, Dhr. Meijer, Mevr. Pauw, Dhr. Scholtes',
-        program: defaultProgramBase('Groep B'),
+        program: defaultProgramBase('Groep B', 'B'),
         rooms: [
           { id: uid(), name: 'Kamer 301', students: 'Sara, Lotte, Yara', note: '' },
           { id: uid(), name: 'Kamer 302', students: 'Finn, Milan, Ties', note: 'Naast begeleiderskamer' }
         ],
-        spots: defaultSpots('The People Paris Marais')
+        spots: defaultSpots('The People Paris Marais', 'B')
       }
     }
   };
@@ -261,6 +268,22 @@ function normalizeData(data) {
     group.hotel = group.hotel || fallback.hotel;
     group.leiding = group.leiding || fallback.leiding;
     group.program = normalizeProgram(group.program, fallback.program);
+    if (groupKey === 'B' && group.program[2]?.items?.length >= 2) {
+      group.program[2].title = 'Eiffeltoren, Louvre en vrije tijd';
+      group.program[2].items[0] = { ...group.program[2].items[0], title: 'Ochtend — Eiffeltoren', text: 'Bezoek aan de Eiffeltoren en omgeving.', image: guessPhoto('Eiffeltoren', 'Bezoek aan de Eiffeltoren en omgeving.'), moreInfo: attractionInfo('Eiffeltoren', 'Bezoek aan de Eiffeltoren en omgeving.') };
+      group.program[2].items[1] = { ...group.program[2].items[1], title: 'Middag — Musée du Louvre', text: 'Bezoek aan het museum en verschillende topstukken uit de kunstgeschiedenis.', image: guessPhoto('Louvre', 'Bezoek aan het museum en verschillende topstukken uit de kunstgeschiedenis.'), moreInfo: attractionInfo('Louvre', 'Bezoek aan het museum en verschillende topstukken uit de kunstgeschiedenis.') };
+    }
+    if (group.program[1]?.items?.length) {
+      group.program[1].title = 'Disneyland Paris (groepen samen)';
+      group.program[1].items[0] = { ...group.program[1].items[0], title: 'Hele dag — Disneyland Paris', text: 'Groep A en Groep B bezoeken samen Disneyland Paris met de nieuwe "World of Frozen". We sluiten deze dag uiteraard af met de sprookjesachtige en indrukwekkende vuurwerkshow!' };
+    }
+    if (group.program[3]) {
+      group.program[3].title = 'Montmartre, Sacré-Cœur en terugreis';
+      group.program[3].items = [
+        { title: 'Ochtend — Montmartre en Sacré-Cœur', text: 'Groep A en Groep B bezoeken in de ochtend Montmartre en de Basilique du Sacré-Cœur.', image: guessPhoto('Montmartre', 'Montmartre en Sacré-Cœur'), moreInfo: attractionInfo('Montmartre', 'Montmartre en Sacré-Cœur') },
+        { title: 'Later — terugreis', text: 'Vertrek uit Parijs en terugreis naar huis.', image: '', moreInfo: '' }
+      ];
+    }
     group.rooms = Array.isArray(group.rooms) ? group.rooms.map(room => ({
       id: room.id || uid(),
       name: room.name || 'Kamer',
@@ -273,7 +296,18 @@ function normalizeData(data) {
         const note = String(spot?.note || '').toLowerCase();
         return !name.includes('(hotel)') && note !== 'hotel / uitvalsbasis';
       })
-      .map(spot => normalizeSpot(spot, group.hotel));
+      .map(spot => {
+        const normalizedSpot = normalizeSpot(spot, group.hotel);
+        const lowerName = String(normalizedSpot.name || '').toLowerCase();
+        if (lowerName.includes('disney')) normalizedSpot.note = 'Dinsdag hele dag (groepen samen)';
+        if (groupKey === 'B' && lowerName.includes('eiffel')) normalizedSpot.note = 'Woensdag ochtend';
+        if (groupKey === 'B' && lowerName.includes('louvre')) normalizedSpot.note = 'Woensdag middag';
+        if (groupKey === 'A' && lowerName.includes('eiffel')) normalizedSpot.note = 'Woensdag middag';
+        if (groupKey === 'A' && lowerName.includes('louvre')) normalizedSpot.note = 'Woensdag ochtend';
+        if (lowerName.includes('montmartre')) normalizedSpot.note = 'Donderdag ochtend';
+        if (lowerName.includes('sacré-cœur') || lowerName.includes('sacre')) normalizedSpot.note = 'Donderdag ochtend';
+        return normalizedSpot;
+      });
     groups[groupKey] = group;
   });
 
@@ -281,8 +315,18 @@ function normalizeData(data) {
     shared: {
       departure: (!shared.departure || shared.departure === '2026-04-13T07:00') ? defaults.shared.departure : shared.departure,
       instagramProfile: shared.instagramProfile || defaults.shared.instagramProfile,
-      announcements: Array.isArray(shared.announcements) ? shared.announcements : defaults.shared.announcements,
-      instagramLinks: Array.isArray(shared.instagramLinks) ? shared.instagramLinks : defaults.shared.instagramLinks,
+      announcements: Array.isArray(shared.announcements) ? shared.announcements.map(item => ({
+        id: item.id || uid(),
+        title: item.title || 'Mededeling',
+        text: item.text || '',
+        type: item.type === 'urgent' ? 'urgent' : 'info',
+        link: item.link || ''
+      })) : defaults.shared.announcements,
+      instagramLinks: Array.isArray(shared.instagramLinks) && shared.instagramLinks.length ? shared.instagramLinks.map(item => ({
+        id: item.id || uid(),
+        title: item.title || 'Instagram update',
+        url: item.url || ''
+      })) : defaults.shared.instagramLinks,
       practical: {
         travel: Array.isArray(shared.practical?.travel) ? shared.practical.travel : defaults.shared.practical.travel,
         moneyInsurance: Array.isArray(shared.practical?.moneyInsurance) ? shared.practical.moneyInsurance : defaults.shared.practical.moneyInsurance,

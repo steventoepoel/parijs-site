@@ -219,7 +219,7 @@
         <div class="hero-actions">
           <button class="theme-btn" id="themeBtn" type="button">Donkere modus</button>
           <button class="theme-btn" id="installAppBtn" type="button">📱 Installeer app</button>
-          <button class="group-btn" id="groupBtn" type="button" aria-label="Wissel groep">A</button>
+          <button class="group-btn" id="groupBtn" type="button" aria-label="Wissel groep">Groep</button>
         </div>
       </div>
       <div class="live-day-badge hidden" id="liveDayBadge">Vandaag: Dag 1</div>
@@ -307,7 +307,7 @@
       </div>
     </section>
 
-    <p class="footer">v0.19</p>
+    <p class="footer">v0.20</p>
   </div>
 
   <div class="modal" id="groupModal">
@@ -361,6 +361,18 @@
           <div class="field"><label>Groep</label><select id="adminGroupSelect"><option value="A">Groep A</option><option value="B">Groep B</option></select></div>
           <div class="field"><label>Leiding</label><input id="leadersInput" type="text"></div>
         </div>
+      </div>
+
+
+      <div class="admin-block">
+        <div style="display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap;">
+          <div>
+            <h4 style="margin:0 0 6px;">Mededelingen</h4>
+            <p class="muted" style="margin:0;">Voeg hier mededelingen toe, kies urgent of niet urgent en voeg eventueel een link toe.</p>
+          </div>
+          <button class="btn btn-secondary" id="addAnnouncementBtn" type="button">+ Mededeling toevoegen</button>
+        </div>
+        <div id="adminAnnouncementsList" class="admin-repeat" style="margin-top:12px;"></div>
       </div>
 
       <div class="admin-block">
@@ -470,7 +482,7 @@
     function setGroup(group) {
       state.currentGroup = group;
       localStorage.setItem('selectedGroup', group);
-      document.getElementById('groupBtn').textContent = group;
+      document.getElementById('groupBtn').textContent = `Groep ${group}`;
       groupModal.classList.remove('show');
       renderAll();
     }
@@ -485,7 +497,7 @@
       const group = currentGroupData();
       const t = tripState();
       const liveDayBadge = document.getElementById('liveDayBadge');
-      document.getElementById('groupBtn').textContent = state.currentGroup;
+      document.getElementById('groupBtn').textContent = `Groep ${state.currentGroup}`;
       document.getElementById('heroLeiding').textContent = group.leiding;
       document.getElementById('departLabel').textContent = formatDate(state.site.shared.departure);
       document.getElementById('instagramProfileBtn').href = state.site.shared.instagramProfile || '#';
@@ -685,6 +697,45 @@
       return spots.map(spot => `${spot.name} | ${spot.note || ''} | ${(spot.coords || []).join(', ')}`).join('\n');
     }
 
+
+    function renderAdminAnnouncements() {
+      const root = document.getElementById('adminAnnouncementsList');
+      const items = state.site.shared.announcements || [];
+      if (!items.length) {
+        root.innerHTML = '<div class="admin-repeat-item"><p class="muted">Nog geen mededelingen toegevoegd.</p></div>';
+        return;
+      }
+      root.innerHTML = items.map((item, index) => `
+        <div class="admin-repeat-item" data-announcement-index="${index}">
+          <div class="admin-inline">
+            <div class="field"><label>Titel</label><input type="text" data-announcement-title="${index}" value="${escapeHtml(item.title || '')}"></div>
+            <div class="field"><label>Type</label>
+              <select data-announcement-type="${index}">
+                <option value="urgent" ${item.type === 'urgent' ? 'selected' : ''}>Urgent</option>
+                <option value="info" ${item.type === 'info' ? 'selected' : ''}>Niet urgent</option>
+              </select>
+            </div>
+          </div>
+          <div class="field" style="margin-top:12px;"><label>Mededeling</label><textarea data-announcement-text="${index}" style="min-height:110px;">${escapeHtml(item.text || '')}</textarea></div>
+          <div class="admin-inline" style="margin-top:12px;align-items:end;">
+            <div class="field"><label>Link (optioneel)</label><input type="url" data-announcement-link="${index}" placeholder="https://..." value="${escapeHtml(item.link || '')}"></div>
+            <div class="field"><button class="btn btn-secondary" type="button" data-delete-announcement="${index}">Verwijderen</button></div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function collectAnnouncementsFromForm() {
+      const items = Array.from(document.querySelectorAll('[data-announcement-index]')).map((block, index) => ({
+        id: state.site.shared.announcements?.[index]?.id || (crypto.randomUUID ? crypto.randomUUID() : `announcement-${Date.now()}-${Math.random()}`),
+        title: block.querySelector(`[data-announcement-title="${index}"]`)?.value.trim() || 'Mededeling',
+        type: block.querySelector(`[data-announcement-type="${index}"]`)?.value === 'urgent' ? 'urgent' : 'info',
+        text: block.querySelector(`[data-announcement-text="${index}"]`)?.value.trim() || '',
+        link: block.querySelector(`[data-announcement-link="${index}"]`)?.value.trim() || ''
+      })).filter(item => item.title || item.text || item.link);
+      state.site.shared.announcements = items;
+    }
+
     function renderAdminProgram() {
       const root = document.getElementById('adminProgramList');
       const group = state.site.groups[state.adminGroup];
@@ -710,11 +761,13 @@
       document.getElementById('adminGroupSelect').value = state.adminGroup;
       document.getElementById('leadersInput').value = group.leiding || '';
       document.getElementById('spotsInput').value = formatSpotsForAdmin(group.spots || []);
+      renderAdminAnnouncements();
       renderAdminProgram();
     }
 
     function buildAdminListsFromForm() {
       const group = state.site.groups[state.adminGroup];
+      collectAnnouncementsFromForm();
       group.leiding = document.getElementById('leadersInput').value.trim() || group.leiding;
 
       group.program = (group.program || []).map((day, index) => {
@@ -804,6 +857,24 @@
       state.adminGroup = event.target.value;
       fillAdmin();
     });
+    document.getElementById('addAnnouncementBtn').addEventListener('click', () => {
+      state.site.shared.announcements = state.site.shared.announcements || [];
+      state.site.shared.announcements.push({
+        id: crypto.randomUUID ? crypto.randomUUID() : `announcement-${Date.now()}-${Math.random()}`,
+        title: '',
+        text: '',
+        type: 'info',
+        link: ''
+      });
+      renderAdminAnnouncements();
+    });
+    document.getElementById('adminAnnouncementsList').addEventListener('click', event => {
+      const index = event.target?.dataset?.deleteAnnouncement;
+      if (index === undefined) return;
+      collectAnnouncementsFromForm();
+      state.site.shared.announcements.splice(Number(index), 1);
+      renderAdminAnnouncements();
+    });
     document.getElementById('loginBtn').addEventListener('click', async () => {
       try {
         await api('/api/auth/login', {
@@ -861,36 +932,5 @@
     setInterval(updateCountdown, 1000);
     init();
   </script>
-
-<!-- V0.20 updates -->
-<section id="mededelingen">
-<h2>Mededelingen</h2>
-<ul id="announcements"></ul>
-</section>
-
-<section>
-<h2>Reels 2025</h2>
-<ul>
-<li><a href="https://www.instagram.com/reel/DPNoZkjirNl/">Dag 1</a></li>
-<li><a href="https://www.instagram.com/reel/DPQLpZQig86/">Dag 2</a></li>
-<li><a href="https://www.instagram.com/reel/DPRFMWCCjXl/">Dag 3A</a></li>
-<li><a href="https://www.instagram.com/reel/DPRr9ZcCs61/">Dag 3B</a></li>
-<li><a href="https://www.instagram.com/reel/DPTjJerilcc/">Dag 4</a></li>
-</ul>
-</section>
-
-<script>
-const announcements = [
-  {text: "Welkom! Dit is een mededeling.", urgent: false, link: ""},
-];
-
-const list = document.getElementById("announcements");
-announcements.forEach(a=>{
-  const li = document.createElement("li");
-  li.innerHTML = (a.urgent ? "<strong>URGENT:</strong> " : "") + a.text + (a.link ? ' <a href="'+a.link+'">link</a>' : "");
-  list.appendChild(li);
-});
-</script>
-
 </body>
 </html>
