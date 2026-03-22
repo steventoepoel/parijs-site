@@ -134,7 +134,7 @@ function defaultProgramBase(groupLabel) {
 function defaultData() {
   return {
     shared: {
-      departure: '2026-04-13T07:00',
+      departure: '2026-09-28T07:00',
       instagramProfile: 'https://www.instagram.com/develsteincollegezwijndrecht/',
       announcements: [
         {

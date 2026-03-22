@@ -65,7 +65,7 @@
     }
     .hero-top { display:flex; gap:16px; justify-content:space-between; align-items:center; }
     .brand { display:flex; gap:14px; align-items:center; min-width:0; }
-    .logo-wrap { width:86px; height:86px; flex:0 0 auto; display:grid; place-items:center; }
+    .logo-wrap { width:64px; height:64px; flex:0 0 auto; display:grid; place-items:center; }
     .logo-wrap img { width:100%; height:100%; object-fit:contain; filter:drop-shadow(0 8px 18px rgba(0,0,0,.25)); }
     .title-wrap small { display:block; font-size:12px; opacity:.82; text-transform:uppercase; letter-spacing:.05em; margin-bottom:4px; }
     .title-wrap h1 { margin:0; font-size:clamp(30px, 6vw, 44px); line-height:1.02; }
@@ -171,6 +171,11 @@
       width:100%; padding:12px 14px; border-radius:14px; border:1px solid var(--line); background:var(--bg-soft); color:var(--text);
     }
     .field textarea { min-height:100px; resize:vertical; }
+    .spot-list { display:flex; flex-direction:column; gap:8px; margin-top:12px; }
+    .spot-row { display:flex; gap:10px; justify-content:space-between; align-items:center; border:1px solid var(--line); border-radius:16px; padding:12px 14px; background:var(--card); }
+    .spot-row h3 { margin:0 0 4px; font-size:16px; }
+    .mini-list { display:flex; flex-direction:column; gap:10px; }
+    .mini { border:1px solid var(--line); border-radius:16px; padding:12px; background:var(--card); }
     .admin-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:12px; }
     .admin-block { border:1px solid var(--line); border-radius:20px; padding:14px; background:var(--bg-soft); margin-top:12px; }
     .picker-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; }
@@ -186,9 +191,10 @@
     }
     @media (max-width: 620px) {
       .hero-top { align-items:flex-start; flex-direction:column; }
-      .hero-actions { width:100%; justify-content:space-between; }
-      .logo-wrap { width:72px; height:72px; }
-      .group-btn { width:62px; height:62px; font-size:28px; }
+      .hero-actions { width:100%; justify-content:flex-start; }
+      .logo-wrap { width:56px; height:56px; }
+      .group-btn { width:54px; height:54px; font-size:24px; }
+      .theme-btn { padding:10px 12px; }
       .quick-grid, .count-grid, .picker-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
       #map { height:320px; }
     }
@@ -213,9 +219,7 @@
       </div>
       <div class="live-day-badge hidden" id="liveDayBadge">Vandaag: Dag 1</div>
       <div class="quick-grid">
-        <div class="quick"><small>Hotel</small><strong id="heroHotel">-</strong></div>
         <div class="quick"><small>Leiding</small><strong id="heroLeiding">-</strong></div>
-        <div class="quick"><small id="statusLabel">Vertrek</small><strong id="heroStatus">-</strong></div>
       </div>
     </header>
 
@@ -223,10 +227,10 @@
       <a href="#aftellen" id="countdownNav">Aftellen</a>
       <a href="#mededelingen">Mededelingen</a>
       <a href="#programma">Programma</a>
+      <a href="#instagram">Instagram</a>
       <a href="#kamers">Kamers</a>
       <a href="#kaart">Kaart</a>
       <a href="#praktisch">Praktisch</a>
-      <a href="#instagram">Instagram</a>
       <button id="openAdminBtn" type="button">Admin</button>
     </nav>
 
@@ -253,6 +257,14 @@
       <div id="scheduleList" class="timeline-list"></div>
     </section>
 
+    <section id="instagram">
+      <div class="section-head"><h2>Instagram</h2></div>
+      <div class="btn-row" style="margin-top:0;margin-bottom:12px;">
+        <a class="btn btn-secondary" id="instagramProfileBtn" href="#" target="_blank" rel="noopener noreferrer">Open schoolaccount</a>
+      </div>
+      <div id="instagramList" class="auto-grid"></div>
+    </section>
+
     <section id="kamers">
       <div class="section-head"><h2>Kamerverdeling</h2></div>
       <div id="roomsList" class="auto-grid"></div>
@@ -266,7 +278,7 @@
         <div id="map"></div>
         <p class="map-note" id="mapSelectedNote" style="margin-top:12px;"></p>
       </div>
-      <div id="spotsList" class="auto-grid" style="margin-top:12px;"></div>
+      <div id="spotsList" class="spot-list"></div>
     </section>
 
     <section id="praktisch">
@@ -291,15 +303,7 @@
       </div>
     </section>
 
-    <section id="instagram">
-      <div class="section-head"><h2>Instagram</h2></div>
-      <div class="btn-row" style="margin-top:0;margin-bottom:12px;">
-        <a class="btn btn-secondary" id="instagramProfileBtn" href="#" target="_blank" rel="noopener noreferrer">Open schoolaccount</a>
-      </div>
-      <div id="instagramList" class="auto-grid"></div>
-    </section>
-
-    <p class="footer">v0.15 • PWA met installeerknop, live dag-highlight, Leaflet-kaart, donkere/licht modus en afvinkbare checklists.</p>
+    <p class="footer">v0.16 • compactere header, nette admin-velden, Instagram direct na het programma en kaartlijst onder de kaart.</p>
   </div>
 
   <div class="modal" id="groupModal">
@@ -338,7 +342,7 @@
       <div class="modal-head">
         <div>
           <h3 style="margin:0;">Admin beheer</h3>
-          <p class="muted" style="margin-top:6px;">Basisvelden aanpassen of de volledige JSON bewerken.</p>
+          <p class="muted" style="margin-top:6px;">Pas alle inhoud aan met nette invoervelden.</p>
         </div>
         <div class="btn-row" style="margin-top:0;">
           <button class="btn btn-secondary" id="logoutBtn" type="button">Uitloggen</button>
@@ -347,18 +351,68 @@
       </div>
 
       <div class="admin-block">
+        <h4 style="margin:0 0 12px;">Basisgegevens</h4>
         <div class="admin-grid">
           <div class="field"><label>Vertrekdatum en tijd</label><input id="departureInput" type="datetime-local"></div>
           <div class="field"><label>Groep</label><select id="adminGroupSelect"><option value="A">Groep A</option><option value="B">Groep B</option></select></div>
           <div class="field"><label>Hotel</label><input id="hotelInput" type="text"></div>
-          <div class="field"><label>Leiding</label><input id="leadersInput" type="text"></div>
+          <div class="field"><label>Leiding</label><textarea id="leadersInput" style="min-height:84px;"></textarea></div>
         </div>
         <div class="btn-row"><button class="btn btn-primary" id="saveBasicsBtn" type="button">Basis opslaan</button></div>
       </div>
 
       <div class="admin-block">
-        <div class="field"><label>Volledige site-data (JSON)</label><textarea id="rawJsonInput" style="min-height:340px;"></textarea></div>
-        <div class="btn-row"><button class="btn btn-primary" id="saveJsonBtn" type="button">JSON opslaan</button></div>
+        <h4 style="margin:0 0 12px;">Mededelingen</h4>
+        <div class="admin-grid">
+          <div class="field"><label>Titel</label><input id="announcementTitle" type="text"></div>
+          <div class="field"><label>Type</label><select id="announcementType"><option value="urgent">Urgent</option><option value="info">Info</option><option value="form">Formulier</option></select></div>
+          <div class="field" style="grid-column:1 / -1;"><label>Tekst</label><textarea id="announcementText"></textarea></div>
+          <div class="field" style="grid-column:1 / -1;"><label>Link</label><input id="announcementLink" type="url"></div>
+        </div>
+        <div class="btn-row"><button class="btn btn-primary" id="addAnnouncementBtn" type="button">Mededeling toevoegen</button></div>
+        <div id="announcementAdminList" class="mini-list" style="margin-top:12px;"></div>
+      </div>
+
+      <div class="admin-block">
+        <h4 style="margin:0 0 12px;">Instagram</h4>
+        <div class="admin-grid">
+          <div class="field"><label>Schoolaccount</label><input id="instaProfileUrl" type="url"></div>
+          <div class="field"><label>Preview titel</label><input id="instaTitle" type="text"></div>
+          <div class="field" style="grid-column:1 / -1;"><label>Preview link</label><input id="instaUrl" type="url"></div>
+        </div>
+        <div class="btn-row"><button class="btn btn-primary" id="saveInstagramProfileBtn" type="button">Schoolaccount opslaan</button><button class="btn btn-primary" id="addInstagramBtn" type="button">Preview toevoegen</button></div>
+        <div id="instagramAdminList" class="mini-list" style="margin-top:12px;"></div>
+      </div>
+
+      <div class="admin-block">
+        <h4 style="margin:0 0 12px;">Praktische informatie</h4>
+        <div class="field"><label>Zakgeld & verzekering — één regel per bullet</label><textarea id="moneyInsuranceInput"></textarea></div>
+        <div class="field"><label>Paklijst — één regel per bullet</label><textarea id="packingInput"></textarea></div>
+        <div class="field"><label>Bus / handbagage — één regel per bullet</label><textarea id="busInput"></textarea></div>
+        <div class="field"><label>Afspraken — één regel per bullet</label><textarea id="agreementsInput"></textarea></div>
+        <div class="btn-row"><button class="btn btn-primary" id="savePracticalBtn" type="button">Praktische info opslaan</button></div>
+      </div>
+
+      <div class="admin-block">
+        <h4 style="margin:0 0 12px;">Programma van gekozen groep</h4>
+        <p class="muted" style="margin:0 0 10px;">Gebruik per regel: Titel | Tekst | Meer info | Foto URL of pad</p>
+        <div id="scheduleAdminList" class="mini-list"></div>
+      </div>
+
+      <div class="admin-block">
+        <h4 style="margin:0 0 12px;">Kamers van gekozen groep</h4>
+        <div class="admin-grid">
+          <div class="field"><label>Kamer</label><input id="roomName" type="text"></div>
+          <div class="field"><label>Leerlingen</label><input id="roomStudents" type="text"></div>
+          <div class="field" style="grid-column:1 / -1;"><label>Opmerking</label><input id="roomNote" type="text"></div>
+        </div>
+        <div class="btn-row"><button class="btn btn-primary" id="addRoomBtn" type="button">Kamer toevoegen</button></div>
+        <div id="roomsAdminList" class="mini-list" style="margin-top:12px;"></div>
+      </div>
+
+      <div class="admin-block">
+        <h4 style="margin:0 0 12px;">Kaartlocaties van gekozen groep</h4>
+        <div id="spotsAdminList" class="mini-list"></div>
       </div>
     </div>
   </div>
@@ -465,11 +519,10 @@
       const t = tripState();
       const liveDayBadge = document.getElementById('liveDayBadge');
       document.getElementById('groupBtn').textContent = state.currentGroup;
-      document.getElementById('heroHotel').textContent = group.hotel;
-      document.getElementById('heroLeiding').textContent = group.leiding;
+            document.getElementById('heroLeiding').textContent = group.leiding;
       document.getElementById('departLabel').textContent = formatDate(state.site.shared.departure);
       document.getElementById('instagramProfileBtn').href = state.site.shared.instagramProfile || '#';
-      document.getElementById('mapCaption').textContent = `${group.hotel} en de excursielocaties van ${group.label}`;
+      document.getElementById('mapCaption').textContent = `Hotel en excursielocaties van ${group.label}`;
       if (t.started && !t.finished) {
         document.getElementById('statusLabel').textContent = 'Reisdag';
         document.getElementById('heroStatus').textContent = `Dag ${t.day}`;
@@ -518,7 +571,7 @@
           <button class="timeline-toggle" type="button">
             <div class="timeline-day-label"><strong>${escapeHtml(day.dayShort)}</strong><span>${escapeHtml(day.dayLabel)}</span></div>
             <div>
-              <h3 style="margin:0 0 6px;">${escapeHtml(day.title)}</h3>
+              <h3 style="margin:0 0 6px;">${escapeHtml(day.dayLabel)} — ${escapeHtml(day.title)}</h3>
               <p class="muted">Tik om deze dag ${shouldOpen ? 'in te klappen' : 'uit te klappen'}.</p>
             </div>
             <div class="timeline-chevron">⌄</div>
@@ -614,11 +667,13 @@
       setTimeout(() => state.map.invalidateSize(), 120);
       selectSpot(0);
       document.getElementById('spotsList').innerHTML = spots.map((spot, index) => `
-        <article class="spot-card">
-          <h3 style="margin:0 0 8px;">${escapeHtml(spot.name)}</h3>
-          <p>${escapeHtml(spot.note || '')}</p>
-          <div class="btn-row"><button class="btn btn-secondary" type="button" data-spot-index="${index}">Toon op kaart</button></div>
-        </article>
+        <div class="spot-row">
+          <div>
+            <h3>${escapeHtml(spot.name)}</h3>
+            <p class="muted">${escapeHtml(spot.note || '')}</p>
+          </div>
+          <button class="btn btn-secondary" type="button" data-spot-index="${index}">Toon op kaart</button>
+        </div>
       `).join('');
       document.querySelectorAll('[data-spot-index]').forEach(btn => {
         btn.addEventListener('click', () => {
@@ -683,12 +738,53 @@
     }
 
     function fillAdmin() {
+      const shared = state.site.shared;
       const group = state.site.groups[state.adminGroup];
-      document.getElementById('departureInput').value = state.site.shared.departure || '';
+      document.getElementById('departureInput').value = shared.departure || '';
       document.getElementById('adminGroupSelect').value = state.adminGroup;
       document.getElementById('hotelInput').value = group.hotel || '';
-      document.getElementById('leadersInput').value = group.leiding || '';
-      document.getElementById('rawJsonInput').value = JSON.stringify(state.site, null, 2);
+      document.getElementById('leadersInput').value = (group.leiding || '').replace(/, /g, '\n');
+      document.getElementById('moneyInsuranceInput').value = (shared.practical.moneyInsurance || []).join('\n');
+      document.getElementById('packingInput').value = (shared.practical.packing || []).join('\n');
+      document.getElementById('busInput').value = (shared.practical.bus || []).join('\n');
+      document.getElementById('agreementsInput').value = (shared.practical.agreements || []).join('\n');
+      document.getElementById('instaProfileUrl').value = shared.instagramProfile || '';
+      document.getElementById('announcementAdminList').innerHTML = (shared.announcements || []).map(item => `
+        <div class="mini">
+          <strong>${escapeHtml(item.title)}</strong>
+          <p class="muted" style="margin-top:6px;">${escapeHtml(item.text)}</p>
+          <div class="btn-row"><button class="btn btn-secondary" type="button" onclick="removeAnnouncement('${item.id}')">Verwijderen</button></div>
+        </div>`).join('');
+      document.getElementById('instagramAdminList').innerHTML = (shared.instagramLinks || []).map(item => `
+        <div class="mini">
+          <strong>${escapeHtml(item.title)}</strong>
+          <p class="muted" style="margin-top:6px;">${escapeHtml(item.url)}</p>
+          <div class="btn-row"><button class="btn btn-secondary" type="button" onclick="removeInstagram('${item.id}')">Verwijderen</button></div>
+        </div>`).join('');
+      document.getElementById('scheduleAdminList').innerHTML = (group.program || []).map((day, index) => `
+        <div class="mini">
+          <div class="field"><label>${escapeHtml(day.dayLabel)} — titel</label><input value="${escapeHtml(day.title)}" onchange="updateDayTitle(${index}, this.value)"></div>
+          <div class="field" style="margin-top:10px;"><label>${escapeHtml(day.dayLabel)} — onderdelen</label><textarea onchange="updateDayItems(${index}, this.value)">${escapeHtml(day.items.map(item => `${item.title} | ${item.text} | ${item.moreInfo || ''} | ${item.image || ''}`).join('\n'))}</textarea></div>
+        </div>`).join('');
+      document.getElementById('roomsAdminList').innerHTML = (group.rooms || []).map(room => `
+        <div class="mini">
+          <strong>${escapeHtml(room.name)}</strong>
+          <p class="muted" style="margin-top:6px;">${escapeHtml(room.students)}</p>
+          ${room.note ? `<p class="muted" style="margin-top:6px;">${escapeHtml(room.note)}</p>` : ''}
+          <div class="btn-row"><button class="btn btn-secondary" type="button" onclick="removeRoom('${room.id}')">Verwijderen</button></div>
+        </div>`).join('');
+      document.getElementById('spotsAdminList').innerHTML = (group.spots || []).map(spot => {
+        const coords = spotCoords(spot);
+        return `
+        <div class="mini">
+          <strong>${escapeHtml(spot.name)}</strong>
+          <div class="field" style="margin-top:10px;"><label>Omschrijving</label><input value="${escapeHtml(spot.note || '')}" onchange="updateSpot('${spot.id}','note',this.value)"></div>
+          <div class="admin-grid" style="margin-top:10px;">
+            <div class="field"><label>Latitude</label><input type="number" step="0.000001" value="${coords[0]}" onchange="updateSpotCoord('${spot.id}',0,this.value)"></div>
+            <div class="field"><label>Longitude</label><input type="number" step="0.000001" value="${coords[1]}" onchange="updateSpotCoord('${spot.id}',1,this.value)"></div>
+          </div>
+        </div>`;
+      }).join('');
     }
 
     async function saveSite() {
@@ -696,6 +792,54 @@
       fillAdmin();
       renderAll();
     }
+
+    window.removeAnnouncement = async function(id) {
+      state.site.shared.announcements = (state.site.shared.announcements || []).filter(item => item.id !== id);
+      await saveSite();
+    };
+    window.removeInstagram = async function(id) {
+      state.site.shared.instagramLinks = (state.site.shared.instagramLinks || []).filter(item => item.id !== id);
+      await saveSite();
+    };
+    window.updateDayTitle = async function(index, value) {
+      const day = state.site.groups[state.adminGroup].program[index];
+      if (!day) return;
+      day.title = value;
+      await saveSite();
+    };
+    window.updateDayItems = async function(index, value) {
+      const day = state.site.groups[state.adminGroup].program[index];
+      if (!day) return;
+      day.items = value.split('\n').map(line => line.trim()).filter(Boolean).map(line => {
+        const parts = line.split('|');
+        return {
+          title: (parts[0] || '').trim() || 'Onderdeel',
+          text: (parts[1] || '').trim() || '',
+          moreInfo: (parts[2] || '').trim() || '',
+          image: parts.slice(3).join('|').trim() || ''
+        };
+      });
+      await saveSite();
+    };
+    window.removeRoom = async function(id) {
+      const group = state.site.groups[state.adminGroup];
+      group.rooms = (group.rooms || []).filter(item => item.id !== id);
+      await saveSite();
+    };
+    window.updateSpot = async function(id, key, value) {
+      const spot = (state.site.groups[state.adminGroup].spots || []).find(item => item.id === id);
+      if (!spot) return;
+      spot[key] = value;
+      await saveSite();
+    };
+    window.updateSpotCoord = async function(id, coordIndex, value) {
+      const spot = (state.site.groups[state.adminGroup].spots || []).find(item => item.id === id);
+      if (!spot) return;
+      const coords = spotCoords(spot);
+      coords[coordIndex] = Number(value);
+      spot.coords = coords;
+      await saveSite();
+    };
 
     function renderAll() {
       if (!state.site || !state.currentGroup || !state.site.groups[state.currentGroup]) return;
@@ -758,17 +902,50 @@
       state.site.shared.departure = document.getElementById('departureInput').value || state.site.shared.departure;
       const group = state.site.groups[state.adminGroup];
       group.hotel = document.getElementById('hotelInput').value.trim() || group.hotel;
-      group.leiding = document.getElementById('leadersInput').value.trim() || group.leiding;
+      group.leiding = document.getElementById('leadersInput').value.split('\n').map(line => line.trim()).filter(Boolean).join(', ') || group.leiding;
       if (Array.isArray(group.spots) && group.spots[0]) group.spots[0].name = `${group.hotel} (hotel)`;
       await saveSite();
     });
-    document.getElementById('saveJsonBtn').addEventListener('click', async () => {
-      try {
-        state.site = JSON.parse(document.getElementById('rawJsonInput').value);
-        await saveSite();
-      } catch (error) {
-        alert('Kon JSON niet opslaan: ' + error.message);
-      }
+    document.getElementById('savePracticalBtn').addEventListener('click', async () => {
+      const practical = state.site.shared.practical;
+      practical.moneyInsurance = document.getElementById('moneyInsuranceInput').value.split('\n').map(line => line.trim()).filter(Boolean);
+      practical.packing = document.getElementById('packingInput').value.split('\n').map(line => line.trim()).filter(Boolean);
+      practical.bus = document.getElementById('busInput').value.split('\n').map(line => line.trim()).filter(Boolean);
+      practical.agreements = document.getElementById('agreementsInput').value.split('\n').map(line => line.trim()).filter(Boolean);
+      await saveSite();
+    });
+    document.getElementById('addAnnouncementBtn').addEventListener('click', async () => {
+      const title = document.getElementById('announcementTitle').value.trim();
+      const textValue = document.getElementById('announcementText').value.trim();
+      if (!title || !textValue) return;
+      state.site.shared.announcements.unshift({ id: Math.random().toString(36).slice(2,10), title, text: textValue, type: document.getElementById('announcementType').value, link: document.getElementById('announcementLink').value.trim() });
+      document.getElementById('announcementTitle').value = '';
+      document.getElementById('announcementText').value = '';
+      document.getElementById('announcementLink').value = '';
+      await saveSite();
+    });
+    document.getElementById('saveInstagramProfileBtn').addEventListener('click', async () => {
+      state.site.shared.instagramProfile = document.getElementById('instaProfileUrl').value.trim();
+      await saveSite();
+    });
+    document.getElementById('addInstagramBtn').addEventListener('click', async () => {
+      const title = document.getElementById('instaTitle').value.trim();
+      const url = document.getElementById('instaUrl').value.trim();
+      if (!title || !url) return;
+      state.site.shared.instagramLinks.unshift({ id: Math.random().toString(36).slice(2,10), title, url });
+      document.getElementById('instaTitle').value = '';
+      document.getElementById('instaUrl').value = '';
+      await saveSite();
+    });
+    document.getElementById('addRoomBtn').addEventListener('click', async () => {
+      const name = document.getElementById('roomName').value.trim();
+      const students = document.getElementById('roomStudents').value.trim();
+      if (!name || !students) return;
+      state.site.groups[state.adminGroup].rooms.push({ id: Math.random().toString(36).slice(2,10), name, students, note: document.getElementById('roomNote').value.trim() });
+      document.getElementById('roomName').value = '';
+      document.getElementById('roomStudents').value = '';
+      document.getElementById('roomNote').value = '';
+      await saveSite();
     });
 
     loginModal.addEventListener('click', event => { if (event.target === loginModal) loginModal.classList.remove('show'); });
