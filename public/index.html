@@ -219,7 +219,7 @@
         <div class="hero-actions">
           <button class="theme-btn" id="themeBtn" type="button">Donkere modus</button>
           <button class="theme-btn" id="installAppBtn" type="button">📱 Installeer app</button>
-          <button class="group-btn" id="groupBtn" type="button" aria-label="Wissel groep">Groep</button>
+          <button class="group-btn" id="groupBtn" type="button" aria-label="Wissel groep">A</button>
         </div>
       </div>
       <div class="live-day-badge hidden" id="liveDayBadge">Vandaag: Dag 1</div>
@@ -503,7 +503,7 @@
     function setGroup(group) {
       state.currentGroup = group;
       localStorage.setItem('selectedGroup', group);
-      document.getElementById('groupBtn').textContent = `Groep ${group}`;
+      document.getElementById('groupBtn').textContent = group;
       groupModal.classList.remove('show');
       renderAll();
     }
@@ -518,7 +518,7 @@
       const group = currentGroupData();
       const t = tripState();
       const liveDayBadge = document.getElementById('liveDayBadge');
-      document.getElementById('groupBtn').textContent = `Groep ${state.currentGroup}`;
+      document.getElementById('groupBtn').textContent = state.currentGroup;
       document.getElementById('heroLeiding').textContent = group.leiding;
       document.getElementById('departLabel').textContent = formatDate(state.site.shared.departure);
       document.getElementById('instagramProfileBtn').href = state.site.shared.instagramProfile || '#';
