@@ -307,7 +307,7 @@
       </div>
     </section>
 
-    <p class="footer">v0.20</p>
+    <p class="footer">v0.21</p>
   </div>
 
   <div class="modal" id="groupModal">
@@ -376,9 +376,14 @@
       </div>
 
       <div class="admin-block">
-        <h4 style="margin:0 0 10px;">Instagram links</h4>
-        <p class="muted">Eén link per regel. Titel is optioneel via: Titel | URL</p>
-        <div class="field" style="margin-top:10px;"><textarea id="instagramLinksInput" style="min-height:140px;"></textarea></div>
+        <div style="display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap;">
+          <div>
+            <h4 style="margin:0 0 6px;">Instagram links</h4>
+            <p class="muted" style="margin:0;">Voeg Instagram links toe met een aparte titel en URL.</p>
+          </div>
+          <button class="btn btn-secondary" id="addInstagramBtn" type="button">+ Instagram toevoegen</button>
+        </div>
+        <div id="adminInstagramList" class="admin-repeat" style="margin-top:12px;"></div>
       </div>
 
       <div class="admin-block">
@@ -387,9 +392,25 @@
       </div>
 
       <div class="admin-block">
-        <h4 style="margin:0 0 10px;">Locaties op de kaart</h4>
-        <p class="muted">Gebruik per regel: Naam | Omschrijving | latitude, longitude</p>
-        <div class="field" style="margin-top:10px;"><textarea id="spotsInput" style="min-height:180px;"></textarea></div>
+        <div style="display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap;">
+          <div>
+            <h4 style="margin:0 0 6px;">Kamers</h4>
+            <p class="muted" style="margin:0;">Voeg kamers toe met namen van leerlingen en een eventuele notitie.</p>
+          </div>
+          <button class="btn btn-secondary" id="addRoomBtn" type="button">+ Kamer toevoegen</button>
+        </div>
+        <div id="adminRoomsList" class="admin-repeat" style="margin-top:12px;"></div>
+      </div>
+
+      <div class="admin-block">
+        <div style="display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap;">
+          <div>
+            <h4 style="margin:0 0 6px;">Locaties op de kaart</h4>
+            <p class="muted" style="margin:0;">Voeg locaties toe met naam, moment en coördinaten.</p>
+          </div>
+          <button class="btn btn-secondary" id="addSpotBtn" type="button">+ Locatie toevoegen</button>
+        </div>
+        <div id="adminSpotsList" class="admin-repeat" style="margin-top:12px;"></div>
       </div>
 
       <div class="btn-row"><button class="btn btn-primary" id="saveBasicsBtn" type="button">Opslaan</button></div>
@@ -698,6 +719,32 @@
     }
 
 
+    function renderAdminInstagramLinks() {
+      const root = document.getElementById('adminInstagramList');
+      const items = state.site.shared.instagramLinks || [];
+      if (!items.length) {
+        root.innerHTML = '<div class="admin-repeat-item"><p class="muted">Nog geen Instagram links toegevoegd.</p></div>';
+        return;
+      }
+      root.innerHTML = items.map((item, index) => `
+        <div class="admin-repeat-item" data-instagram-index="${index}">
+          <div class="admin-inline" style="align-items:end;">
+            <div class="field"><label>Titel</label><input type="text" data-instagram-title="${index}" value="${escapeHtml(item.title || '')}"></div>
+            <div class="field"><label>URL</label><input type="url" data-instagram-url="${index}" value="${escapeHtml(item.url || '')}" placeholder="https://www.instagram.com/..."></div>
+            <div class="field"><button class="btn btn-secondary" type="button" data-delete-instagram="${index}">Verwijderen</button></div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function collectInstagramFromForm() {
+      state.site.shared.instagramLinks = Array.from(document.querySelectorAll('[data-instagram-index]')).map((block, index) => ({
+        id: state.site.shared.instagramLinks?.[index]?.id || (crypto.randomUUID ? crypto.randomUUID() : `instagram-${Date.now()}-${Math.random()}`),
+        title: block.querySelector(`[data-instagram-title="${index}"]`)?.value.trim() || 'Instagram update',
+        url: block.querySelector(`[data-instagram-url="${index}"]`)?.value.trim() || ''
+      })).filter(item => item.url);
+    }
+
     function renderAdminAnnouncements() {
       const root = document.getElementById('adminAnnouncementsList');
       const items = state.site.shared.announcements || [];
@@ -736,89 +783,155 @@
       state.site.shared.announcements = items;
     }
 
-    function renderAdminProgram() {
-      const root = document.getElementById('adminProgramList');
-      const group = state.site.groups[state.adminGroup];
-      root.innerHTML = (group.program || []).map((day, index) => `
-        <div class="admin-repeat-item">
+    function renderAdminRooms() {
+      const root = document.getElementById('adminRoomsList');
+      const rooms = state.site.groups[state.adminGroup].rooms || [];
+      if (!rooms.length) {
+        root.innerHTML = '<div class="admin-repeat-item"><p class="muted">Nog geen kamers toegevoegd.</p></div>';
+        return;
+      }
+      root.innerHTML = rooms.map((room, index) => `
+        <div class="admin-repeat-item" data-room-index="${index}">
           <div class="admin-inline">
-            <div class="field"><label>${escapeHtml(day.dayLabel || `Dag ${index + 1}`)} titel</label><input type="text" data-program-title="${index}" value="${escapeHtml(day.title || '')}"></div>
-            <div class="field"><label>Korte dagnaam</label><input type="text" data-program-day-short="${index}" value="${escapeHtml(day.dayShort || '')}"></div>
+            <div class="field"><label>Kamer</label><input type="text" data-room-name="${index}" value="${escapeHtml(room.name || '')}"></div>
+            <div class="field"><label>Leerlingen</label><input type="text" data-room-students="${index}" value="${escapeHtml(room.students || '')}" placeholder="Naam 1, Naam 2, Naam 3"></div>
           </div>
-          <div class="field" style="margin-top:12px;">
-            <label>Onderdelen per regel (Titel | Tekst)</label>
-            <textarea data-program-items="${index}" style="min-height:140px;">${escapeHtml((day.items || []).map(item => `${item.title} | ${item.text}`).join('\n'))}</textarea>
+          <div class="admin-inline" style="margin-top:12px;align-items:end;">
+            <div class="field"><label>Notitie</label><input type="text" data-room-note="${index}" value="${escapeHtml(room.note || '')}"></div>
+            <div class="field"><button class="btn btn-secondary" type="button" data-delete-room="${index}">Verwijderen</button></div>
           </div>
         </div>
       `).join('');
     }
 
+    function collectRoomsFromForm() {
+      const group = state.site.groups[state.adminGroup];
+      group.rooms = Array.from(document.querySelectorAll('[data-room-index]')).map((block, index) => ({
+        id: group.rooms?.[index]?.id || (crypto.randomUUID ? crypto.randomUUID() : `room-${Date.now()}-${Math.random()}`),
+        name: block.querySelector(`[data-room-name="${index}"]`)?.value.trim() || 'Kamer',
+        students: block.querySelector(`[data-room-students="${index}"]`)?.value.trim() || '',
+        note: block.querySelector(`[data-room-note="${index}"]`)?.value.trim() || ''
+      })).filter(item => item.name || item.students || item.note);
+    }
+
+    function renderAdminSpots() {
+      const root = document.getElementById('adminSpotsList');
+      const spots = state.site.groups[state.adminGroup].spots || [];
+      if (!spots.length) {
+        root.innerHTML = '<div class="admin-repeat-item"><p class="muted">Nog geen locaties toegevoegd.</p></div>';
+        return;
+      }
+      root.innerHTML = spots.map((spot, index) => `
+        <div class="admin-repeat-item" data-spot-index="${index}">
+          <div class="admin-inline">
+            <div class="field"><label>Naam</label><input type="text" data-spot-name="${index}" value="${escapeHtml(spot.name || '')}"></div>
+            <div class="field"><label>Moment / omschrijving</label><input type="text" data-spot-note="${index}" value="${escapeHtml(spot.note || '')}"></div>
+          </div>
+          <div class="admin-inline" style="margin-top:12px;align-items:end;">
+            <div class="field"><label>Latitude</label><input type="number" step="any" data-spot-lat="${index}" value="${escapeHtml((spot.coords || [])[0] ?? '')}"></div>
+            <div class="field"><label>Longitude</label><input type="number" step="any" data-spot-lng="${index}" value="${escapeHtml((spot.coords || [])[1] ?? '')}"></div>
+            <div class="field"><button class="btn btn-secondary" type="button" data-delete-spot="${index}">Verwijderen</button></div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function collectSpotsFromForm() {
+      const group = state.site.groups[state.adminGroup];
+      group.spots = Array.from(document.querySelectorAll('[data-spot-index]')).map((block, index) => {
+        const lat = Number(block.querySelector(`[data-spot-lat="${index}"]`)?.value);
+        const lng = Number(block.querySelector(`[data-spot-lng="${index}"]`)?.value);
+        return {
+          id: group.spots?.[index]?.id || (crypto.randomUUID ? crypto.randomUUID() : `spot-${Date.now()}-${Math.random()}`),
+          name: block.querySelector(`[data-spot-name="${index}"]`)?.value.trim() || 'Locatie',
+          note: block.querySelector(`[data-spot-note="${index}"]`)?.value.trim() || '',
+          coords: [Number.isFinite(lat) ? lat : 48.858, Number.isFinite(lng) ? lng : 2.34]
+        };
+      }).filter(item => item.name || item.note);
+    }
+
+    function renderAdminProgram() {
+      const root = document.getElementById('adminProgramList');
+      const group = state.site.groups[state.adminGroup];
+      root.innerHTML = (group.program || []).map((day, index) => `
+        <div class="admin-repeat-item" data-day-index="${index}">
+          <div class="admin-inline">
+            <div class="field"><label>${escapeHtml(day.dayLabel || `Dag ${index + 1}`)} titel</label><input type="text" data-program-title="${index}" value="${escapeHtml(day.title || '')}"></div>
+            <div class="field"><label>Korte dagnaam</label><input type="text" data-program-day-short="${index}" value="${escapeHtml(day.dayShort || '')}"></div>
+          </div>
+          <div style="display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap;margin-top:12px;">
+            <strong>Onderdelen</strong>
+            <button class="btn btn-secondary" type="button" data-add-program-item="${index}">+ Onderdeel toevoegen</button>
+          </div>
+          <div class="admin-repeat" style="margin-top:12px;">
+            ${(day.items || []).map((item, itemIndex) => `
+              <div class="admin-repeat-item" data-program-item-index="${index}-${itemIndex}">
+                <div class="field"><label>Titel</label><input type="text" data-program-item-title="${index}-${itemIndex}" value="${escapeHtml(item.title || '')}"></div>
+                <div class="field" style="margin-top:12px;"><label>Tekst</label><textarea data-program-item-text="${index}-${itemIndex}" style="min-height:100px;">${escapeHtml(item.text || '')}</textarea></div>
+                <div class="field" style="margin-top:12px;"><button class="btn btn-secondary" type="button" data-delete-program-item="${index}-${itemIndex}">Verwijderen</button></div>
+              </div>
+            `).join('') || '<div class="admin-repeat-item"><p class="muted">Nog geen onderdelen toegevoegd.</p></div>'}
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function collectProgramFromForm() {
+      const group = state.site.groups[state.adminGroup];
+      group.program = (group.program || []).map((day, index) => {
+        const existingItems = day.items || [];
+        const itemBlocks = Array.from(document.querySelectorAll(`[data-program-item-index^="${index}-"]`));
+        const items = itemBlocks.map((block, itemIndex) => ({
+          title: block.querySelector(`[data-program-item-title="${index}-${itemIndex}"]`)?.value.trim() || 'Onderdeel',
+          text: block.querySelector(`[data-program-item-text="${index}-${itemIndex}"]`)?.value.trim() || '',
+          image: existingItems[itemIndex]?.image || '',
+          moreInfo: existingItems[itemIndex]?.moreInfo || ''
+        })).filter(item => item.title || item.text);
+        return {
+          ...day,
+          title: document.querySelector(`[data-program-title="${index}"]`)?.value.trim() || day.title,
+          dayShort: document.querySelector(`[data-program-day-short="${index}"]`)?.value.trim() || day.dayShort,
+          items: items.length ? items : existingItems
+        };
+      });
+    }
+
     function fillAdmin() {
+
       const group = state.site.groups[state.adminGroup];
       document.getElementById('departureInput').value = state.site.shared.departure || '';
       document.getElementById('instagramProfileInput').value = state.site.shared.instagramProfile || '';
-      document.getElementById('instagramLinksInput').value = formatInstagramLinksForAdmin(state.site.shared.instagramLinks || []);
       document.getElementById('adminGroupSelect').value = state.adminGroup;
       document.getElementById('leadersInput').value = group.leiding || '';
-      document.getElementById('spotsInput').value = formatSpotsForAdmin(group.spots || []);
       renderAdminAnnouncements();
+      renderAdminInstagramLinks();
       renderAdminProgram();
+      renderAdminRooms();
+      renderAdminSpots();
     }
 
     function buildAdminListsFromForm() {
       const group = state.site.groups[state.adminGroup];
       collectAnnouncementsFromForm();
+      collectInstagramFromForm();
+      collectProgramFromForm();
+      collectRoomsFromForm();
+      collectSpotsFromForm();
       group.leiding = document.getElementById('leadersInput').value.trim() || group.leiding;
-
-      group.program = (group.program || []).map((day, index) => {
-        const title = document.querySelector(`[data-program-title="${index}"]`)?.value.trim() || day.title;
-        const dayShort = document.querySelector(`[data-program-day-short="${index}"]`)?.value.trim() || day.dayShort;
-        const rawItems = document.querySelector(`[data-program-items="${index}"]`)?.value || '';
-        const items = rawItems.split(/\n+/).map(line => line.trim()).filter(Boolean).map(line => {
-          const [titlePart, ...rest] = line.split('|');
-          const itemTitle = (titlePart || '').trim() || 'Onderdeel';
-          const itemText = rest.join('|').trim();
-          return {
-            title: itemTitle,
-            text: itemText,
-            image: day.items?.find(existing => existing.title === itemTitle)?.image || '',
-            moreInfo: day.items?.find(existing => existing.title === itemTitle)?.moreInfo || ''
-          };
-        });
-        return { ...day, title, dayShort, items: items.length ? items : day.items };
-      });
-
-      state.site.shared.instagramLinks = (document.getElementById('instagramLinksInput').value || '')
-        .split(/\n+/)
-        .map(line => line.trim())
-        .filter(Boolean)
-        .map(line => {
-          const [titlePart, ...rest] = line.split('|');
-          const maybeUrl = (rest.length ? rest.join('|') : titlePart).trim();
-          const title = rest.length ? titlePart.trim() : '';
-          return { title: title || 'Instagram update', url: maybeUrl };
-        });
-
-      group.spots = (document.getElementById('spotsInput').value || '')
-        .split(/\n+/)
-        .map(line => line.trim())
-        .filter(Boolean)
-        .map(line => {
-          const [namePart = '', notePart = '', coordsPart = ''] = line.split('|');
-          const coordMatch = coordsPart.split(',').map(v => Number(v.trim())).filter(v => !Number.isNaN(v));
-          return {
-            id: crypto.randomUUID ? crypto.randomUUID() : `spot-${Date.now()}-${Math.random()}`,
-            name: namePart.trim() || 'Locatie',
-            note: notePart.trim(),
-            coords: coordMatch.length === 2 ? coordMatch : [48.858, 2.34]
-          };
-        });
     }
 
     async function saveSite() {
       await api('/api/site-data', { method: 'POST', body: JSON.stringify(state.site) });
       fillAdmin();
       renderAll();
+    }
+
+    async function saveAdminAndClose() {
+      state.site.shared.departure = document.getElementById('departureInput').value || state.site.shared.departure;
+      state.site.shared.instagramProfile = document.getElementById('instagramProfileInput').value.trim() || state.site.shared.instagramProfile;
+      buildAdminListsFromForm();
+      await saveSite();
+      adminModal.classList.remove('show');
     }
 
     function renderAll() {
@@ -852,12 +965,14 @@
 
     document.getElementById('openAdminBtn').addEventListener('click', () => loginModal.classList.add('show'));
     document.getElementById('closeLoginBtn').addEventListener('click', () => loginModal.classList.remove('show'));
-    document.getElementById('closeAdminBtn').addEventListener('click', () => adminModal.classList.remove('show'));
+    document.getElementById('closeAdminBtn').addEventListener('click', async () => { try { await saveAdminAndClose(); } catch (error) { alert(error.message); } });
     document.getElementById('adminGroupSelect').addEventListener('change', event => {
+      buildAdminListsFromForm();
       state.adminGroup = event.target.value;
       fillAdmin();
     });
     document.getElementById('addAnnouncementBtn').addEventListener('click', () => {
+      collectAnnouncementsFromForm();
       state.site.shared.announcements = state.site.shared.announcements || [];
       state.site.shared.announcements.push({
         id: crypto.randomUUID ? crypto.randomUUID() : `announcement-${Date.now()}-${Math.random()}`,
@@ -875,6 +990,67 @@
       state.site.shared.announcements.splice(Number(index), 1);
       renderAdminAnnouncements();
     });
+    document.getElementById('addInstagramBtn').addEventListener('click', () => {
+      collectInstagramFromForm();
+      state.site.shared.instagramLinks = state.site.shared.instagramLinks || [];
+      state.site.shared.instagramLinks.push({
+        id: crypto.randomUUID ? crypto.randomUUID() : `instagram-${Date.now()}-${Math.random()}`,
+        title: '',
+        url: ''
+      });
+      renderAdminInstagramLinks();
+    });
+    document.getElementById('adminInstagramList').addEventListener('click', event => {
+      const index = event.target?.dataset?.deleteInstagram;
+      if (index === undefined) return;
+      collectInstagramFromForm();
+      state.site.shared.instagramLinks.splice(Number(index), 1);
+      renderAdminInstagramLinks();
+    });
+    document.getElementById('adminProgramList').addEventListener('click', event => {
+      const addDayIndex = event.target?.dataset?.addProgramItem;
+      if (addDayIndex !== undefined) {
+        collectProgramFromForm();
+        state.site.groups[state.adminGroup].program[Number(addDayIndex)].items.push({ title: '', text: '', image: '', moreInfo: '' });
+        renderAdminProgram();
+        return;
+      }
+      const deleteKey = event.target?.dataset?.deleteProgramItem;
+      if (deleteKey === undefined) return;
+      const [dayIndex, itemIndex] = deleteKey.split('-').map(Number);
+      collectProgramFromForm();
+      state.site.groups[state.adminGroup].program[dayIndex].items.splice(itemIndex, 1);
+      renderAdminProgram();
+    });
+    document.getElementById('addRoomBtn').addEventListener('click', () => {
+      collectRoomsFromForm();
+      const group = state.site.groups[state.adminGroup];
+      group.rooms = group.rooms || [];
+      group.rooms.push({ id: crypto.randomUUID ? crypto.randomUUID() : `room-${Date.now()}-${Math.random()}`, name: '', students: '', note: '' });
+      renderAdminRooms();
+    });
+    document.getElementById('adminRoomsList').addEventListener('click', event => {
+      const index = event.target?.dataset?.deleteRoom;
+      if (index === undefined) return;
+      collectRoomsFromForm();
+      state.site.groups[state.adminGroup].rooms.splice(Number(index), 1);
+      renderAdminRooms();
+    });
+    document.getElementById('addSpotBtn').addEventListener('click', () => {
+      collectSpotsFromForm();
+      const group = state.site.groups[state.adminGroup];
+      group.spots = group.spots || [];
+      group.spots.push({ id: crypto.randomUUID ? crypto.randomUUID() : `spot-${Date.now()}-${Math.random()}`, name: '', note: '', coords: [48.858, 2.34] });
+      renderAdminSpots();
+    });
+    document.getElementById('adminSpotsList').addEventListener('click', event => {
+      const index = event.target?.dataset?.deleteSpot;
+      if (index === undefined) return;
+      collectSpotsFromForm();
+      state.site.groups[state.adminGroup].spots.splice(Number(index), 1);
+      renderAdminSpots();
+    });
+
     document.getElementById('loginBtn').addEventListener('click', async () => {
       try {
         await api('/api/auth/login', {
@@ -897,15 +1073,19 @@
       adminModal.classList.remove('show');
     });
     document.getElementById('saveBasicsBtn').addEventListener('click', async () => {
-      state.site.shared.departure = document.getElementById('departureInput').value || state.site.shared.departure;
-      state.site.shared.instagramProfile = document.getElementById('instagramProfileInput').value.trim() || state.site.shared.instagramProfile;
-      buildAdminListsFromForm();
-      await saveSite();
-      alert('Wijzigingen opgeslagen.');
+      try {
+        state.site.shared.departure = document.getElementById('departureInput').value || state.site.shared.departure;
+        state.site.shared.instagramProfile = document.getElementById('instagramProfileInput').value.trim() || state.site.shared.instagramProfile;
+        buildAdminListsFromForm();
+        await saveSite();
+        alert('Wijzigingen opgeslagen.');
+      } catch (error) {
+        alert(error.message);
+      }
     });
 
     loginModal.addEventListener('click', event => { if (event.target === loginModal) loginModal.classList.remove('show'); });
-    adminModal.addEventListener('click', event => { if (event.target === adminModal) adminModal.classList.remove('show'); });
+    adminModal.addEventListener('click', async event => { if (event.target === adminModal) { try { await saveAdminAndClose(); } catch (error) { alert(error.message); } } });
     groupModal.addEventListener('click', event => { if (event.target === groupModal && state.currentGroup) groupModal.classList.remove('show'); });
 
     window.addEventListener('beforeinstallprompt', event => {

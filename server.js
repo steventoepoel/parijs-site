@@ -195,7 +195,8 @@ function defaultData() {
           'Je mag het hotel nooit op eigen houtje verlaten.',
           'Ga in de stad in je vrije tijd nooit alleen op stap, maar minimaal met 3 personen.',
           'Let op zakkenrollers. Neem eventueel een klein slotje mee of een paperclip om je rits van je tas dicht te maken.',
-          'Houd rekening met anderen.'
+          'Houd rekening met anderen.',
+          'Geluidsboxen zijn niet toegestaan.'
         ]
       }
     },
@@ -332,7 +333,7 @@ function normalizeData(data) {
         moneyInsurance: Array.isArray(shared.practical?.moneyInsurance) ? shared.practical.moneyInsurance : defaults.shared.practical.moneyInsurance,
         packing: Array.isArray(shared.practical?.packing) ? shared.practical.packing : defaults.shared.practical.packing,
         bus: Array.isArray(shared.practical?.bus) ? shared.practical.bus : defaults.shared.practical.bus,
-        agreements: Array.isArray(shared.practical?.agreements) ? shared.practical.agreements : defaults.shared.practical.agreements
+        agreements: Array.isArray(shared.practical?.agreements) ? (shared.practical.agreements.includes('Geluidsboxen zijn niet toegestaan.') ? shared.practical.agreements : [...shared.practical.agreements, 'Geluidsboxen zijn niet toegestaan.']) : defaults.shared.practical.agreements
       }
     },
     groups
